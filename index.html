@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Samagra Decor App</title>
+  <meta name="description" content="Samagra Decor - Marriage Garden, Tent, DJ, Photographer, Catering aur Event Services ke liye All India marketplace." />
+
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#061b3a" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6fb;
+      color: #061b3a;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #061b3a, #010b1f);
+      color: white;
+      padding: 28px 18px;
+      text-align: center;
+      border-radius: 0 0 30px 30px;
+    }
+
+    .logo {
+      font-size: 34px;
+      font-weight: bold;
+      color: #d4a12a;
+      margin-bottom: 8px;
+    }
+
+    .tagline {
+      font-size: 15px;
+      color: #ffffff;
+    }
+
+    .container {
+      padding: 18px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #061b3a;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      background: #d4a12a;
+      color: #061b3a;
+      text-align: center;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-blue {
+      background: #061b3a;
+      color: white;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .service {
+      background: #061b3a;
+      color: white;
+      padding: 14px;
+      border-radius: 14px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .gold {
+      color: #d4a12a;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .logo {
+        font-size: 28px;
+      }
+      .services {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <div class="logo">Samagra Decor</div>
+    <div class="tagline">Har Function Ki Puri Tayari</div>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Welcome to <span class="gold">Samagra Decor</span></h2>
+      <p>
+        Samagra Decor ek event service marketplace hai jahan customer Marriage Garden,
+        Tent, DJ, Photographer, Catering, Decoration aur party services find kar sakte hain.
+      </p>
+      <button class="btn" onclick="installApp()">Add to Home Screen</button>
+      <a class="btn btn-blue" href="tel:+919999999999">Contact Us</a>
+    </div>
+
+    <div class="card">
+      <h2>Our Services</h2>
+      <div class="services">
+        <div class="service">Marriage Garden</div>
+        <div class="service">Tent Wale</div>
+        <div class="service">DJ Wale</div>
+        <div class="service">Photographer</div>
+        <div class="service">Catering / Halwai</div>
+        <div class="service">Decoration</div>
+        <div class="service">Restaurant Party</div>
+        <div class="service">Disco Light</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Download App Without APK Warning</h2>
+      <p>
+        Is website ko mobile me app ki tarah use kar sakte ho. Browser me open karke
+        “Add to Home Screen” karne par mobile screen par Samagra Decor ka icon aa jayega.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © 2026 Samagra Decor. All Rights Reserved.
+  </div>
+
+  <script>
+    let deferredPrompt;
+
+    window.addEventListener("beforeinstallprompt", function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function(choiceResult) {
+          deferredPrompt = null;
+        });
+      } else {
+        alert("Mobile browser me menu खोलकर Add to Home Screen दबाएं.");
+      }
+    }
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "Samagra Decor",
+  "short_name": "Samagra",
+  "description": "Samagra Decor - Har Function Ki Puri Tayari",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#061b3a",
+  "theme_color": "#061b3a",
+  "orientation": "portrait",
+  "icons": []
+}
