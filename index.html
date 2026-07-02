@@ -4,117 +4,785 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Samagra Decor App</title>
-  <meta name="description" content="Samagra Decor - Marriage Garden, Tent, DJ, Photographer, Catering aur Event Services ke liye All India marketplace." />
+  <title>Samagra Decor - Har Function Ki Puri Tayari</title>
+  <meta name="description" content="Samagra Decor - Tent House, Decoration, Catering, DJ, Photography, Lighting, Makeup aur Marriage Garden vendors ke liye event services marketplace." />
 
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#061b3a" />
+  <meta name="theme-color" content="#043b2f" />
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Arial, sans-serif;
     }
 
-    body {
-      margin: 0;
-      background: #f4f6fb;
-      color: #061b3a;
+    body{
+      background:#fffaf0;
+      color:#10382f;
     }
 
-    .header {
-      background: linear-gradient(135deg, #061b3a, #010b1f);
-      color: white;
-      padding: 28px 18px;
-      text-align: center;
-      border-radius: 0 0 30px 30px;
+    html{
+      scroll-behavior:smooth;
     }
 
-    .logo {
-      font-size: 34px;
-      font-weight: bold;
-      color: #d4a12a;
-      margin-bottom: 8px;
+    :root{
+      --green:#043b2f;
+      --dark:#02251f;
+      --gold:#d6a53a;
+      --light:#fffaf0;
+      --white:#ffffff;
+      --text:#1b2b25;
     }
 
-    .tagline {
-      font-size: 15px;
-      color: #ffffff;
+    .top{
+      background:linear-gradient(135deg,#02251f,#07523f);
+      color:white;
+      position:relative;
+      overflow:hidden;
     }
 
-    .container {
-      padding: 18px;
-      max-width: 900px;
-      margin: auto;
+    .nav{
+      max-width:1200px;
+      margin:auto;
+      padding:18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      position:relative;
+      z-index:2;
     }
 
-    .card {
-      background: white;
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.10);
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
     }
 
-    h2 {
-      margin-top: 0;
-      color: #061b3a;
+    .logoCircle{
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      border:2px solid var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--gold);
+      font-weight:bold;
+      font-size:26px;
+      box-shadow:0 0 20px rgba(214,165,58,.35);
     }
 
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      margin-top: 12px;
-      background: #d4a12a;
-      color: #061b3a;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 12px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
+    .brand h1{
+      color:var(--gold);
+      font-size:25px;
+      line-height:1.1;
     }
 
-    .btn-blue {
-      background: #061b3a;
-      color: white;
+    .brand small{
+      color:#fff6d8;
+      font-size:12px;
     }
 
-    .services {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+    .menu{
+      display:flex;
+      align-items:center;
+      gap:24px;
+      font-weight:bold;
+      font-size:14px;
     }
 
-    .service {
-      background: #061b3a;
-      color: white;
-      padding: 14px;
-      border-radius: 14px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 14px;
+    .menu a{
+      color:white;
+      text-decoration:none;
+      cursor:pointer;
     }
 
-    .gold {
-      color: #d4a12a;
+    .menu a:hover{
+      color:var(--gold);
     }
 
-    .footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 13px;
-      color: #555;
+    .navButtons{
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
 
-    @media (max-width: 600px) {
-      .logo {
-        font-size: 28px;
+    .outlineBtn,.goldBtn{
+      border:1px solid var(--gold);
+      padding:11px 16px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:bold;
+      background:transparent;
+      color:white;
+    }
+
+    .goldBtn{
+      background:linear-gradient(135deg,#e7bb55,#c99120);
+      color:#062a22;
+      border:none;
+    }
+
+    .mobileMenuBtn{
+      display:none;
+      font-size:28px;
+      color:white;
+      cursor:pointer;
+    }
+
+    .hero{
+      max-width:1200px;
+      margin:auto;
+      padding:35px 18px 82px;
+      display:grid;
+      grid-template-columns:1fr 1.2fr;
+      align-items:center;
+      gap:25px;
+      position:relative;
+      z-index:1;
+    }
+
+    .heroText .mini{
+      color:#f6d889;
+      font-weight:bold;
+      margin-bottom:14px;
+      letter-spacing:.4px;
+    }
+
+    .heroText h2{
+      font-family:Georgia,serif;
+      font-size:60px;
+      line-height:.98;
+      color:white;
+      margin-bottom:18px;
+    }
+
+    .heroText h2 span{
+      color:var(--gold);
+    }
+
+    .heroText p{
+      color:#fff5dc;
+      font-size:16px;
+      line-height:1.5;
+      max-width:500px;
+      margin-bottom:18px;
+    }
+
+    .trust{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .trust span{
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(214,165,58,.45);
+      color:#fff8df;
+      padding:9px 12px;
+      border-radius:30px;
+      font-size:13px;
+      font-weight:bold;
+    }
+
+    .heroImage{
+      min-height:350px;
+      border-radius:260px 0 0 260px;
+      background:
+        linear-gradient(90deg,rgba(4,59,47,.1),rgba(4,59,47,.35)),
+        url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80");
+      background-size:cover;
+      background-position:center;
+      border-left:4px solid var(--gold);
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    .searchBox{
+      max-width:1120px;
+      margin:-48px auto 0;
+      background:white;
+      border-radius:15px;
+      padding:16px;
+      box-shadow:0 12px 35px rgba(0,0,0,.18);
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr 1fr;
+      gap:12px;
+      position:relative;
+      z-index:5;
+      border:1px solid rgba(214,165,58,.45);
+    }
+
+    .field{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      border-right:1px solid #eee;
+      padding-right:12px;
+    }
+
+    .fieldIcon{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      background:#073b2f;
+      color:var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+    }
+
+    .field label{
+      display:block;
+      font-weight:bold;
+      font-size:14px;
+      margin-bottom:5px;
+    }
+
+    .field select{
+      width:100%;
+      border:none;
+      outline:none;
+      color:#555;
+      background:white;
+      font-size:14px;
+    }
+
+    .searchBtn{
+      border:none;
+      background:linear-gradient(135deg,#07523f,#02251f);
+      color:white;
+      border-radius:10px;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .searchBtn:hover,.goldBtn:hover{
+      transform:translateY(-1px);
+      opacity:.95;
+    }
+
+    section{
+      max-width:1200px;
+      margin:auto;
+      padding:28px 18px;
+    }
+
+    .categoryRow{
+      display:grid;
+      grid-template-columns:repeat(8,1fr);
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .category{
+      background:white;
+      border:1px solid #f0dfb8;
+      border-radius:14px;
+      min-height:95px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      box-shadow:0 5px 18px rgba(0,0,0,.06);
+      cursor:pointer;
+      transition:.2s;
+      text-align:center;
+      font-weight:bold;
+      font-size:13px;
+    }
+
+    .category:hover{
+      transform:translateY(-4px);
+      border-color:var(--gold);
+    }
+
+    .catIcon{
+      font-size:32px;
+    }
+
+    .heading{
+      text-align:center;
+      font-family:Georgia,serif;
+      font-size:34px;
+      color:#043b2f;
+      margin-bottom:18px;
+    }
+
+    .heading span{
+      color:var(--gold);
+    }
+
+    .vendorTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .viewAll{
+      color:#043b2f;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .vendors{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .vendorCard{
+      background:white;
+      border-radius:15px;
+      overflow:hidden;
+      border:1px solid #f0dfb8;
+      box-shadow:0 8px 25px rgba(0,0,0,.08);
+      transition:.2s;
+    }
+
+    .vendorCard:hover{
+      transform:translateY(-4px);
+      box-shadow:0 12px 35px rgba(0,0,0,.14);
+    }
+
+    .vendorImg{
+      height:150px;
+      background-size:cover;
+      background-position:center;
+      position:relative;
+    }
+
+    .badge{
+      position:absolute;
+      top:10px;
+      left:10px;
+      background:#043b2f;
+      color:#f9d77c;
+      padding:6px 10px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:bold;
+    }
+
+    .vendorBody{
+      padding:13px;
+    }
+
+    .vendorBody h3{
+      color:#082f28;
+      margin-bottom:7px;
+      font-size:17px;
+    }
+
+    .meta{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:13px;
+      color:#555;
+      margin-bottom:8px;
+    }
+
+    .price{
+      font-weight:bold;
+      color:#043b2f;
+      margin-bottom:12px;
+    }
+
+    .cardActions{
+      display:grid;
+      grid-template-columns:48px 1fr 42px;
+      gap:8px;
+    }
+
+    .waBtn,.detailBtn,.favBtn{
+      border:none;
+      border-radius:8px;
+      padding:10px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .waBtn{
+      background:#0dbb59;
+      color:white;
+      font-size:18px;
+    }
+
+    .detailBtn{
+      background:white;
+      border:1px solid #ccc;
+      color:#043b2f;
+    }
+
+    .favBtn{
+      background:#fff1cc;
+      color:#a67400;
+    }
+
+    .why{
+      max-width:none;
+      background:linear-gradient(135deg,#02251f,#07523f);
+      color:white;
+      margin-top:20px;
+      padding:0;
+    }
+
+    .whyInner{
+      max-width:1200px;
+      margin:auto;
+      padding:22px 18px;
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:14px;
+    }
+
+    .whyItem{
+      text-align:center;
+      border-right:1px solid rgba(255,255,255,.15);
+      padding:10px;
+    }
+
+    .whyItem:last-child{
+      border-right:none;
+    }
+
+    .whyIcon{
+      width:50px;
+      height:50px;
+      border-radius:50%;
+      border:2px solid var(--gold);
+      color:var(--gold);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto 8px;
+      font-size:24px;
+    }
+
+    .whyItem h4{
+      color:#f7d77d;
+      margin-bottom:4px;
+      font-size:14px;
+    }
+
+    .whyItem p{
+      font-size:12px;
+      color:#fff5df;
+      line-height:1.3;
+    }
+
+    .reviews{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .reviewCard{
+      background:white;
+      border-radius:15px;
+      padding:20px;
+      border:1px solid #f0dfb8;
+      box-shadow:0 8px 25px rgba(0,0,0,.06);
+    }
+
+    .quote{
+      color:#b68116;
+      font-size:30px;
+      line-height:1;
+    }
+
+    .reviewText{
+      color:#555;
+      font-style:italic;
+      margin:8px 0 15px;
+      line-height:1.5;
+    }
+
+    .reviewUser{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .stars{
+      color:#f4a700;
+      font-weight:bold;
+    }
+
+    footer{
+      background:linear-gradient(135deg,#02251f,#064533);
+      color:white;
+      margin-top:25px;
+    }
+
+    .footerInner{
+      max-width:1200px;
+      margin:auto;
+      padding:34px 18px 18px;
+      display:grid;
+      grid-template-columns:1.4fr 1fr 1fr 1fr 1.2fr;
+      gap:25px;
+    }
+
+    .footerBrand h2{
+      color:var(--gold);
+      margin-bottom:7px;
+    }
+
+    .footerBrand p,.footerCol p,.footerCol a{
+      color:#fff3d2;
+      font-size:14px;
+      line-height:1.6;
+      text-decoration:none;
+      display:block;
+      margin-bottom:5px;
+      cursor:pointer;
+    }
+
+    .footerCol h3{
+      color:var(--gold);
+      margin-bottom:10px;
+      font-size:17px;
+    }
+
+    .social{
+      display:flex;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .social span{
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background:var(--gold);
+      color:#043b2f;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:bold;
+    }
+
+    .newsletter{
+      display:flex;
+      margin-top:8px;
+    }
+
+    .newsletter input{
+      flex:1;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(255,255,255,.08);
+      color:white;
+      outline:none;
+      border-radius:8px 0 0 8px;
+    }
+
+    .newsletter button{
+      padding:12px 15px;
+      border:none;
+      background:var(--gold);
+      color:#043b2f;
+      font-weight:bold;
+      border-radius:0 8px 8px 0;
+      cursor:pointer;
+    }
+
+    .bottom{
+      border-top:1px solid rgba(255,255,255,.15);
+      text-align:center;
+      padding:12px;
+      font-size:13px;
+      color:#fff3d2;
+    }
+
+    .floatWhatsApp{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      width:58px;
+      height:58px;
+      border-radius:50%;
+      background:#10b85a;
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:30px;
+      text-decoration:none;
+      box-shadow:0 8px 25px rgba(0,0,0,.25);
+      z-index:50;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:100;
+      padding:18px;
+    }
+
+    .modalBox{
+      background:white;
+      border-radius:18px;
+      width:100%;
+      max-width:470px;
+      padding:24px;
+      position:relative;
+      box-shadow:0 15px 50px rgba(0,0,0,.35);
+    }
+
+    .close{
+      position:absolute;
+      top:12px;
+      right:14px;
+      font-size:24px;
+      cursor:pointer;
+      color:#333;
+    }
+
+    .modalBox h2{
+      color:#043b2f;
+      margin-bottom:10px;
+    }
+
+    .modalBox p{
+      color:#555;
+      line-height:1.5;
+      margin-bottom:12px;
+    }
+
+    .modalBox input,.modalBox select,.modalBox textarea{
+      width:100%;
+      padding:12px;
+      margin:8px 0;
+      border:1px solid #ddd;
+      border-radius:10px;
+      outline:none;
+    }
+
+    .modalBox button{
+      width:100%;
+      padding:13px;
+      border:none;
+      background:#043b2f;
+      color:white;
+      border-radius:10px;
+      font-weight:bold;
+      margin-top:8px;
+      cursor:pointer;
+    }
+
+    .installBar{
+      position:fixed;
+      left:15px;
+      bottom:20px;
+      background:white;
+      border:1px solid #f0dfb8;
+      border-radius:13px;
+      padding:12px 14px;
+      box-shadow:0 8px 25px rgba(0,0,0,.18);
+      z-index:45;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .installBar button{
+      background:var(--gold);
+      color:#043b2f;
+      border:none;
+      padding:9px 12px;
+      border-radius:8px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    @media(max-width:950px){
+      .menu,.navButtons{
+        display:none;
       }
-      .services {
-        grid-template-columns: repeat(2, 1fr);
+
+      .mobileMenuBtn{
+        display:block;
+      }
+
+      .menu.show{
+        display:flex;
+        position:absolute;
+        left:18px;
+        right:18px;
+        top:85px;
+        background:#02251f;
+        border:1px solid var(--gold);
+        border-radius:14px;
+        padding:18px;
+        flex-direction:column;
+        align-items:flex-start;
+        z-index:20;
+      }
+
+      .hero{
+        grid-template-columns:1fr;
+        padding-bottom:70px;
+      }
+
+      .heroText h2{
+        font-size:46px;
+      }
+
+      .heroImage{
+        min-height:250px;
+        border-radius:30px;
+        border-left:none;
+        border:3px solid var(--gold);
+      }
+
+      .searchBox{
+        grid-template-columns:1fr;
+        margin:15px 18px 0;
+      }
+
+      .field{
+        border-right:none;
+        border-bottom:1px solid #eee;
+        padding-bottom:10px;
+      }
+
+      .searchBtn{
+        padding:15px;
+      }
+
+      .categoryRow{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .vendors,.reviews{
+        grid-template-columns:1fr;
+      }
+
+      .whyInner{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .footerInner{
+        grid-template-columns:1fr;
+      }
+
+      .installBar{
+        display:none;
       }
     }
   </style>
@@ -122,73 +790,544 @@
 
 <body>
 
-  <div class="header">
-    <div class="logo">Samagra Decor</div>
-    <div class="tagline">Har Function Ki Puri Tayari</div>
-  </div>
+  <div class="top" id="home">
+    <div class="nav">
+      <div class="brand">
+        <div class="logoCircle">SD</div>
+        <div>
+          <h1>Samagra Decor</h1>
+          <small>Har Function Ki Puri Tayari</small>
+        </div>
+      </div>
 
-  <div class="container">
+      <div class="menu" id="menu">
+        <a onclick="goTo('home')">Home</a>
+        <a onclick="goTo('services')">Services</a>
+        <a onclick="goTo('vendors')">Vendors</a>
+        <a onclick="openModal('dealsModal')">Deals</a>
+        <a onclick="openModal('aboutModal')">About Us</a>
+        <a onclick="openModal('contactModal')">Contact</a>
+      </div>
 
-    <div class="card">
-      <h2>Welcome to <span class="gold">Samagra Decor</span></h2>
-      <p>
-        Samagra Decor ek event service marketplace hai jahan customer Marriage Garden,
-        Tent, DJ, Photographer, Catering, Decoration aur party services find kar sakte hain.
-      </p>
-      <button class="btn" onclick="installApp()">Add to Home Screen</button>
-      <a class="btn btn-blue" href="tel:+919999999999">Contact Us</a>
+      <div class="navButtons">
+        <button class="outlineBtn" onclick="showFavorites()">♡ Favorites</button>
+        <button class="outlineBtn" onclick="openModal('loginModal')">Login / Signup</button>
+        <button class="goldBtn" onclick="openModal('businessModal')">List Your Business</button>
+      </div>
+
+      <div class="mobileMenuBtn" onclick="toggleMenu()">☰</div>
     </div>
 
-    <div class="card">
-      <h2>Our Services</h2>
-      <div class="services">
-        <div class="service">Marriage Garden</div>
-        <div class="service">Tent Wale</div>
-        <div class="service">DJ Wale</div>
-        <div class="service">Photographer</div>
-        <div class="service">Catering / Halwai</div>
-        <div class="service">Decoration</div>
-        <div class="service">Restaurant Party</div>
-        <div class="service">Disco Light</div>
+    <div class="hero">
+      <div class="heroText">
+        <div class="mini">India's Most Loved Event Services Marketplace</div>
+        <h2>Har Function<br><span>Ki Puri Tayari</span></h2>
+        <p>
+          One platform. 1000+ trusted vendors. Weddings, Corporate Events,
+          Birthday Parties aur more. Find, compare & book the best all in one place.
+        </p>
+        <div class="trust">
+          <span>✅ Verified Vendors</span>
+          <span>💰 Best Price</span>
+          <span>🔒 Secure Booking</span>
+          <span>🎧 24x7 Support</span>
+        </div>
+      </div>
+      <div class="heroImage"></div>
+    </div>
+  </div>
+
+  <div class="searchBox">
+    <div class="field">
+      <div class="fieldIcon">📍</div>
+      <div style="width:100%;">
+        <label>City</label>
+        <select id="city">
+          <option value="">Select your city</option>
+          <option>Bhopal</option>
+          <option>Indore</option>
+          <option>Delhi</option>
+          <option>Mumbai</option>
+          <option>Jaipur</option>
+          <option>Lucknow</option>
+          <option>Noida</option>
+        </select>
       </div>
     </div>
 
-    <div class="card">
-      <h2>Download App Without APK Warning</h2>
-      <p>
-        Is website ko mobile me app ki tarah use kar sakte ho. Browser me open karke
-        “Add to Home Screen” karne par mobile screen par Samagra Decor ka icon aa jayega.
-      </p>
+    <div class="field">
+      <div class="fieldIcon">▦</div>
+      <div style="width:100%;">
+        <label>Category</label>
+        <select id="category">
+          <option value="">All Categories</option>
+          <option>Tent House</option>
+          <option>Decoration</option>
+          <option>Catering</option>
+          <option>DJ Music</option>
+          <option>Photography</option>
+          <option>Lighting</option>
+          <option>Banquet Hall</option>
+          <option>Makeup</option>
+        </select>
+      </div>
     </div>
 
+    <div class="field">
+      <div class="fieldIcon">₹</div>
+      <div style="width:100%;">
+        <label>Budget</label>
+        <select id="budget">
+          <option value="">Select Budget</option>
+          <option value="20000">Under ₹20,000</option>
+          <option value="50000">Under ₹50,000</option>
+          <option value="100000">Under ₹1,00,000</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="searchBtn" onclick="searchVendors()">🔍 Search Vendors</button>
   </div>
 
-  <div class="footer">
-    © 2026 Samagra Decor. All Rights Reserved.
+  <section id="services">
+    <div class="categoryRow">
+      <div class="category" onclick="selectCategory('Tent House')"><div class="catIcon">⛺</div>Tent House</div>
+      <div class="category" onclick="selectCategory('Decoration')"><div class="catIcon">🎊</div>Decoration</div>
+      <div class="category" onclick="selectCategory('Catering')"><div class="catIcon">🍽️</div>Catering</div>
+      <div class="category" onclick="selectCategory('DJ Music')"><div class="catIcon">🎧</div>DJ Music</div>
+      <div class="category" onclick="selectCategory('Photography')"><div class="catIcon">📷</div>Photography</div>
+      <div class="category" onclick="selectCategory('Lighting')"><div class="catIcon">💡</div>Lighting</div>
+      <div class="category" onclick="selectCategory('Banquet Hall')"><div class="catIcon">🏛️</div>Banquet Hall</div>
+      <div class="category" onclick="selectCategory('Makeup')"><div class="catIcon">💄</div>Makeup</div>
+    </div>
+  </section>
+
+  <section id="vendors">
+    <div class="vendorTop">
+      <h2 class="heading">Featured <span>Vendors</span></h2>
+      <div class="viewAll" onclick="showAllVendors()">View All Vendors →</div>
+    </div>
+    <div class="vendors" id="vendorList"></div>
+  </section>
+
+  <div class="why">
+    <div class="whyInner">
+      <div class="whyItem"><div class="whyIcon">🛡️</div><h4>Trusted Vendors</h4><p>All vendors verified for quality.</p></div>
+      <div class="whyItem"><div class="whyIcon">💰</div><h4>Best Price</h4><p>Get best deals & transparent pricing.</p></div>
+      <div class="whyItem"><div class="whyIcon">📅</div><h4>Easy Booking</h4><p>Compare, connect and book fast.</p></div>
+      <div class="whyItem"><div class="whyIcon">💎</div><h4>Wide Choice</h4><p>1000+ vendors across categories.</p></div>
+      <div class="whyItem"><div class="whyIcon">🔒</div><h4>Secure</h4><p>Safe and trusted communication.</p></div>
+      <div class="whyItem"><div class="whyIcon">🎧</div><h4>24x7 Support</h4><p>Support anytime, anywhere.</p></div>
+    </div>
+  </div>
+
+  <section>
+    <h2 class="heading">What Our <span>Clients Say</span></h2>
+    <div class="reviews">
+      <div class="reviewCard">
+        <div class="quote">“</div>
+        <p class="reviewText">Samagra Decor made my sister's wedding perfect. Decoration and catering quality bahut achhi thi.</p>
+        <div class="reviewUser"><b>Neha Sharma<br><small>Delhi</small></b><span class="stars">★★★★★ 5.0</span></div>
+      </div>
+      <div class="reviewCard">
+        <div class="quote">“</div>
+        <p class="reviewText">Amazing platform to find trusted vendors. Booking easy thi aur prices reasonable the.</p>
+        <div class="reviewUser"><b>Rohit Verma<br><small>Jaipur</small></b><span class="stars">★★★★★ 5.0</span></div>
+      </div>
+      <div class="reviewCard">
+        <div class="quote">“</div>
+        <p class="reviewText">Corporate event ke liye photographer aur DJ best mile. Highly recommended.</p>
+        <div class="reviewUser"><b>Ananya Kapoor<br><small>Mumbai</small></b><span class="stars">★★★★★ 5.0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footerInner">
+      <div class="footerBrand">
+        <h2>Samagra Decor</h2>
+        <p>India's event services marketplace. Find best vendors for every occasion.</p>
+        <div class="social"><span>f</span><span>i</span><span>▶</span><span>p</span><span>w</span></div>
+      </div>
+
+      <div class="footerCol">
+        <h3>Quick Links</h3>
+        <a onclick="goTo('home')">Home</a>
+        <a onclick="goTo('services')">Services</a>
+        <a onclick="goTo('vendors')">Vendors</a>
+        <a onclick="openModal('dealsModal')">Deals</a>
+        <a onclick="openModal('aboutModal')">About Us</a>
+        <a onclick="openModal('contactModal')">Contact Us</a>
+      </div>
+
+      <div class="footerCol">
+        <h3>Popular Services</h3>
+        <a onclick="selectCategory('Tent House')">Tent House</a>
+        <a onclick="selectCategory('Decoration')">Decoration</a>
+        <a onclick="selectCategory('Catering')">Catering</a>
+        <a onclick="selectCategory('DJ Music')">DJ Music</a>
+        <a onclick="selectCategory('Photography')">Photography</a>
+        <a onclick="selectCategory('Banquet Hall')">Banquet Hall</a>
+      </div>
+
+      <div class="footerCol">
+        <h3>For Businesses</h3>
+        <a onclick="openModal('businessModal')">List Your Business</a>
+        <a onclick="openModal('loginModal')">Vendor Login</a>
+        <a onclick="openModal('aboutModal')">How It Works</a>
+        <a onclick="openModal('contactModal')">Partner With Us</a>
+      </div>
+
+      <div class="footerCol">
+        <h3>Contact Us</h3>
+        <p>📞 +91 99999 99999</p>
+        <p>✉ info@samagradecor.com</p>
+        <p>📍 India</p>
+        <h3 style="margin-top:15px;">Newsletter</h3>
+        <div class="newsletter">
+          <input id="newsletterEmail" placeholder="Enter your email" />
+          <button onclick="subscribe()">➤</button>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      © 2026 Samagra Decor. All Rights Reserved. |
+      <span onclick="openModal('privacyModal')" style="cursor:pointer;">Privacy Policy</span> |
+      <span onclick="openModal('termsModal')" style="cursor:pointer;">Terms & Conditions</span>
+    </div>
+  </footer>
+
+  <a class="floatWhatsApp" target="_blank" href="https://wa.me/919999999999?text=Hello%20Samagra%20Decor,%20mujhe%20event%20service%20ki%20details%20chahiye">☘</a>
+
+  <div class="installBar">
+    <b>📱 App jaisa use karein</b>
+    <button onclick="installApp()">Add</button>
+  </div>
+
+  <div class="modal" id="loginModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('loginModal')">×</span>
+      <h2>Login / Signup</h2>
+      <p>Customer ya vendor account ke liye demo login form.</p>
+      <input placeholder="Email address" />
+      <input placeholder="Password" type="password" />
+      <button onclick="alert('Login feature next step me Firebase/Supabase se connect karenge.')">Login</button>
+      <button onclick="alert('Signup feature next step me database se connect karenge.')">Create Account</button>
+    </div>
+  </div>
+
+  <div class="modal" id="businessModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('businessModal')">×</span>
+      <h2>List Your Business</h2>
+      <p>Apna vendor business Samagra Decor par list karne ke liye details bhejein.</p>
+      <input id="bizName" placeholder="Business Name" />
+      <input id="bizCity" placeholder="City" />
+      <select id="bizCategory">
+        <option>Tent House</option>
+        <option>Decoration</option>
+        <option>Catering</option>
+        <option>DJ Music</option>
+        <option>Photography</option>
+        <option>Lighting</option>
+        <option>Banquet Hall</option>
+        <option>Makeup</option>
+      </select>
+      <input id="bizPhone" placeholder="Phone Number" />
+      <button onclick="submitBusiness()">Submit on WhatsApp</button>
+    </div>
+  </div>
+
+  <div class="modal" id="detailsModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('detailsModal')">×</span>
+      <div id="detailsContent"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="aboutModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('aboutModal')">×</span>
+      <h2>About Samagra Decor</h2>
+      <p>Samagra Decor ek event services marketplace hai jahan customers trusted vendors find, compare aur contact kar sakte hain.</p>
+      <p>Humara goal hai Marriage Garden, Tent, DJ, Photographer, Catering, Decoration aur party services ko ek platform par lana.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="contactModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('contactModal')">×</span>
+      <h2>Contact Us</h2>
+      <p>📞 Phone: +91 99999 99999</p>
+      <p>✉ Email: info@samagradecor.com</p>
+      <p>📍 Location: India</p>
+      <button onclick="window.open('https://wa.me/919999999999?text=Hello%20Samagra%20Decor')">WhatsApp Now</button>
+    </div>
+  </div>
+
+  <div class="modal" id="dealsModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('dealsModal')">×</span>
+      <h2>Latest Deals</h2>
+      <p>🎉 Wedding Decoration Package - Special Discount</p>
+      <p>🎧 DJ + Lighting Combo - Best Price</p>
+      <p>🍽️ Catering Bulk Booking - Offer Available</p>
+    </div>
+  </div>
+
+  <div class="modal" id="privacyModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('privacyModal')">×</span>
+      <h2>Privacy Policy</h2>
+      <p>Samagra Decor user details ko safe rakhne ka प्रयास karta hai. Contact details sirf service communication ke liye use ki jaati hain.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="termsModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('termsModal')">×</span>
+      <h2>Terms & Conditions</h2>
+      <p>Samagra Decor marketplace platform hai. Vendor aur customer ke beech final service, price aur booking ki zimmedari dono parties ki hogi.</p>
+    </div>
   </div>
 
   <script>
+    const WHATSAPP_NUMBER = "919999999999";
+
+    const vendors = [
+      {
+        name:"Royal Tent House",
+        category:"Tent House",
+        city:"Lucknow",
+        rating:"4.8",
+        reviews:"256",
+        price:45000,
+        img:"https://images.unsplash.com/photo-1519167758481-83f29c8d7e9b?auto=format&fit=crop&w=800&q=80",
+        desc:"Premium tent setup, stage, seating and wedding event decoration."
+      },
+      {
+        name:"Dream Decorators",
+        category:"Decoration",
+        city:"Jaipur",
+        rating:"4.9",
+        reviews:"312",
+        price:125000,
+        img:"https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80",
+        desc:"Wedding stage, flower decor, entry gate and theme decoration."
+      },
+      {
+        name:"Taste Affair Catering",
+        category:"Catering",
+        city:"Delhi",
+        rating:"4.7",
+        reviews:"198",
+        price:450,
+        img:"https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80",
+        desc:"Veg/non-veg catering, live counters and halwai services."
+      },
+      {
+        name:"Beat Blast DJ",
+        category:"DJ Music",
+        city:"Mumbai",
+        rating:"4.9",
+        reviews:"278",
+        price:15000,
+        img:"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
+        desc:"DJ, sound, disco light and event music setup."
+      },
+      {
+        name:"Memories Studio",
+        category:"Photography",
+        city:"Chandigarh",
+        rating:"4.8",
+        reviews:"205",
+        price:20000,
+        img:"https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
+        desc:"Wedding photography, candid shoot and video coverage."
+      },
+      {
+        name:"Grand Garden Palace",
+        category:"Banquet Hall",
+        city:"Noida",
+        rating:"4.6",
+        reviews:"167",
+        price:85000,
+        img:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80",
+        desc:"Marriage garden, banquet hall and party venue."
+      }
+    ];
+
+    let favorites = [];
+
+    function renderVendors(list){
+      const box = document.getElementById("vendorList");
+      box.innerHTML = "";
+
+      if(list.length === 0){
+        box.innerHTML = "<p style='grid-column:1/-1;text-align:center;font-weight:bold;'>No vendors found. City/category change karke search karein.</p>";
+        return;
+      }
+
+      list.forEach((v,index)=>{
+        box.innerHTML += `
+          <div class="vendorCard">
+            <div class="vendorImg" style="background-image:url('${v.img}')">
+              <div class="badge">✅ Verified</div>
+            </div>
+            <div class="vendorBody">
+              <h3>${v.name}</h3>
+              <div class="meta">
+                <span>⭐ ${v.rating} (${v.reviews})</span>
+                <span>📍 ${v.city}</span>
+              </div>
+              <div class="price">Starts from ₹${v.price.toLocaleString("en-IN")}</div>
+              <div class="cardActions">
+                <button class="waBtn" onclick="vendorWhatsApp('${v.name}')">☘</button>
+                <button class="detailBtn" onclick="viewDetails(${index})">View Details</button>
+                <button class="favBtn" onclick="addFavorite('${v.name}')">♡</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function searchVendors(){
+      const city = document.getElementById("city").value;
+      const category = document.getElementById("category").value;
+      const budget = document.getElementById("budget").value;
+
+      let result = vendors.filter(v=>{
+        let cityOk = city === "" || v.city === city;
+        let catOk = category === "" || v.category === category;
+        let budgetOk = budget === "" || v.price <= Number(budget);
+        return cityOk && catOk && budgetOk;
+      });
+
+      renderVendors(result);
+      goTo("vendors");
+    }
+
+    function selectCategory(cat){
+      document.getElementById("category").value = cat;
+      searchVendors();
+    }
+
+    function showAllVendors(){
+      document.getElementById("city").value = "";
+      document.getElementById("category").value = "";
+      document.getElementById("budget").value = "";
+      renderVendors(vendors);
+      goTo("vendors");
+    }
+
+    function viewDetails(index){
+      const v = vendors[index];
+      document.getElementById("detailsContent").innerHTML = `
+        <h2>${v.name}</h2>
+        <p><b>Category:</b> ${v.category}</p>
+        <p><b>City:</b> ${v.city}</p>
+        <p><b>Rating:</b> ⭐ ${v.rating} (${v.reviews} reviews)</p>
+        <p><b>Price:</b> Starts from ₹${v.price.toLocaleString("en-IN")}</p>
+        <p>${v.desc}</p>
+        <button onclick="vendorWhatsApp('${v.name}')">Contact on WhatsApp</button>
+      `;
+      openModal("detailsModal");
+    }
+
+    function vendorWhatsApp(name){
+      const text = encodeURIComponent("Hello Samagra Decor, mujhe " + name + " vendor ki details chahiye.");
+      window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + text, "_blank");
+    }
+
+    function addFavorite(name){
+      if(!favorites.includes(name)){
+        favorites.push(name);
+        alert(name + " favorites me add ho gaya.");
+      }else{
+        alert(name + " already favorites me hai.");
+      }
+    }
+
+    function showFavorites(){
+      if(favorites.length === 0){
+        alert("Abhi koi favorite vendor add nahi hai.");
+      }else{
+        alert("Your Favorites:\\n" + favorites.join("\\n"));
+      }
+    }
+
+    function submitBusiness(){
+      const name = document.getElementById("bizName").value;
+      const city = document.getElementById("bizCity").value;
+      const cat = document.getElementById("bizCategory").value;
+      const phone = document.getElementById("bizPhone").value;
+
+      if(!name || !city || !phone){
+        alert("Business name, city aur phone number bharo.");
+        return;
+      }
+
+      const msg = encodeURIComponent(
+        "Hello Samagra Decor, mujhe apna business list karna hai.%0A" +
+        "Business: " + name + "%0A" +
+        "City: " + city + "%0A" +
+        "Category: " + cat + "%0A" +
+        "Phone: " + phone
+      );
+      window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg, "_blank");
+    }
+
+    function subscribe(){
+      const email = document.getElementById("newsletterEmail").value;
+      if(!email){
+        alert("Email enter karo.");
+      }else{
+        alert("Thank you! Newsletter request received: " + email);
+        document.getElementById("newsletterEmail").value = "";
+      }
+    }
+
+    function openModal(id){
+      document.getElementById(id).style.display = "flex";
+    }
+
+    function closeModal(id){
+      document.getElementById(id).style.display = "none";
+    }
+
+    function goTo(id){
+      document.getElementById(id).scrollIntoView({behavior:"smooth"});
+      document.getElementById("menu").classList.remove("show");
+    }
+
+    function toggleMenu(){
+      document.getElementById("menu").classList.toggle("show");
+    }
+
     let deferredPrompt;
 
-    window.addEventListener("beforeinstallprompt", function(e) {
+    window.addEventListener("beforeinstallprompt", function(e){
       e.preventDefault();
       deferredPrompt = e;
     });
 
-    function installApp() {
-      if (deferredPrompt) {
+    function installApp(){
+      if(deferredPrompt){
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(function(choiceResult) {
+        deferredPrompt.userChoice.then(function(){
           deferredPrompt = null;
         });
-      } else {
-        alert("Mobile browser me menu खोलकर Add to Home Screen दबाएं.");
+      }else{
+        alert("Mobile Chrome me 3 dot menu खोलकर 'Add to Home Screen' दबाएं.");
       }
     }
 
-    if ("serviceWorker" in navigator) {
+    if("serviceWorker" in navigator){
       navigator.serviceWorker.register("service-worker.js");
     }
+
+    renderVendors(vendors);
   </script>
 
 </body>
