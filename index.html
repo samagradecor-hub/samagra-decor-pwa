@@ -672,7 +672,7 @@
       background:white;
       border-radius:18px;
       width:100%;
-      max-width:470px;
+      max-width:520px;
       padding:24px;
       position:relative;
       box-shadow:0 15px 50px rgba(0,0,0,.35);
@@ -804,6 +804,112 @@
       margin-top:8px;
     }
 
+    .vendorFormTitle{
+      text-align:center;
+      color:var(--blue);
+      font-size:30px;
+      font-weight:bold;
+      margin-bottom:8px;
+    }
+
+    .vendorFormSub{
+      text-align:center;
+      color:#666;
+      font-size:16px;
+      margin-bottom:14px;
+    }
+
+    .vendorInput,.vendorSelect,.vendorTextarea{
+      width:100%;
+      padding:14px 16px;
+      margin:7px 0;
+      border:1px solid #ddd;
+      border-radius:12px;
+      outline:none;
+      font-size:16px;
+      background:#fff;
+    }
+
+    .vendorSelect{
+      height:54px;
+    }
+
+    .vendorTextarea{
+      min-height:110px;
+      resize:vertical;
+    }
+
+    .mediaTitle{
+      text-align:center;
+      color:var(--blue);
+      font-size:26px;
+      font-weight:bold;
+      margin:18px 0 10px;
+    }
+
+    .uploadBtn{
+      width:100%;
+      padding:15px;
+      border:none !important;
+      border-radius:14px !important;
+      background:linear-gradient(135deg,#efc55a,#d9a42d) !important;
+      color:#111 !important;
+      font-size:18px;
+      font-weight:bold;
+      margin:8px 0;
+      box-shadow:0 8px 18px rgba(0,0,0,.15);
+    }
+
+    .mediaStatus{
+      color:#666;
+      font-size:15px;
+      margin:5px 0 12px;
+    }
+
+    .monthlyBtn{
+      width:100%;
+      padding:16px !important;
+      border:none !important;
+      border-radius:14px !important;
+      background:#061b3a !important;
+      color:#d6a53a !important;
+      font-size:18px;
+      font-weight:bold;
+      margin-top:12px;
+    }
+
+    .planBox{
+      text-align:center;
+    }
+
+    .planPrice{
+      font-size:42px;
+      font-weight:bold;
+      color:#061b3a;
+      margin:12px 0;
+    }
+
+    .planPrice span{
+      font-size:18px;
+      color:#777;
+    }
+
+    .planFeatures{
+      text-align:left;
+      margin:15px 0;
+      color:#444;
+      line-height:1.8;
+    }
+
+    .planNote{
+      background:#fff7df;
+      border:1px solid #e7c45a;
+      padding:12px;
+      border-radius:12px;
+      color:#5a4300;
+      margin:12px 0;
+    }
+
     @media(max-width:950px){
       .menu{
         display:none;
@@ -933,7 +1039,7 @@
         <div class="mini">India's Most Loved Event Services Marketplace</div>
         <h2>Har Function<br><span>Ki Puri Tayari</span></h2>
         <p>
-          One platform. 1000+ trusted vendors. Weddings, Corporate Events,
+          One platform. Trusted vendors. Weddings, Corporate Events,
           Birthday Parties aur more. Find, compare & book the best all in one place.
         </p>
         <div class="trust">
@@ -1031,9 +1137,9 @@
       <div class="whyItem"><div class="whyIcon">🛡️</div><h4>Trusted Vendors</h4><p>All vendors verified for quality.</p></div>
       <div class="whyItem"><div class="whyIcon">💰</div><h4>Best Price</h4><p>Get best deals & transparent pricing.</p></div>
       <div class="whyItem"><div class="whyIcon">📅</div><h4>Easy Booking</h4><p>Compare, connect and book fast.</p></div>
-      <div class="whyItem"><div class="whyIcon">💎</div><h4>Wide Choice</h4><p>1000+ vendors across categories.</p></div>
+      <div class="whyItem"><div class="whyIcon">💎</div><h4>Wide Choice</h4><p>All event categories.</p></div>
       <div class="whyItem"><div class="whyIcon">🔒</div><h4>Secure</h4><p>Safe and trusted communication.</p></div>
-      <div class="whyItem"><div class="whyIcon">🎧</div><h4>24x7 Support</h4><p>Support anytime, anywhere.</p></div>
+      <div class="whyItem"><div class="whyIcon">🎧</div><h4>Support</h4><p>Support anytime, anywhere.</p></div>
     </div>
   </div>
 
@@ -1130,12 +1236,17 @@
   <div class="modal" id="businessModal">
     <div class="modalBox">
       <span class="close" onclick="closeModal('businessModal')">×</span>
-      <h2>List Your Business</h2>
-      <p>Apna vendor business Samagra Decor par list karne ke liye details bhejein.</p>
-      <input id="bizName" placeholder="Business Name" />
-      <input id="bizOwner" placeholder="Owner Name" />
-      <input id="bizCity" placeholder="City" />
-      <select id="bizCategory">
+
+      <div class="vendorFormTitle">Vendor Registration</div>
+      <div class="vendorFormSub">Apna business Samagra Decor par list karein</div>
+
+      <input class="vendorInput" id="bizName" placeholder="Business Name" />
+      <input class="vendorInput" id="bizOwner" placeholder="Owner Name" />
+      <input class="vendorInput" id="bizPhone" placeholder="Mobile Number" />
+      <input class="vendorInput" id="bizCity" placeholder="City" />
+
+      <select class="vendorSelect" id="bizCategory">
+        <option value="">📋 Select Service Category</option>
         <option>Tent House</option>
         <option>Decoration</option>
         <option>Catering</option>
@@ -1145,10 +1256,47 @@
         <option>Banquet Hall</option>
         <option>Makeup</option>
       </select>
-      <input id="bizPhone" placeholder="Phone Number / WhatsApp" />
-      <input id="bizPrice" type="number" placeholder="Starting Price" />
-      <textarea id="bizDesc" rows="3" placeholder="Business Description"></textarea>
-      <button onclick="submitBusiness()">Submit Business</button>
+
+      <input class="vendorInput" id="bizPrice" type="number" placeholder="Starting Price जैसे ₹25000" />
+      <textarea class="vendorTextarea" id="bizDesc" placeholder="Business Description"></textarea>
+
+      <div class="mediaTitle">Photos aur Video Upload</div>
+
+      <input id="vendorPhotos" type="file" accept="image/*" multiple style="display:none;" onchange="handlePhotoSelect(event)" />
+      <button class="uploadBtn" onclick="document.getElementById('vendorPhotos').click()">➕ Add Photos (Max 4)</button>
+      <div class="mediaStatus" id="photoStatus">Abhi koi photo select nahi hui</div>
+
+      <input id="vendorVideo" type="file" accept="video/*" style="display:none;" onchange="handleVideoSelect(event)" />
+      <button class="uploadBtn" onclick="document.getElementById('vendorVideo').click()">➕ Add Video (Max 1)</button>
+      <div class="mediaStatus" id="videoStatus">Abhi koi video select nahi hua</div>
+
+      <button class="monthlyBtn" onclick="continueToMonthlyPlan()">Continue to Monthly Plan</button>
+    </div>
+  </div>
+
+  <div class="modal" id="planModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('planModal')">×</span>
+
+      <div class="planBox">
+        <h2>Samagra Decor Monthly Plan</h2>
+        <div class="planPrice">₹19 <span>/ month</span></div>
+
+        <div class="planFeatures">
+          ✅ Vendor listing website par<br>
+          ✅ Photos max 4 upload<br>
+          ✅ Video max 1 upload<br>
+          ✅ Customer WhatsApp inquiry<br>
+          ✅ Admin approval ke baad live
+        </div>
+
+        <div class="planNote">
+          Abhi payment gateway connect nahi hai. Vendor request <b>pending_payment</b> status me save hogi.
+        </div>
+
+        <button class="monthlyBtn" onclick="submitBusinessWithPlan()">Submit Vendor Request</button>
+        <button class="authOutlineBtn" onclick="closeModal('planModal')">Cancel</button>
+      </div>
     </div>
   </div>
 
@@ -1225,12 +1373,6 @@
       ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
       : null;
 
-    if (supabaseClient) {
-      console.log("Supabase Connected Successfully ✅");
-    } else {
-      console.log("Supabase key missing. Website demo data se chalegi.");
-    }
-
     const firebaseConfig = {
       apiKey: "AIzaSyAH4B2wWFUnuW7iO-vaHjO5iYpQsXHAv70",
       authDomain: "samagra-decor.firebaseapp.com",
@@ -1257,6 +1399,8 @@
         phone:"919999999999",
         price:45000,
         img:"https://images.unsplash.com/photo-1519167758481-83f29c8d7e9b?auto=format&fit=crop&w=800&q=80",
+        photos:[],
+        video_url:"",
         desc:"Premium tent setup, stage, seating and wedding event decoration."
       },
       {
@@ -1269,6 +1413,8 @@
         phone:"919999999999",
         price:125000,
         img:"https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80",
+        photos:[],
+        video_url:"",
         desc:"Wedding stage, flower decor, entry gate and theme decoration."
       },
       {
@@ -1281,55 +1427,38 @@
         phone:"919999999999",
         price:450,
         img:"https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80",
+        photos:[],
+        video_url:"",
         desc:"Veg/non-veg catering, live counters and halwai services."
-      },
-      {
-        name:"Beat Blast DJ",
-        owner_name:"Rahul Khan",
-        category:"DJ Music",
-        city:"Mumbai",
-        rating:"4.9",
-        reviews:"278",
-        phone:"919999999999",
-        price:15000,
-        img:"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
-        desc:"DJ, sound, disco light and event music setup."
-      },
-      {
-        name:"Memories Studio",
-        owner_name:"Nikhil Jain",
-        category:"Photography",
-        city:"Chandigarh",
-        rating:"4.8",
-        reviews:"205",
-        phone:"919999999999",
-        price:20000,
-        img:"https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
-        desc:"Wedding photography, candid shoot and video coverage."
-      },
-      {
-        name:"Grand Garden Palace",
-        owner_name:"Manish Yadav",
-        category:"Banquet Hall",
-        city:"Noida",
-        rating:"4.6",
-        reviews:"167",
-        phone:"919999999999",
-        price:85000,
-        img:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80",
-        desc:"Marriage garden, banquet hall and party venue."
       }
     ];
 
     let vendors = [...demoVendors];
     let currentVendorList = [...demoVendors];
     let favorites = [];
+    let selectedPhotos = [];
+    let selectedVideo = null;
 
     function safeText(value, fallback = ""){
       return value === null || value === undefined || value === "" ? fallback : String(value);
     }
 
     function normalizeVendor(v){
+      let photos = [];
+
+      if(v.vendor_images && Array.isArray(v.vendor_images)){
+        photos = v.vendor_images.map(img => img.image_url).filter(Boolean);
+      }
+
+      if(v.photos && Array.isArray(v.photos)){
+        photos = v.photos;
+      }
+
+      const mainImage =
+        photos.length > 0
+          ? photos[0]
+          : safeText(v.image_url || v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80");
+
       return {
         id: v.id || "",
         name: safeText(v.name || v.business_name, "Vendor Name"),
@@ -1340,7 +1469,9 @@
         reviews: safeText(v.review_count || v.reviews, "0"),
         phone: safeText(v.phone || v.whatsapp || WHATSAPP_NUMBER, WHATSAPP_NUMBER).replace(/\D/g, ""),
         price: Number(v.price || v.starting_price || 0),
-        img: safeText(v.image_url || v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80"),
+        img: mainImage,
+        photos: photos,
+        video_url: safeText(v.video_url, ""),
         desc: safeText(v.description || v.desc, "Samagra Decor verified event service vendor.")
       };
     }
@@ -1353,10 +1484,26 @@
         return;
       }
 
-      const { data, error } = await supabaseClient
+      let data = null;
+      let error = null;
+
+      const richResult = await supabaseClient
         .from("vendors")
-        .select("*")
+        .select("*, vendor_images(image_url)")
         .order("created_at", { ascending: false });
+
+      data = richResult.data;
+      error = richResult.error;
+
+      if(error){
+        const simpleResult = await supabaseClient
+          .from("vendors")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        data = simpleResult.data;
+        error = simpleResult.error;
+      }
 
       if(error){
         console.log("Vendor load error:", error.message);
@@ -1445,8 +1592,23 @@
     function viewDetails(index){
       const v = currentVendorList[index];
       const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
+
+      const photoGallery = v.photos && v.photos.length > 0
+        ? v.photos.map(url => `
+            <img src="${url}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />
+          `).join("")
+        : `<img src="${v.img}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />`;
+
+      const videoBox = v.video_url
+        ? `<video controls style="width:100%;border-radius:12px;margin:10px 0;max-height:260px;">
+             <source src="${v.video_url}">
+           </video>`
+        : "";
+
       document.getElementById("detailsContent").innerHTML = `
         <h2>${v.name}</h2>
+        ${photoGallery}
+        ${videoBox}
         <p><b>Owner:</b> ${v.owner_name}</p>
         <p><b>Category:</b> ${v.category}</p>
         <p><b>City:</b> ${v.city}</p>
@@ -1455,6 +1617,7 @@
         <p>${v.desc}</p>
         <button onclick="vendorWhatsApp(${index})">Contact on WhatsApp</button>
       `;
+
       openModal("detailsModal");
     }
 
@@ -1482,70 +1645,175 @@
       }
     }
 
-    async function submitBusiness(){
+    function handlePhotoSelect(event){
+      const files = Array.from(event.target.files);
+
+      if(files.length > 4){
+        alert("Max 4 photos hi select kar sakte ho.");
+        event.target.value = "";
+        selectedPhotos = [];
+        document.getElementById("photoStatus").innerText = "Abhi koi photo select nahi hui";
+        return;
+      }
+
+      selectedPhotos = files;
+      document.getElementById("photoStatus").innerText =
+        selectedPhotos.length + " photo select hui";
+    }
+
+    function handleVideoSelect(event){
+      const file = event.target.files[0];
+
+      if(!file){
+        selectedVideo = null;
+        document.getElementById("videoStatus").innerText = "Abhi koi video select nahi hua";
+        return;
+      }
+
+      selectedVideo = file;
+      document.getElementById("videoStatus").innerText = "1 video select hua";
+    }
+
+    function getVendorFormData(){
       const name = document.getElementById("bizName").value.trim();
       const owner = document.getElementById("bizOwner").value.trim();
+      const phone = document.getElementById("bizPhone").value.trim();
       const city = document.getElementById("bizCity").value.trim();
       const cat = document.getElementById("bizCategory").value;
-      const phone = document.getElementById("bizPhone").value.trim();
       const price = document.getElementById("bizPrice").value.trim();
       const desc = document.getElementById("bizDesc").value.trim();
 
-      if(!name || !city || !phone){
-        alert("Business name, city aur phone number bharo.");
+      return { name, owner, phone, city, cat, price, desc };
+    }
+
+    function continueToMonthlyPlan(){
+      const v = getVendorFormData();
+
+      if(!v.name || !v.owner || !v.phone || !v.city || !v.cat){
+        alert("Business Name, Owner Name, Mobile Number, City aur Category zaruri hai.");
         return;
       }
 
-      const vendorData = {
-        name: name,
-        owner_name: owner,
-        city: city,
-        category: cat,
-        phone: phone,
-        price: price ? Number(price) : null,
-        description: desc,
-        status: "pending"
-      };
+      openModal("planModal");
+    }
 
-      if(supabaseClient){
-        const { error } = await supabaseClient.from("vendors").insert([vendorData]);
+    async function uploadFileToSupabase(file, folderName){
+      const fileExt = file.name.split(".").pop();
+      const fileName = folderName + "/" + Date.now() + "_" + Math.random().toString(36).substring(2) + "." + fileExt;
 
-        if(error){
-          alert("Supabase error: " + error.message + "\nAb WhatsApp se submit kar rahe hain.");
-          sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc);
+      const { error } = await supabaseClient.storage
+        .from("vendor-media")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false
+        });
+
+      if(error){
+        throw new Error(error.message);
+      }
+
+      const { data } = supabaseClient.storage
+        .from("vendor-media")
+        .getPublicUrl(fileName);
+
+      return data.publicUrl;
+    }
+
+    async function submitBusinessWithPlan(){
+      const v = getVendorFormData();
+
+      if(!v.name || !v.owner || !v.phone || !v.city || !v.cat){
+        alert("Form me required details bharo.");
+        return;
+      }
+
+      if(!supabaseClient){
+        alert("Supabase connect nahi hai. Pehle Supabase check karo.");
+        return;
+      }
+
+      try{
+        let videoUrl = "";
+
+        if(selectedVideo){
+          videoUrl = await uploadFileToSupabase(selectedVideo, "videos");
+        }
+
+        const vendorData = {
+          name: v.name,
+          owner_name: v.owner,
+          city: v.city,
+          category: v.cat,
+          phone: v.phone,
+          price: v.price ? Number(v.price) : null,
+          description: v.desc,
+          video_url: videoUrl,
+          status: "pending_payment"
+        };
+
+        const { data: vendor, error: vendorError } = await supabaseClient
+          .from("vendors")
+          .insert([vendorData])
+          .select()
+          .single();
+
+        if(vendorError){
+          alert("Vendor save error: " + vendorError.message);
           return;
         }
 
-        alert("Business submit ho gaya ✅ Admin approve karega, phir website par live dikhega.");
+        if(selectedPhotos.length > 0){
+          const imageRows = [];
+
+          for(const photo of selectedPhotos){
+            const photoUrl = await uploadFileToSupabase(photo, "photos");
+
+            imageRows.push({
+              vendor_id: vendor.id,
+              image_url: photoUrl
+            });
+          }
+
+          const { error: imageError } = await supabaseClient
+            .from("vendor_images")
+            .insert(imageRows);
+
+          if(imageError){
+            alert("Vendor save ho gaya, lekin image save error: " + imageError.message);
+          }
+        }
+
+        alert("Vendor request submit ho gayi ✅ Monthly plan status pending_payment hai. Admin approval ke baad live hoga.");
+
+        closeModal("planModal");
         closeModal("businessModal");
         clearBusinessForm();
-        return;
+
+      }catch(err){
+        alert("Upload error: " + err.message);
       }
-
-      sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc);
-      clearBusinessForm();
-    }
-
-    function sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc){
-      const msg = encodeURIComponent(
-        "Hello Samagra Decor, mujhe apna business list karna hai.\n" +
-        "Business: " + name + "\n" +
-        "Owner: " + owner + "\n" +
-        "City: " + city + "\n" +
-        "Category: " + cat + "\n" +
-        "Phone: " + phone + "\n" +
-        "Starting Price: " + price + "\n" +
-        "Description: " + desc
-      );
-      window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg, "_blank");
-      closeModal("businessModal");
     }
 
     function clearBusinessForm(){
-      ["bizName","bizOwner","bizCity","bizPhone","bizPrice","bizDesc"].forEach(id=>{
+      ["bizName","bizOwner","bizPhone","bizCity","bizPrice","bizDesc"].forEach(id=>{
         const el = document.getElementById(id);
         if(el) el.value = "";
       });
+
+      const cat = document.getElementById("bizCategory");
+      if(cat) cat.value = "";
+
+      selectedPhotos = [];
+      selectedVideo = null;
+
+      const photoInput = document.getElementById("vendorPhotos");
+      const videoInput = document.getElementById("vendorVideo");
+
+      if(photoInput) photoInput.value = "";
+      if(videoInput) videoInput.value = "";
+
+      document.getElementById("photoStatus").innerText = "Abhi koi photo select nahi hui";
+      document.getElementById("videoStatus").innerText = "Abhi koi video select nahi hua";
     }
 
     function openAuthModal(){
@@ -1607,7 +1875,7 @@
       `;
     }
 
-    async function createAccount(){
+    function createAccount(){
       const name = document.getElementById("createName").value.trim();
       const email = document.getElementById("createEmail").value.trim();
       const password = document.getElementById("createPassword").value.trim();
