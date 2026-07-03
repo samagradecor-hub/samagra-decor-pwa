@@ -18,13 +18,13 @@
       font-family:Arial, sans-serif;
     }
 
+    html{
+      scroll-behavior:smooth;
+    }
+
     body{
       background:#fffaf0;
       color:#10382f;
-    }
-
-    html{
-      scroll-behavior:smooth;
     }
 
     :root{
@@ -34,6 +34,10 @@
       --light:#fffaf0;
       --white:#ffffff;
       --text:#1b2b25;
+    }
+
+    button{
+      cursor:pointer;
     }
 
     .top{
@@ -73,6 +77,7 @@
       font-weight:bold;
       font-size:26px;
       box-shadow:0 0 20px rgba(214,165,58,.35);
+      flex:none;
     }
 
     .brand h1{
@@ -89,7 +94,7 @@
     .menu{
       display:flex;
       align-items:center;
-      gap:24px;
+      gap:18px;
       font-weight:bold;
       font-size:14px;
     }
@@ -98,32 +103,11 @@
       color:white;
       text-decoration:none;
       cursor:pointer;
+      white-space:nowrap;
     }
 
     .menu a:hover{
       color:var(--gold);
-    }
-
-    .navButtons{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    .outlineBtn,.goldBtn{
-      border:1px solid var(--gold);
-      padding:11px 16px;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:bold;
-      background:transparent;
-      color:white;
-    }
-
-    .goldBtn{
-      background:linear-gradient(135deg,#e7bb55,#c99120);
-      color:#062a22;
-      border:none;
     }
 
     .mobileMenuBtn{
@@ -201,9 +185,45 @@
       box-shadow:0 20px 60px rgba(0,0,0,.35);
     }
 
+    .quickButtons{
+      max-width:1120px;
+      margin:-48px auto 12px;
+      padding:0 18px;
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:12px;
+      position:relative;
+      z-index:6;
+    }
+
+    .quickBtn,.quickGoldBtn{
+      padding:14px 12px;
+      border-radius:12px;
+      font-size:15px;
+      font-weight:bold;
+      border:1px solid var(--gold);
+      box-shadow:0 8px 22px rgba(0,0,0,.18);
+    }
+
+    .quickBtn{
+      background:#043b2f;
+      color:white;
+    }
+
+    .quickGoldBtn{
+      background:linear-gradient(135deg,#e7bb55,#c99120);
+      color:#062a22;
+      border:none;
+    }
+
+    .quickBtn:hover,.quickGoldBtn:hover{
+      transform:translateY(-1px);
+      opacity:.95;
+    }
+
     .searchBox{
       max-width:1120px;
-      margin:-48px auto 0;
+      margin:0 auto 0;
       background:white;
       border-radius:15px;
       padding:16px;
@@ -234,6 +254,7 @@
       align-items:center;
       justify-content:center;
       font-size:22px;
+      flex:none;
     }
 
     .field label{
@@ -259,10 +280,9 @@
       border-radius:10px;
       font-size:16px;
       font-weight:bold;
-      cursor:pointer;
     }
 
-    .searchBtn:hover,.goldBtn:hover{
+    .searchBtn:hover{
       transform:translateY(-1px);
       opacity:.95;
     }
@@ -406,7 +426,6 @@
       border:none;
       border-radius:8px;
       padding:10px;
-      cursor:pointer;
       font-weight:bold;
     }
 
@@ -594,7 +613,6 @@
       color:#043b2f;
       font-weight:bold;
       border-radius:0 8px 8px 0;
-      cursor:pointer;
     }
 
     .bottom{
@@ -623,6 +641,30 @@
       z-index:50;
     }
 
+    .installBar{
+      position:fixed;
+      left:15px;
+      bottom:20px;
+      background:white;
+      border:1px solid #f0dfb8;
+      border-radius:13px;
+      padding:12px 14px;
+      box-shadow:0 8px 25px rgba(0,0,0,.18);
+      z-index:45;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .installBar button{
+      background:var(--gold);
+      color:#043b2f;
+      border:none;
+      padding:9px 12px;
+      border-radius:8px;
+      font-weight:bold;
+    }
+
     .modal{
       position:fixed;
       inset:0;
@@ -642,6 +684,8 @@
       padding:24px;
       position:relative;
       box-shadow:0 15px 50px rgba(0,0,0,.35);
+      max-height:90vh;
+      overflow:auto;
     }
 
     .close{
@@ -682,36 +726,10 @@
       border-radius:10px;
       font-weight:bold;
       margin-top:8px;
-      cursor:pointer;
-    }
-
-    .installBar{
-      position:fixed;
-      left:15px;
-      bottom:20px;
-      background:white;
-      border:1px solid #f0dfb8;
-      border-radius:13px;
-      padding:12px 14px;
-      box-shadow:0 8px 25px rgba(0,0,0,.18);
-      z-index:45;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .installBar button{
-      background:var(--gold);
-      color:#043b2f;
-      border:none;
-      padding:9px 12px;
-      border-radius:8px;
-      font-weight:bold;
-      cursor:pointer;
     }
 
     @media(max-width:950px){
-      .menu,.navButtons{
+      .menu{
         display:none;
       }
 
@@ -748,6 +766,17 @@
         border-radius:30px;
         border-left:none;
         border:3px solid var(--gold);
+      }
+
+      .quickButtons{
+        grid-template-columns:1fr;
+        margin:15px 18px 12px;
+        padding:0;
+      }
+
+      .quickBtn,.quickGoldBtn{
+        padding:15px;
+        font-size:16px;
       }
 
       .searchBox{
@@ -807,12 +836,9 @@
         <a onclick="openModal('dealsModal')">Deals</a>
         <a onclick="openModal('aboutModal')">About Us</a>
         <a onclick="openModal('contactModal')">Contact</a>
-      </div>
-
-      <div class="navButtons">
-        <button class="outlineBtn" onclick="showFavorites()">♡ Favorites</button>
-        <button class="outlineBtn" onclick="openModal('loginModal')">Login / Signup</button>
-        <button class="goldBtn" onclick="openModal('businessModal')">List Your Business</button>
+        <a onclick="showFavorites()">♡ Favorites</a>
+        <a onclick="openModal('loginModal')">Login / Signup</a>
+        <a onclick="openModal('businessModal')">List Your Business</a>
       </div>
 
       <div class="mobileMenuBtn" onclick="toggleMenu()">☰</div>
@@ -835,6 +861,12 @@
       </div>
       <div class="heroImage"></div>
     </div>
+  </div>
+
+  <div class="quickButtons">
+    <button class="quickBtn" onclick="showFavorites()">♡ Favorites</button>
+    <button class="quickBtn" onclick="openModal('loginModal')">Login / Signup</button>
+    <button class="quickGoldBtn" onclick="openModal('businessModal')">List Your Business</button>
   </div>
 
   <div class="searchBox">
@@ -1011,8 +1043,8 @@
       <p>Customer ya vendor account ke liye demo login form.</p>
       <input placeholder="Email address" />
       <input placeholder="Password" type="password" />
-      <button onclick="alert('Login feature next step me Firebase/Supabase se connect karenge.')">Login</button>
-      <button onclick="alert('Signup feature next step me database se connect karenge.')">Create Account</button>
+      <button onclick="alert('Login feature next step me Supabase Auth se connect karenge.')">Login</button>
+      <button onclick="alert('Signup feature next step me Supabase Auth se connect karenge.')">Create Account</button>
     </div>
   </div>
 
@@ -1099,11 +1131,7 @@
   <script>
     const WHATSAPP_NUMBER = "919999999999";
 
-    // ✅ Supabase Project URL already added
     const SUPABASE_URL = "https://uomxewgvhbqjoamxfnnm.supabase.co";
-
-    // ⚠️ Yahan sirf Supabase ki "anon public key" paste karni hai.
-    // service_role key kabhi website me paste mat karna.
     const SUPABASE_ANON_KEY = "sb_publishable_JizxCNPAlEeHRL1RaIGJXQ_Q8HeqzCq";
 
     const isSupabaseReady =
@@ -1237,7 +1265,6 @@
         console.log("Vendor load error:", error.message);
         vendors = demoVendors.map(normalizeVendor);
       }else if(data && data.length > 0){
-        // Public website par approved vendors dikhenge. Agar status column nahi hai to sab dikhenge.
         vendors = data
           .filter(v => !v.status || v.status === "approved" || v.status === "active")
           .map(normalizeVendor);
@@ -1354,7 +1381,7 @@
       if(favorites.length === 0){
         alert("Abhi koi favorite vendor add nahi hai.");
       }else{
-        alert("Your Favorites:\\n" + favorites.join("\\n"));
+        alert("Your Favorites:\n" + favorites.join("\n"));
       }
     }
 
@@ -1387,7 +1414,7 @@
         const { error } = await supabaseClient.from("vendors").insert([vendorData]);
 
         if(error){
-          alert("Supabase error: " + error.message + "\\nAb WhatsApp se submit kar rahe hain.");
+          alert("Supabase error: " + error.message + "\nAb WhatsApp se submit kar rahe hain.");
           sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc);
           return;
         }
@@ -1404,13 +1431,13 @@
 
     function sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc){
       const msg = encodeURIComponent(
-        "Hello Samagra Decor, mujhe apna business list karna hai.\\n" +
-        "Business: " + name + "\\n" +
-        "Owner: " + owner + "\\n" +
-        "City: " + city + "\\n" +
-        "Category: " + cat + "\\n" +
-        "Phone: " + phone + "\\n" +
-        "Starting Price: " + price + "\\n" +
+        "Hello Samagra Decor, mujhe apna business list karna hai.\n" +
+        "Business: " + name + "\n" +
+        "Owner: " + owner + "\n" +
+        "City: " + city + "\n" +
+        "Category: " + cat + "\n" +
+        "Phone: " + phone + "\n" +
+        "Starting Price: " + price + "\n" +
         "Description: " + desc
       );
       window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg, "_blank");
