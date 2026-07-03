@@ -1329,6 +1329,15 @@
 
     renderVendors(vendors);
   </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  const SUPABASE_URL = "https://uomxewgvhbqjoamxfnnm.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_JizxCNPAlEeHRL1RaIGJXQ_Q8HeqzCq";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  console.log("Supabase Connected Successfully ✅");
+</script>
 </body>
 </html>
