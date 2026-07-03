@@ -34,6 +34,7 @@
       --light:#fffaf0;
       --white:#ffffff;
       --text:#1b2b25;
+      --blue:#061b3a;
     }
 
     button{
@@ -276,11 +277,6 @@
       border-radius:10px;
       font-size:16px;
       font-weight:bold;
-    }
-
-    .searchBtn:hover{
-      transform:translateY(-1px);
-      opacity:.95;
     }
 
     section{
@@ -664,7 +660,7 @@
     .modal{
       position:fixed;
       inset:0;
-      background:rgba(0,0,0,.55);
+      background:rgba(0,0,0,.62);
       display:none;
       align-items:center;
       justify-content:center;
@@ -684,13 +680,97 @@
       overflow:auto;
     }
 
+    .authBox{
+      background:white;
+      border-radius:32px;
+      width:100%;
+      max-width:520px;
+      padding:34px 28px;
+      position:relative;
+      box-shadow:0 15px 50px rgba(0,0,0,.4);
+      border:2px solid var(--gold);
+      max-height:92vh;
+      overflow:auto;
+      text-align:center;
+    }
+
+    .authIcon{
+      font-size:54px;
+      margin-bottom:10px;
+    }
+
+    .authTitle{
+      color:var(--blue);
+      font-size:34px;
+      font-weight:bold;
+      margin-bottom:8px;
+    }
+
+    .authSub{
+      color:#c49a29;
+      font-size:20px;
+      margin-bottom:15px;
+    }
+
+    .authInput{
+      width:100%;
+      padding:15px 16px;
+      margin:8px 0;
+      border:1px solid #ddd;
+      border-radius:12px;
+      outline:none;
+      font-size:17px;
+    }
+
+    .authMainBtn{
+      width:100%;
+      padding:16px;
+      border:none;
+      background:var(--blue);
+      color:var(--gold);
+      border-radius:16px;
+      font-weight:bold;
+      font-size:18px;
+      margin-top:10px;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+    }
+
+    .authOutlineBtn{
+      width:100%;
+      padding:14px;
+      border:1px solid var(--gold);
+      background:white;
+      color:var(--blue);
+      border-radius:30px;
+      font-weight:bold;
+      font-size:17px;
+      margin-top:12px;
+    }
+
+    .authTextBtn{
+      background:transparent;
+      border:none;
+      color:var(--blue);
+      font-size:17px;
+      font-weight:bold;
+      margin-top:14px;
+      text-decoration:underline;
+    }
+
+    .authDivider{
+      margin:14px 0;
+      color:#c49a29;
+      font-weight:bold;
+    }
+
     .close{
       position:absolute;
-      top:12px;
-      right:14px;
-      font-size:24px;
+      top:16px;
+      right:20px;
+      font-size:30px;
       cursor:pointer;
-      color:#333;
+      color:#111;
+      z-index:2;
     }
 
     .modalBox h2{
@@ -809,6 +889,15 @@
       .installBar{
         display:none;
       }
+
+      .authBox{
+        border-radius:28px;
+        padding:32px 22px;
+      }
+
+      .authTitle{
+        font-size:31px;
+      }
     }
   </style>
 </head>
@@ -833,8 +922,7 @@
         <a onclick="openModal('aboutModal')">About Us</a>
         <a onclick="openModal('contactModal')">Contact</a>
         <a onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</a>
-        <a onclick="openModal('loginModal')">Login / Signup</a>
-        <a onclick="openModal('businessModal')">List Your Business</a>
+        <a id="authMenuLink" onclick="openAuthModal()">Login / Create Account</a>
       </div>
 
       <div class="mobileMenuBtn" onclick="toggleMenu()">☰</div>
@@ -861,7 +949,7 @@
 
   <div class="quickButtons">
     <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
-    <button class="quickBtn" onclick="openModal('loginModal')">Login / Signup</button>
+    <button class="quickBtn" id="authQuickBtn" onclick="openAuthModal()">Login / Create Account</button>
     <button class="quickGoldBtn" onclick="openModal('businessModal')">List Your Business</button>
   </div>
 
@@ -1001,7 +1089,7 @@
       <div class="footerCol">
         <h3>For Businesses</h3>
         <a onclick="openModal('businessModal')">List Your Business</a>
-        <a onclick="openModal('loginModal')">Vendor Login</a>
+        <a onclick="openAuthModal()">Vendor Login</a>
         <a onclick="openModal('aboutModal')">How It Works</a>
         <a onclick="openModal('contactModal')">Partner With Us</a>
       </div>
@@ -1033,14 +1121,9 @@
   </div>
 
   <div class="modal" id="loginModal">
-    <div class="modalBox">
+    <div class="authBox">
       <span class="close" onclick="closeModal('loginModal')">×</span>
-      <h2>Login / Signup</h2>
-      <p>Customer ya vendor account ke liye demo login form.</p>
-      <input placeholder="Email address" />
-      <input placeholder="Password" type="password" />
-      <button onclick="alert('Login feature next step me Supabase Auth se connect karenge.')">Login</button>
-      <button onclick="alert('Signup feature next step me Supabase Auth se connect karenge.')">Create Account</button>
+      <div id="authContent"></div>
     </div>
   </div>
 
@@ -1124,6 +1207,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+
   <script>
     const WHATSAPP_NUMBER = "919999999999";
 
@@ -1144,6 +1230,21 @@
     } else {
       console.log("Supabase key missing. Website demo data se chalegi.");
     }
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAH4B2wWFUnuW7iO-vaHjO5iYpQsXHAv70",
+      authDomain: "samagra-decor.firebaseapp.com",
+      projectId: "samagra-decor",
+      storageBucket: "samagra-decor.firebasestorage.app",
+      messagingSenderId: "219015483747",
+      appId: "1:219015483747:web:3209ebda9afcd77ebdc356",
+      measurementId: "G-RWFVVV964L"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const firebaseAuth = firebase.auth();
+
+    let currentUser = null;
 
     const demoVendors = [
       {
@@ -1446,6 +1547,158 @@
         if(el) el.value = "";
       });
     }
+
+    function openAuthModal(){
+      if(currentUser){
+        showAccountScreen();
+      }else{
+        showLoginScreen();
+      }
+      openModal("loginModal");
+    }
+
+    function showLoginScreen(){
+      document.getElementById("authContent").innerHTML = `
+        <div class="authIcon">👤</div>
+        <div class="authTitle">Welcome Back</div>
+        <div class="authSub">Login to continue</div>
+
+        <input class="authInput" id="loginEmail" type="email" placeholder="✉  Email address" />
+        <input class="authInput" id="loginPassword" type="password" placeholder="🔒  Password" />
+
+        <button class="authTextBtn" onclick="forgotPassword()">Forgot Password?</button>
+        <button class="authMainBtn" onclick="loginUser()">LOGIN →</button>
+
+        <div class="authDivider">OR</div>
+        <button class="authOutlineBtn" onclick="showCreateAccountScreen()">Create Account</button>
+        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
+      `;
+    }
+
+    function showCreateAccountScreen(){
+      document.getElementById("authContent").innerHTML = `
+        <div class="authIcon">👥</div>
+        <div class="authTitle">Create Account</div>
+        <div class="authSub">Join Samagra Decor</div>
+
+        <input class="authInput" id="createName" type="text" placeholder="👤  Full Name" />
+        <input class="authInput" id="createEmail" type="email" placeholder="✉  Email address" />
+        <input class="authInput" id="createPassword" type="password" placeholder="🔒  Password" />
+
+        <button class="authMainBtn" onclick="createAccount()">CREATE ACCOUNT →</button>
+
+        <div class="authDivider">OR</div>
+        <button class="authOutlineBtn" onclick="showLoginScreen()">Login</button>
+        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
+      `;
+    }
+
+    function showAccountScreen(){
+      const name = currentUser.displayName || "User";
+      const email = currentUser.email || "";
+      document.getElementById("authContent").innerHTML = `
+        <div class="authIcon">✅</div>
+        <div class="authTitle">Welcome</div>
+        <div class="authSub">${name}</div>
+        <p style="color:#555;margin:10px 0 18px;">${email}</p>
+
+        <button class="authMainBtn" onclick="logoutUser()">LOGOUT</button>
+        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
+      `;
+    }
+
+    async function createAccount(){
+      const name = document.getElementById("createName").value.trim();
+      const email = document.getElementById("createEmail").value.trim();
+      const password = document.getElementById("createPassword").value.trim();
+
+      if(!name || !email || !password){
+        alert("Full name, email aur password bharo.");
+        return;
+      }
+
+      if(password.length < 6){
+        alert("Password kam se kam 6 character ka hona chahiye.");
+        return;
+      }
+
+      firebaseAuth.createUserWithEmailAndPassword(email, password)
+        .then(function(result){
+          return result.user.updateProfile({
+            displayName:name
+          });
+        })
+        .then(function(){
+          alert("Account create ho gaya ✅");
+          closeModal("loginModal");
+        })
+        .catch(function(error){
+          alert("Create Account Error: " + error.message);
+        });
+    }
+
+    function loginUser(){
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+
+      if(!email || !password){
+        alert("Email aur password bharo.");
+        return;
+      }
+
+      firebaseAuth.signInWithEmailAndPassword(email, password)
+        .then(function(){
+          alert("Login successful ✅");
+          closeModal("loginModal");
+        })
+        .catch(function(error){
+          alert("Login Error: " + error.message);
+        });
+    }
+
+    function forgotPassword(){
+      const email = document.getElementById("loginEmail").value.trim();
+
+      if(!email){
+        alert("Pehle email address bharo.");
+        return;
+      }
+
+      firebaseAuth.sendPasswordResetEmail(email)
+        .then(function(){
+          alert("Password reset email bhej diya gaya ✅");
+        })
+        .catch(function(error){
+          alert("Forgot Password Error: " + error.message);
+        });
+    }
+
+    function logoutUser(){
+      firebaseAuth.signOut()
+        .then(function(){
+          alert("Logout successful ✅");
+          closeModal("loginModal");
+        })
+        .catch(function(error){
+          alert("Logout Error: " + error.message);
+        });
+    }
+
+    firebaseAuth.onAuthStateChanged(function(user){
+      currentUser = user;
+
+      const authQuickBtn = document.getElementById("authQuickBtn");
+      const authMenuLink = document.getElementById("authMenuLink");
+
+      if(user){
+        const name = user.displayName || "My Account";
+        if(authQuickBtn) authQuickBtn.textContent = name;
+        if(authMenuLink) authMenuLink.textContent = "My Account / Logout";
+      }else{
+        if(authQuickBtn) authQuickBtn.textContent = "Login / Create Account";
+        if(authMenuLink) authMenuLink.textContent = "Login / Create Account";
+      }
+    });
 
     function subscribe(){
       const email = document.getElementById("newsletterEmail").value.trim();
