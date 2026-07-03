@@ -201,24 +201,20 @@
       border-radius:12px;
       font-size:15px;
       font-weight:bold;
-      border:1px solid var(--gold);
+      border:2px solid #043b2f;
       box-shadow:0 8px 22px rgba(0,0,0,.18);
-    }
-
-    .quickBtn{
-      background:#043b2f;
-      color:white;
-    }
-
-    .quickGoldBtn{
-      background:linear-gradient(135deg,#e7bb55,#c99120);
-      color:#062a22;
-      border:none;
+      background:linear-gradient(135deg,#efc55a,#d9a42d);
+      color:#111111;
     }
 
     .quickBtn:hover,.quickGoldBtn:hover{
       transform:translateY(-1px);
       opacity:.95;
+    }
+
+    .redHeart{
+      color:red;
+      font-weight:bold;
     }
 
     .searchBox{
@@ -775,7 +771,7 @@
       }
 
       .quickBtn,.quickGoldBtn{
-        padding:15px;
+        padding:18px;
         font-size:16px;
       }
 
@@ -836,7 +832,7 @@
         <a onclick="openModal('dealsModal')">Deals</a>
         <a onclick="openModal('aboutModal')">About Us</a>
         <a onclick="openModal('contactModal')">Contact</a>
-        <a onclick="showFavorites()">♡ Favorites</a>
+        <a onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</a>
         <a onclick="openModal('loginModal')">Login / Signup</a>
         <a onclick="openModal('businessModal')">List Your Business</a>
       </div>
@@ -864,7 +860,7 @@
   </div>
 
   <div class="quickButtons">
-    <button class="quickBtn" onclick="showFavorites()">♡ Favorites</button>
+    <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
     <button class="quickBtn" onclick="openModal('loginModal')">Login / Signup</button>
     <button class="quickGoldBtn" onclick="openModal('businessModal')">List Your Business</button>
   </div>
