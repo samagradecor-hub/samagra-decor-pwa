@@ -1022,6 +1022,7 @@
       <h2>List Your Business</h2>
       <p>Apna vendor business Samagra Decor par list karne ke liye details bhejein.</p>
       <input id="bizName" placeholder="Business Name" />
+      <input id="bizOwner" placeholder="Owner Name" />
       <input id="bizCity" placeholder="City" />
       <select id="bizCategory">
         <option>Tent House</option>
@@ -1033,8 +1034,10 @@
         <option>Banquet Hall</option>
         <option>Makeup</option>
       </select>
-      <input id="bizPhone" placeholder="Phone Number" />
-      <button onclick="submitBusiness()">Submit on WhatsApp</button>
+      <input id="bizPhone" placeholder="Phone Number / WhatsApp" />
+      <input id="bizPrice" type="number" placeholder="Starting Price" />
+      <textarea id="bizDesc" rows="3" placeholder="Business Description"></textarea>
+      <button onclick="submitBusiness()">Submit Business</button>
     </div>
   </div>
 
@@ -1091,76 +1094,168 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     const WHATSAPP_NUMBER = "919999999999";
 
-    const vendors = [
+    // ✅ Supabase Project URL already added
+    const SUPABASE_URL = "https://uomxewgvhbqjoamxfnnm.supabase.co";
+
+    // ⚠️ Yahan sirf Supabase ki "anon public key" paste karni hai.
+    // service_role key kabhi website me paste mat karna.
+    const SUPABASE_ANON_KEY = "YAHAN_SUPABASE_ANON_PUBLIC_KEY_PASTE_KARO";
+
+    const isSupabaseReady =
+      SUPABASE_URL.includes("supabase.co") &&
+      SUPABASE_ANON_KEY &&
+      !SUPABASE_ANON_KEY.includes("YAHAN_");
+
+    const supabaseClient = isSupabaseReady
+      ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+      : null;
+
+    if (supabaseClient) {
+      console.log("Supabase Connected Successfully ✅");
+    } else {
+      console.log("Supabase key missing. Website demo data se chalegi.");
+    }
+
+    const demoVendors = [
       {
         name:"Royal Tent House",
+        owner_name:"Rajesh Verma",
         category:"Tent House",
         city:"Lucknow",
         rating:"4.8",
         reviews:"256",
+        phone:"919999999999",
         price:45000,
         img:"https://images.unsplash.com/photo-1519167758481-83f29c8d7e9b?auto=format&fit=crop&w=800&q=80",
         desc:"Premium tent setup, stage, seating and wedding event decoration."
       },
       {
         name:"Dream Decorators",
+        owner_name:"Amit Sharma",
         category:"Decoration",
         city:"Jaipur",
         rating:"4.9",
         reviews:"312",
+        phone:"919999999999",
         price:125000,
         img:"https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80",
         desc:"Wedding stage, flower decor, entry gate and theme decoration."
       },
       {
         name:"Taste Affair Catering",
+        owner_name:"Suresh Gupta",
         category:"Catering",
         city:"Delhi",
         rating:"4.7",
         reviews:"198",
+        phone:"919999999999",
         price:450,
         img:"https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80",
         desc:"Veg/non-veg catering, live counters and halwai services."
       },
       {
         name:"Beat Blast DJ",
+        owner_name:"Rahul Khan",
         category:"DJ Music",
         city:"Mumbai",
         rating:"4.9",
         reviews:"278",
+        phone:"919999999999",
         price:15000,
         img:"https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
         desc:"DJ, sound, disco light and event music setup."
       },
       {
         name:"Memories Studio",
+        owner_name:"Nikhil Jain",
         category:"Photography",
         city:"Chandigarh",
         rating:"4.8",
         reviews:"205",
+        phone:"919999999999",
         price:20000,
         img:"https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80",
         desc:"Wedding photography, candid shoot and video coverage."
       },
       {
         name:"Grand Garden Palace",
+        owner_name:"Manish Yadav",
         category:"Banquet Hall",
         city:"Noida",
         rating:"4.6",
         reviews:"167",
+        phone:"919999999999",
         price:85000,
         img:"https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80",
         desc:"Marriage garden, banquet hall and party venue."
       }
     ];
 
+    let vendors = [...demoVendors];
+    let currentVendorList = [...demoVendors];
     let favorites = [];
+
+    function safeText(value, fallback = ""){
+      return value === null || value === undefined || value === "" ? fallback : String(value);
+    }
+
+    function normalizeVendor(v){
+      return {
+        id: v.id || "",
+        name: safeText(v.name || v.business_name, "Vendor Name"),
+        owner_name: safeText(v.owner_name, "Owner"),
+        category: safeText(v.category, "Event Service"),
+        city: safeText(v.city, "India"),
+        rating: safeText(v.rating, "0"),
+        reviews: safeText(v.review_count || v.reviews, "0"),
+        phone: safeText(v.phone || v.whatsapp || WHATSAPP_NUMBER, WHATSAPP_NUMBER).replace(/\D/g, ""),
+        price: Number(v.price || v.starting_price || 0),
+        img: safeText(v.image_url || v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80"),
+        desc: safeText(v.description || v.desc, "Samagra Decor verified event service vendor.")
+      };
+    }
+
+    async function loadVendors(){
+      if(!supabaseClient){
+        vendors = demoVendors.map(normalizeVendor);
+        currentVendorList = [...vendors];
+        renderVendors(currentVendorList);
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from("vendors")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if(error){
+        console.log("Vendor load error:", error.message);
+        vendors = demoVendors.map(normalizeVendor);
+      }else if(data && data.length > 0){
+        // Public website par approved vendors dikhenge. Agar status column nahi hai to sab dikhenge.
+        vendors = data
+          .filter(v => !v.status || v.status === "approved" || v.status === "active")
+          .map(normalizeVendor);
+
+        if(vendors.length === 0){
+          vendors = demoVendors.map(normalizeVendor);
+        }
+      }else{
+        vendors = demoVendors.map(normalizeVendor);
+      }
+
+      currentVendorList = [...vendors];
+      renderVendors(currentVendorList);
+    }
 
     function renderVendors(list){
       const box = document.getElementById("vendorList");
+      currentVendorList = list;
       box.innerHTML = "";
 
       if(list.length === 0){
@@ -1169,6 +1264,7 @@
       }
 
       list.forEach((v,index)=>{
+        const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
         box.innerHTML += `
           <div class="vendorCard">
             <div class="vendorImg" style="background-image:url('${v.img}')">
@@ -1179,12 +1275,13 @@
               <div class="meta">
                 <span>⭐ ${v.rating} (${v.reviews})</span>
                 <span>📍 ${v.city}</span>
+                <span>▦ ${v.category}</span>
               </div>
-              <div class="price">Starts from ₹${v.price.toLocaleString("en-IN")}</div>
+              <div class="price">${priceText}</div>
               <div class="cardActions">
-                <button class="waBtn" onclick="vendorWhatsApp('${v.name}')">☘</button>
+                <button class="waBtn" onclick="vendorWhatsApp(${index})">☘</button>
                 <button class="detailBtn" onclick="viewDetails(${index})">View Details</button>
-                <button class="favBtn" onclick="addFavorite('${v.name}')">♡</button>
+                <button class="favBtn" onclick="addFavorite('${v.name.replace(/'/g, "\\'")}')">♡</button>
               </div>
             </div>
           </div>
@@ -1197,10 +1294,10 @@
       const category = document.getElementById("category").value;
       const budget = document.getElementById("budget").value;
 
-      let result = vendors.filter(v=>{
-        let cityOk = city === "" || v.city === city;
-        let catOk = category === "" || v.category === category;
-        let budgetOk = budget === "" || v.price <= Number(budget);
+      const result = vendors.filter(v=>{
+        const cityOk = city === "" || v.city.toLowerCase() === city.toLowerCase();
+        const catOk = category === "" || v.category.toLowerCase() === category.toLowerCase();
+        const budgetOk = budget === "" || v.price <= Number(budget);
         return cityOk && catOk && budgetOk;
       });
 
@@ -1222,22 +1319,26 @@
     }
 
     function viewDetails(index){
-      const v = vendors[index];
+      const v = currentVendorList[index];
+      const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
       document.getElementById("detailsContent").innerHTML = `
         <h2>${v.name}</h2>
+        <p><b>Owner:</b> ${v.owner_name}</p>
         <p><b>Category:</b> ${v.category}</p>
         <p><b>City:</b> ${v.city}</p>
         <p><b>Rating:</b> ⭐ ${v.rating} (${v.reviews} reviews)</p>
-        <p><b>Price:</b> Starts from ₹${v.price.toLocaleString("en-IN")}</p>
+        <p><b>Price:</b> ${priceText}</p>
         <p>${v.desc}</p>
-        <button onclick="vendorWhatsApp('${v.name}')">Contact on WhatsApp</button>
+        <button onclick="vendorWhatsApp(${index})">Contact on WhatsApp</button>
       `;
       openModal("detailsModal");
     }
 
-    function vendorWhatsApp(name){
-      const text = encodeURIComponent("Hello Samagra Decor, mujhe " + name + " vendor ki details chahiye.");
-      window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + text, "_blank");
+    function vendorWhatsApp(index){
+      const v = currentVendorList[index];
+      const phone = v.phone && v.phone.length >= 10 ? v.phone : WHATSAPP_NUMBER;
+      const text = encodeURIComponent("Hello Samagra Decor, mujhe " + v.name + " vendor ki details chahiye.");
+      window.open("https://wa.me/" + phone + "?text=" + text, "_blank");
     }
 
     function addFavorite(name){
@@ -1257,29 +1358,74 @@
       }
     }
 
-    function submitBusiness(){
-      const name = document.getElementById("bizName").value;
-      const city = document.getElementById("bizCity").value;
+    async function submitBusiness(){
+      const name = document.getElementById("bizName").value.trim();
+      const owner = document.getElementById("bizOwner").value.trim();
+      const city = document.getElementById("bizCity").value.trim();
       const cat = document.getElementById("bizCategory").value;
-      const phone = document.getElementById("bizPhone").value;
+      const phone = document.getElementById("bizPhone").value.trim();
+      const price = document.getElementById("bizPrice").value.trim();
+      const desc = document.getElementById("bizDesc").value.trim();
 
       if(!name || !city || !phone){
         alert("Business name, city aur phone number bharo.");
         return;
       }
 
+      const vendorData = {
+        name: name,
+        owner_name: owner,
+        city: city,
+        category: cat,
+        phone: phone,
+        price: price ? Number(price) : null,
+        description: desc,
+        status: "pending"
+      };
+
+      if(supabaseClient){
+        const { error } = await supabaseClient.from("vendors").insert([vendorData]);
+
+        if(error){
+          alert("Supabase error: " + error.message + "\\nAb WhatsApp se submit kar rahe hain.");
+          sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc);
+          return;
+        }
+
+        alert("Business submit ho gaya ✅ Admin approve karega, phir website par live dikhega.");
+        closeModal("businessModal");
+        clearBusinessForm();
+        return;
+      }
+
+      sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc);
+      clearBusinessForm();
+    }
+
+    function sendBusinessWhatsApp(name, owner, city, cat, phone, price, desc){
       const msg = encodeURIComponent(
-        "Hello Samagra Decor, mujhe apna business list karna hai.%0A" +
-        "Business: " + name + "%0A" +
-        "City: " + city + "%0A" +
-        "Category: " + cat + "%0A" +
-        "Phone: " + phone
+        "Hello Samagra Decor, mujhe apna business list karna hai.\\n" +
+        "Business: " + name + "\\n" +
+        "Owner: " + owner + "\\n" +
+        "City: " + city + "\\n" +
+        "Category: " + cat + "\\n" +
+        "Phone: " + phone + "\\n" +
+        "Starting Price: " + price + "\\n" +
+        "Description: " + desc
       );
       window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + msg, "_blank");
+      closeModal("businessModal");
+    }
+
+    function clearBusinessForm(){
+      ["bizName","bizOwner","bizCity","bizPhone","bizPrice","bizDesc"].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.value = "";
+      });
     }
 
     function subscribe(){
-      const email = document.getElementById("newsletterEmail").value;
+      const email = document.getElementById("newsletterEmail").value.trim();
       if(!email){
         alert("Email enter karo.");
       }else{
@@ -1297,7 +1443,10 @@
     }
 
     function goTo(id){
-      document.getElementById(id).scrollIntoView({behavior:"smooth"});
+      const section = document.getElementById(id);
+      if(section){
+        section.scrollIntoView({behavior:"smooth"});
+      }
       document.getElementById("menu").classList.remove("show");
     }
 
@@ -1324,20 +1473,13 @@
     }
 
     if("serviceWorker" in navigator){
-      navigator.serviceWorker.register("service-worker.js");
+      navigator.serviceWorker.register("service-worker.js")
+        .catch(function(error){
+          console.log("Service worker error:", error);
+        });
     }
 
-    renderVendors(vendors);
+    loadVendors();
   </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-  const SUPABASE_URL = "https://uomxewgvhbqjoamxfnnm.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_JizxCNPAlEeHRL1RaIGJXQ_Q8HeqzCq";
-
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  console.log("Supabase Connected Successfully ✅");
-</script>
 </body>
 </html>
