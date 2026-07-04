@@ -1476,53 +1476,74 @@
       };
     }
 
-    async function loadVendors(){
-      if(!supabaseClient){
-        vendors = demoVendors.map(normalizeVendor);
-        currentVendorList = [...vendors];
-        renderVendors(currentVendorList);
-        return;
+   async function loadVendors(){
+  if(!supabaseClient){
+    vendors = demoVendors.map(normalizeVendor);
+    currentVendorList = [...vendors];
+    renderVendors(currentVendorList);
+    return;
+  }
+
+  const { data: vendorData, error: vendorError } = await supabaseClient
+    .from("vendors")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if(vendorError){
+    console.log("Vendor load error:", vendorError.message);
+    vendors = demoVendors.map(normalizeVendor);
+    currentVendorList = [...vendors];
+    renderVendors(currentVendorList);
+    return;
+  }
+
+  if(!vendorData || vendorData.length === 0){
+    vendors = demoVendors.map(normalizeVendor);
+    currentVendorList = [...vendors];
+    renderVendors(currentVendorList);
+    return;
+  }
+
+  const { data: imageData, error: imageError } = await supabaseClient
+    .from("vendor_images")
+    .select("vendor_id, image_url");
+
+  if(imageError){
+    console.log("Image load error:", imageError.message);
+  }
+
+  const imagesByVendor = {};
+
+  if(imageData && imageData.length > 0){
+    imageData.forEach(img => {
+      if(!imagesByVendor[img.vendor_id]){
+        imagesByVendor[img.vendor_id] = [];
       }
 
-      let data = null;
-      let error = null;
+      imagesByVendor[img.vendor_id].push({
+        image_url: img.image_url
+      });
+    });
+  }
 
-      const richResult = await supabaseClient
-        .from("vendors")
-        .select("*, vendor_images(image_url)")
-        .order("created_at", { ascending: false });
+  const finalData = vendorData.map(v => {
+    return {
+      ...v,
+      vendor_images: imagesByVendor[v.id] || []
+    };
+  });
 
-      data = richResult.data;
-      error = richResult.error;
+  vendors = finalData
+    .filter(v => !v.status || v.status === "approved" || v.status === "active" || v.status === "pending_payment")
+    .map(normalizeVendor);
 
-      if(error){
-        const simpleResult = await supabaseClient
-          .from("vendors")
-          .select("*")
-          .order("created_at", { ascending: false });
+  if(vendors.length === 0){
+    vendors = demoVendors.map(normalizeVendor);
+  }
 
-        data = simpleResult.data;
-        error = simpleResult.error;
-      }
-
-      if(error){
-        console.log("Vendor load error:", error.message);
-        vendors = demoVendors.map(normalizeVendor);
-      }else if(data && data.length > 0){
-        vendors = data
-          .filter(v => !v.status || v.status === "approved" || v.status === "active")
-          .map(normalizeVendor);
-
-        if(vendors.length === 0){
-          vendors = demoVendors.map(normalizeVendor);
-        }
-      }else{
-        vendors = demoVendors.map(normalizeVendor);
-      }
-
-      currentVendorList = [...vendors];
-      renderVendors(currentVendorList);
-    }
+  currentVendorList = [...vendors];
+  renderVendors(currentVendorList);
+}
 
     function renderVendors(list){
       const box = document.getElementById("vendorList");
