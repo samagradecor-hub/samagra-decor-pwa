@@ -1029,6 +1029,7 @@
         <a onclick="openModal('contactModal')">Contact</a>
         <a onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</a>
         <a id="authMenuLink" onclick="openAuthModal()">Login / Create Account</a>
+        <a id="adminMenuLink" onclick="openAdminPanel()" style="display:none;">Admin Panel</a>
       </div>
 
       <div class="mobileMenuBtn" onclick="toggleMenu()">☰</div>
@@ -1057,6 +1058,7 @@
     <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
     <button class="quickBtn" id="authQuickBtn" onclick="openAuthModal()">Login / Create Account</button>
     <button class="quickGoldBtn" onclick="openModal('businessModal')">List Your Business</button>
+    <button class="quickBtn" id="adminQuickBtn" onclick="openAdminPanel()" style="display:none;">Admin Panel</button>
   </div>
 
   <div class="searchBox">
@@ -1299,7 +1301,20 @@
       </div>
     </div>
   </div>
+<div class="modal" id="adminModal">
+  <div class="modalBox">
+    <span class="close" onclick="closeModal('adminModal')">×</span>
+    <h2>Website Admin Panel</h2>
+    <p>Pending vendors ko approve/reject karein.</p>
 
+    <button onclick="loadAdminVendors()">Refresh Pending Vendors</button>
+
+    <div id="adminContent" style="margin-top:15px;">
+      Loading...
+    </div>
+  </div>
+</div>
+  
   <div class="modal" id="detailsModal">
     <div class="modalBox">
       <span class="close" onclick="closeModal('detailsModal')">×</span>
@@ -1387,6 +1402,7 @@
     const firebaseAuth = firebase.auth();
 
     let currentUser = null;
+    let isWebsiteAdmin = false;
 
     const demoVendors = [
       {
@@ -1499,8 +1515,7 @@
     console.log("Vendor load error:", error.message);
     vendors = demoVendors.map(normalizeVendor);
   }else if(data && data.length > 0){
-    vendors = data
-      .filter(v => !v.status || v.status === "approved" || v.status === "active" || v.status === "pending_payment")
+    vendors = data.filter(v => v.status === "approved" || v.status === "active")
       .map(normalizeVendor);
 
     if(vendors.length === 0){
@@ -1805,7 +1820,137 @@
       document.getElementById("photoStatus").innerText = "Abhi koi photo select nahi hui";
       document.getElementById("videoStatus").innerText = "Abhi koi video select nahi hua";
     }
+function showAdminButtons(show){
+  const adminMenuLink = document.getElementById("adminMenuLink");
+  const adminQuickBtn = document.getElementById("adminQuickBtn");
 
+  if(adminMenuLink){
+    adminMenuLink.style.display = show ? "block" : "none";
+  }
+
+  if(adminQuickBtn){
+    adminQuickBtn.style.display = show ? "block" : "none";
+  }
+}
+
+async function checkWebsiteAdmin(user){
+  isWebsiteAdmin = false;
+  showAdminButtons(false);
+
+  if(!user || !supabaseClient){
+    return;
+  }
+
+  const email = (user.email || "").toLowerCase();
+
+  const { data, error } = await supabaseClient
+    .from("admin_users")
+    .select("*")
+    .ilike("email", email)
+    .maybeSingle();
+
+  if(error){
+    console.log("Admin check error:", error.message);
+    return;
+  }
+
+  if(data && (!data.status || String(data.status).toLowerCase() === "active")){
+    isWebsiteAdmin = true;
+    showAdminButtons(true);
+  }
+}
+
+async function openAdminPanel(){
+  if(!currentUser){
+    alert("Pehle admin email se login karo.");
+    openAuthModal();
+    return;
+  }
+
+  await checkWebsiteAdmin(currentUser);
+
+  if(!isWebsiteAdmin){
+    alert("Ye email admin nahi hai. Supabase admin_users table me email add karo.");
+    return;
+  }
+
+  openModal("adminModal");
+  loadAdminVendors();
+}
+
+async function loadAdminVendors(){
+  const box = document.getElementById("adminContent");
+
+  if(!supabaseClient){
+    box.innerHTML = "Supabase connect nahi hai.";
+    return;
+  }
+
+  box.innerHTML = "Loading pending vendors...";
+
+  const { data, error } = await supabaseClient
+    .from("vendors")
+    .select("*")
+    .in("status", ["pending_payment", "pending"])
+    .order("created_at", { ascending:false });
+
+  if(error){
+    box.innerHTML = "Error: " + error.message;
+    return;
+  }
+
+  if(!data || data.length === 0){
+    box.innerHTML = "<b>Abhi koi pending vendor nahi hai ✅</b>";
+    return;
+  }
+
+  box.innerHTML = data.map(raw => {
+    const v = normalizeVendor(raw);
+
+    return `
+      <div style="border:1px solid #e2c15d;border-radius:14px;padding:12px;margin:12px 0;background:#fffaf0;">
+        <img src="${v.img}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />
+
+        <h3 style="color:#043b2f;margin-bottom:6px;">${v.name}</h3>
+        <p><b>Owner:</b> ${v.owner_name}</p>
+        <p><b>City:</b> ${v.city}</p>
+        <p><b>Category:</b> ${v.category}</p>
+        <p><b>Price:</b> ₹${v.price}</p>
+        <p><b>Status:</b> ${raw.status}</p>
+
+        <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">
+          Approve Vendor
+        </button>
+
+        <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','rejected')">
+          Reject Vendor
+        </button>
+      </div>
+    `;
+  }).join("");
+}
+
+async function updateVendorStatus(vendorId, status){
+  if(!isWebsiteAdmin){
+    alert("Admin access required.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("vendors")
+    .update({ status: status })
+    .eq("id", vendorId);
+
+  if(error){
+    alert("Update error: " + error.message);
+    return;
+  }
+
+  alert("Vendor " + status + " ho gaya ✅");
+
+  loadAdminVendors();
+  loadVendors();
+}
     function openAuthModal(){
       if(currentUser){
         showAccountScreen();
@@ -1944,7 +2089,9 @@
 
     firebaseAuth.onAuthStateChanged(function(user){
       currentUser = user;
-
+      
+      checkWebsiteAdmin(user);
+      
       const authQuickBtn = document.getElementById("authQuickBtn");
       const authMenuLink = document.getElementById("authMenuLink");
 
