@@ -1444,39 +1444,45 @@
     }
 
     function normalizeVendor(v){
-      let photos = [];
+  let photos = [];
 
-      if(v.vendor_images && Array.isArray(v.vendor_images)){
-        photos = v.vendor_images.map(img => img.image_url).filter(Boolean);
-      }
+  if(v.vendor_images && Array.isArray(v.vendor_images)){
+    photos = v.vendor_images.map(img => img.image_url).filter(Boolean);
+  }
 
-      if(v.photos && Array.isArray(v.photos)){
-        photos = v.photos;
-      }
+  const appImages = [
+    v.image_url,
+    v.image_url_1,
+    v.image_url_2,
+    v.image_url_3,
+    v.image_url_4
+  ].filter(url => url && url !== "EMPTY" && url !== "NULL");
 
-      const mainImage =
-        photos.length > 0
-          ? photos[0]
-          : safeText(v.image_url || v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80");
+  photos = [...photos, ...appImages];
 
-      return {
-        id: v.id || "",
-        name: safeText(v.name || v.business_name, "Vendor Name"),
-        owner_name: safeText(v.owner_name, "Owner"),
-        category: safeText(v.category, "Event Service"),
-        city: safeText(v.city, "India"),
-        rating: safeText(v.rating, "0"),
-        reviews: safeText(v.review_count || v.reviews, "0"),
-        phone: safeText(v.phone || v.whatsapp || WHATSAPP_NUMBER, WHATSAPP_NUMBER).replace(/\D/g, ""),
-        price: Number(v.price || v.starting_price || 0),
-        img: mainImage,
-        photos: photos,
-        video_url: safeText(v.video_url, ""),
-        desc: safeText(v.description || v.desc, "Samagra Decor verified event service vendor.")
-      };
-    }
+  const mainImage =
+    photos.length > 0
+      ? photos[0]
+      : safeText(v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80");
 
-   async function loadVendors(){
+  return {
+    id: v.id || "",
+    name: safeText(v.name || v.business_name, "Vendor Name"),
+    owner_name: safeText(v.owner_name || v.owner || v.ownerName, "Owner"),
+    category: safeText(v.category || v.service_category, "Event Service"),
+    city: safeText(v.city, "India"),
+    rating: safeText(v.rating, "0"),
+    reviews: safeText(v.review_count || v.reviews, "0"),
+    phone: safeText(v.phone || v.mobile || v.mobile_number || v.whatsapp || WHATSAPP_NUMBER, WHATSAPP_NUMBER).replace(/\D/g, ""),
+    price: Number(v.price || v.starting_price || 0),
+    img: mainImage,
+    photos: photos,
+    video_url: safeText(v.video_url || v.video || v.video_link || v.videoUrl, ""),
+    desc: safeText(v.description || v.business_description || v.desc, "Samagra Decor verified event service vendor.")
+  };
+}
+
+ async function loadVendors(){
   if(!supabaseClient){
     vendors = demoVendors.map(normalizeVendor);
     currentVendorList = [...vendors];
@@ -1484,60 +1490,23 @@
     return;
   }
 
-  const { data: vendorData, error: vendorError } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("vendors")
     .select("*")
     .order("created_at", { ascending: false });
 
-  if(vendorError){
-    console.log("Vendor load error:", vendorError.message);
+  if(error){
+    console.log("Vendor load error:", error.message);
     vendors = demoVendors.map(normalizeVendor);
-    currentVendorList = [...vendors];
-    renderVendors(currentVendorList);
-    return;
-  }
+  }else if(data && data.length > 0){
+    vendors = data
+      .filter(v => !v.status || v.status === "approved" || v.status === "active" || v.status === "pending_payment")
+      .map(normalizeVendor);
 
-  if(!vendorData || vendorData.length === 0){
-    vendors = demoVendors.map(normalizeVendor);
-    currentVendorList = [...vendors];
-    renderVendors(currentVendorList);
-    return;
-  }
-
-  const { data: imageData, error: imageError } = await supabaseClient
-    .from("vendor_images")
-    .select("vendor_id, image_url");
-
-  if(imageError){
-    console.log("Image load error:", imageError.message);
-  }
-
-  const imagesByVendor = {};
-
-  if(imageData && imageData.length > 0){
-    imageData.forEach(img => {
-      if(!imagesByVendor[img.vendor_id]){
-        imagesByVendor[img.vendor_id] = [];
-      }
-
-      imagesByVendor[img.vendor_id].push({
-        image_url: img.image_url
-      });
-    });
-  }
-
-  const finalData = vendorData.map(v => {
-    return {
-      ...v,
-      vendor_images: imagesByVendor[v.id] || []
-    };
-  });
-
-  vendors = finalData
-    .filter(v => !v.status || v.status === "approved" || v.status === "active" || v.status === "pending_payment")
-    .map(normalizeVendor);
-
-  if(vendors.length === 0){
+    if(vendors.length === 0){
+      vendors = demoVendors.map(normalizeVendor);
+    }
+  }else{
     vendors = demoVendors.map(normalizeVendor);
   }
 
