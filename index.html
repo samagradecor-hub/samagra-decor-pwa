@@ -191,7 +191,7 @@
       margin:-48px auto 12px;
       padding:0 18px;
       display:grid;
-      grid-template-columns:1fr 1fr 1fr;
+      grid-template-columns:repeat(3, 1fr);
       gap:12px;
       position:relative;
       z-index:6;
@@ -1075,6 +1075,7 @@
           <option>Jaipur</option>
           <option>Lucknow</option>
           <option>Noida</option>
+          <option>Jabalpur</option>
         </select>
       </div>
     </div>
@@ -1093,6 +1094,7 @@
           <option>Lighting</option>
           <option>Banquet Hall</option>
           <option>Makeup</option>
+          <option>Marriage Garden</option>
         </select>
       </div>
     </div>
@@ -1257,6 +1259,7 @@
         <option>Lighting</option>
         <option>Banquet Hall</option>
         <option>Makeup</option>
+        <option>Marriage Garden</option>
       </select>
 
       <input class="vendorInput" id="bizPrice" type="number" placeholder="Starting Price जैसे ₹25000" />
@@ -1301,7 +1304,8 @@
       </div>
     </div>
   </div>
-<div class="modal" id="adminModal">
+
+  <div class="modal" id="adminModal">
     <div class="modalBox">
       <span class="close" onclick="closeModal('adminModal')">×</span>
 
@@ -1316,7 +1320,7 @@
     </div>
   </div>
 
-    <div class="modal" id="detailsModal">  <div class="modal" id="detailsModal">
+  <div class="modal" id="detailsModal">
     <div class="modalBox">
       <span class="close" onclick="closeModal('detailsModal')">×</span>
       <div id="detailsContent"></div>
@@ -1405,53 +1409,9 @@
     let currentUser = null;
     let isWebsiteAdmin = false;
 
-    const demoVendors = [
-      {
-        name:"Royal Tent House",
-        owner_name:"Rajesh Verma",
-        category:"Tent House",
-        city:"Lucknow",
-        rating:"4.8",
-        reviews:"256",
-        phone:"919999999999",
-        price:45000,
-        img:"https://images.unsplash.com/photo-1519167758481-83f29c8d7e9b?auto=format&fit=crop&w=800&q=80",
-        photos:[],
-        video_url:"",
-        desc:"Premium tent setup, stage, seating and wedding event decoration."
-      },
-      {
-        name:"Dream Decorators",
-        owner_name:"Amit Sharma",
-        category:"Decoration",
-        city:"Jaipur",
-        rating:"4.9",
-        reviews:"312",
-        phone:"919999999999",
-        price:125000,
-        img:"https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80",
-        photos:[],
-        video_url:"",
-        desc:"Wedding stage, flower decor, entry gate and theme decoration."
-      },
-      {
-        name:"Taste Affair Catering",
-        owner_name:"Suresh Gupta",
-        category:"Catering",
-        city:"Delhi",
-        rating:"4.7",
-        reviews:"198",
-        phone:"919999999999",
-        price:450,
-        img:"https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80",
-        photos:[],
-        video_url:"",
-        desc:"Veg/non-veg catering, live counters and halwai services."
-      }
-    ];
-
-    let vendors = [...demoVendors];
-    let currentVendorList = [...demoVendors];
+    const demoVendors = [];
+    let vendors = [];
+    let currentVendorList = [];
     let favorites = [];
     let selectedPhotos = [];
     let selectedVideo = null;
@@ -1461,45 +1421,45 @@
     }
 
     function normalizeVendor(v){
-  let photos = [];
+      let photos = [];
 
-  if(v.vendor_images && Array.isArray(v.vendor_images)){
-    photos = v.vendor_images.map(img => img.image_url).filter(Boolean);
-  }
+      if(v.vendor_images && Array.isArray(v.vendor_images)){
+        photos = v.vendor_images.map(img => img.image_url).filter(Boolean);
+      }
 
-  const appImages = [
-    v.image_url,
-    v.image_url_1,
-    v.image_url_2,
-    v.image_url_3,
-    v.image_url_4
-  ].filter(url => url && url !== "EMPTY" && url !== "NULL");
+      const appImages = [
+        v.image_url,
+        v.image_url_1,
+        v.image_url_2,
+        v.image_url_3,
+        v.image_url_4
+      ].filter(url => url && url !== "EMPTY" && url !== "NULL" && url !== "null");
 
-  photos = [...photos, ...appImages];
+      photos = [...photos, ...appImages];
 
-  const mainImage =
-    photos.length > 0
-      ? photos[0]
-      : safeText(v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80");
+      const mainImage =
+        photos.length > 0
+          ? photos[0]
+          : safeText(v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80");
 
-  return {
-    id: v.id || "",
-    name: safeText(v.name || v.business_name, "Vendor Name"),
-    owner_name: safeText(v.owner_name || v.owner || v.ownerName, "Owner"),
-    category: safeText(v.category || v.service_category, "Event Service"),
-    city: safeText(v.city, "India"),
-    rating: safeText(v.rating, "0"),
-    reviews: safeText(v.review_count || v.reviews, "0"),
-    phone: safeText(v.phone || v.mobile || v.mobile_number || v.whatsapp || WHATSAPP_NUMBER, WHATSAPP_NUMBER).replace(/\D/g, ""),
-    price: Number(v.price || v.starting_price || 0),
-    img: mainImage,
-    photos: photos,
-    video_url: safeText(v.video_url || v.video || v.video_link || v.videoUrl, ""),
-    desc: safeText(v.description || v.business_description || v.desc, "Samagra Decor verified event service vendor.")
-  };
-}
+      return {
+        id: v.id || "",
+        name: safeText(v.name || v.business_name, "Vendor Name"),
+        owner_name: safeText(v.owner_name || v.owner || v.ownerName, "Owner"),
+        category: safeText(v.category || v.service_category, "Event Service"),
+        city: safeText(v.city, "India"),
+        rating: safeText(v.rating, "0"),
+        reviews: safeText(v.review_count || v.reviews, "0"),
+        phone: safeText(v.phone || v.mobile || v.mobile_number || v.whatsapp || WHATSAPP_NUMBER, WHATSAPP_NUMBER).replace(/\D/g, ""),
+        price: Number(v.price || v.starting_price || 0),
+        img: mainImage,
+        photos: photos,
+        video_url: safeText(v.video_url || v.video || v.video_link || v.videoUrl, ""),
+        desc: safeText(v.description || v.business_description || v.desc, "Samagra Decor verified event service vendor.")
+      };
+    }
 
- async function loadVendors(){
+    async function loadVendors(){
       if(!supabaseClient){
         vendors = demoVendors.map(normalizeVendor);
         currentVendorList = [...vendors];
@@ -1514,8 +1474,8 @@
 
       if(vendorError){
         console.log("Vendor load error:", vendorError.message);
-        vendors = demoVendors.map(normalizeVendor);
-        currentVendorList = [...vendors];
+        vendors = [];
+        currentVendorList = [];
         renderVendors(currentVendorList);
         return;
       }
@@ -1557,7 +1517,10 @@
       });
 
       vendors = finalData
-        .filter(v => String(v.status || "").toLowerCase() === "approved" || String(v.status || "").toLowerCase() === "active")
+        .filter(v => {
+          const status = String(v.status || "").toLowerCase().trim();
+          return status === "approved" || status === "active";
+        })
         .map(normalizeVendor);
 
       currentVendorList = [...vendors];
@@ -1570,7 +1533,7 @@
       box.innerHTML = "";
 
       if(list.length === 0){
-        box.innerHTML = "<p style='grid-column:1/-1;text-align:center;font-weight:bold;'>No vendors found. City/category change karke search karein.</p>";
+        box.innerHTML = "<p style='grid-column:1/-1;text-align:center;font-weight:bold;'>Abhi koi approved vendor live nahi hai.</p>";
         return;
       }
 
@@ -1864,7 +1827,8 @@
       document.getElementById("photoStatus").innerText = "Abhi koi photo select nahi hui";
       document.getElementById("videoStatus").innerText = "Abhi koi video select nahi hua";
     }
-function showAdminButtons(show){
+
+    function showAdminButtons(show){
       const adminMenuLink = document.getElementById("adminMenuLink");
       const adminQuickBtn = document.getElementById("adminQuickBtn");
 
@@ -2043,7 +2007,7 @@ function showAdminButtons(show){
       loadVendors();
     }
 
-    function openAuthModal(){    function openAuthModal(){
+    function openAuthModal(){
       if(currentUser){
         showAccountScreen();
       }else{
@@ -2181,9 +2145,9 @@ function showAdminButtons(show){
 
     firebaseAuth.onAuthStateChanged(function(user){
       currentUser = user;
-      
+
       checkWebsiteAdmin(user);
-      
+
       const authQuickBtn = document.getElementById("authQuickBtn");
       const authMenuLink = document.getElementById("authMenuLink");
 
