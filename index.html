@@ -1302,20 +1302,21 @@
     </div>
   </div>
 <div class="modal" id="adminModal">
-  <div class="modalBox">
-    <span class="close" onclick="closeModal('adminModal')">×</span>
-    <h2>Website Admin Panel</h2>
-    <p>Pending vendors ko approve/reject karein.</p>
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('adminModal')">×</span>
 
-    <button onclick="loadAdminVendors()">Refresh Pending Vendors</button>
+      <h2 style="color:#061b3a;text-align:center;">Website Admin Panel</h2>
+      <p style="text-align:center;">Pending vendors ko approve/reject karein.</p>
 
-    <div id="adminContent" style="margin-top:15px;">
-      Loading...
+      <button class="monthlyBtn" onclick="loadAdminVendors()">Refresh Pending Vendors</button>
+
+      <div id="adminContent" style="margin-top:15px;">
+        Loading...
+      </div>
     </div>
   </div>
-</div>
-  
-  <div class="modal" id="detailsModal">
+
+    <div class="modal" id="detailsModal">  <div class="modal" id="detailsModal">
     <div class="modalBox">
       <span class="close" onclick="closeModal('detailsModal')">×</span>
       <div id="detailsContent"></div>
@@ -1499,35 +1500,69 @@
 }
 
  async function loadVendors(){
-  if(!supabaseClient){
-    vendors = demoVendors.map(normalizeVendor);
-    currentVendorList = [...vendors];
-    renderVendors(currentVendorList);
-    return;
-  }
+      if(!supabaseClient){
+        vendors = demoVendors.map(normalizeVendor);
+        currentVendorList = [...vendors];
+        renderVendors(currentVendorList);
+        return;
+      }
 
-  const { data, error } = await supabaseClient
-    .from("vendors")
-    .select("*")
-    .order("created_at", { ascending: false });
+      const { data: vendorData, error: vendorError } = await supabaseClient
+        .from("vendors")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-  if(error){
-    console.log("Vendor load error:", error.message);
-    vendors = demoVendors.map(normalizeVendor);
-  }else if(data && data.length > 0){
-    vendors = data.filter(v => v.status === "approved" || v.status === "active")
-      .map(normalizeVendor);
+      if(vendorError){
+        console.log("Vendor load error:", vendorError.message);
+        vendors = demoVendors.map(normalizeVendor);
+        currentVendorList = [...vendors];
+        renderVendors(currentVendorList);
+        return;
+      }
 
-    if(vendors.length === 0){
-      vendors = demoVendors.map(normalizeVendor);
+      if(!vendorData || vendorData.length === 0){
+        vendors = [];
+        currentVendorList = [];
+        renderVendors(currentVendorList);
+        return;
+      }
+
+      const { data: imageData, error: imageError } = await supabaseClient
+        .from("vendor_images")
+        .select("vendor_id, image_url");
+
+      if(imageError){
+        console.log("Vendor images load error:", imageError.message);
+      }
+
+      const imagesByVendor = {};
+
+      if(imageData && imageData.length > 0){
+        imageData.forEach(img => {
+          if(!imagesByVendor[img.vendor_id]){
+            imagesByVendor[img.vendor_id] = [];
+          }
+
+          imagesByVendor[img.vendor_id].push({
+            image_url: img.image_url
+          });
+        });
+      }
+
+      const finalData = vendorData.map(v => {
+        return {
+          ...v,
+          vendor_images: imagesByVendor[v.id] || []
+        };
+      });
+
+      vendors = finalData
+        .filter(v => String(v.status || "").toLowerCase() === "approved" || String(v.status || "").toLowerCase() === "active")
+        .map(normalizeVendor);
+
+      currentVendorList = [...vendors];
+      renderVendors(currentVendorList);
     }
-  }else{
-    vendors = demoVendors.map(normalizeVendor);
-  }
-
-  currentVendorList = [...vendors];
-  renderVendors(currentVendorList);
-}
 
     function renderVendors(list){
       const box = document.getElementById("vendorList");
@@ -1739,6 +1774,14 @@
 
       try{
         let videoUrl = "";
+        let photoUrls = [];
+
+        if(selectedPhotos.length > 0){
+          for(const photo of selectedPhotos){
+            const photoUrl = await uploadFileToSupabase(photo, "photos");
+            photoUrls.push(photoUrl);
+          }
+        }
 
         if(selectedVideo){
           videoUrl = await uploadFileToSupabase(selectedVideo, "videos");
@@ -1746,6 +1789,7 @@
 
         const vendorData = {
           name: v.name,
+          business_name: v.name,
           owner_name: v.owner,
           city: v.city,
           category: v.cat,
@@ -1753,6 +1797,10 @@
           price: v.price ? Number(v.price) : null,
           description: v.desc,
           video_url: videoUrl,
+          image_url_1: photoUrls[0] || null,
+          image_url_2: photoUrls[1] || null,
+          image_url_3: photoUrls[2] || null,
+          image_url_4: photoUrls[3] || null,
           status: "pending_payment"
         };
 
@@ -1767,24 +1815,20 @@
           return;
         }
 
-        if(selectedPhotos.length > 0){
-          const imageRows = [];
-
-          for(const photo of selectedPhotos){
-            const photoUrl = await uploadFileToSupabase(photo, "photos");
-
-            imageRows.push({
+        if(photoUrls.length > 0){
+          const imageRows = photoUrls.map(url => {
+            return {
               vendor_id: vendor.id,
-              image_url: photoUrl
-            });
-          }
+              image_url: url
+            };
+          });
 
           const { error: imageError } = await supabaseClient
             .from("vendor_images")
             .insert(imageRows);
 
           if(imageError){
-            alert("Vendor save ho gaya, lekin image save error: " + imageError.message);
+            console.log("Image table save error:", imageError.message);
           }
         }
 
@@ -1821,137 +1865,185 @@
       document.getElementById("videoStatus").innerText = "Abhi koi video select nahi hua";
     }
 function showAdminButtons(show){
-  const adminMenuLink = document.getElementById("adminMenuLink");
-  const adminQuickBtn = document.getElementById("adminQuickBtn");
+      const adminMenuLink = document.getElementById("adminMenuLink");
+      const adminQuickBtn = document.getElementById("adminQuickBtn");
 
-  if(adminMenuLink){
-    adminMenuLink.style.display = show ? "block" : "none";
-  }
+      if(adminMenuLink){
+        adminMenuLink.style.display = show ? "block" : "none";
+      }
 
-  if(adminQuickBtn){
-    adminQuickBtn.style.display = show ? "block" : "none";
-  }
-}
+      if(adminQuickBtn){
+        adminQuickBtn.style.display = show ? "block" : "none";
+      }
+    }
 
-async function checkWebsiteAdmin(user){
-  isWebsiteAdmin = false;
-  showAdminButtons(false);
+    async function checkWebsiteAdmin(user){
+      isWebsiteAdmin = false;
+      showAdminButtons(false);
 
-  if(!user || !supabaseClient){
-    return;
-  }
+      if(!user || !supabaseClient){
+        return;
+      }
 
-  const email = (user.email || "").toLowerCase();
+      const email = (user.email || "").toLowerCase().trim();
 
-  const { data, error } = await supabaseClient
-    .from("admin_users")
-    .select("*")
-    .ilike("email", email)
-    .maybeSingle();
+      const { data, error } = await supabaseClient
+        .from("admin_users")
+        .select("*")
+        .ilike("email", email)
+        .maybeSingle();
 
-  if(error){
-    console.log("Admin check error:", error.message);
-    return;
-  }
+      if(error){
+        console.log("Admin check error:", error.message);
+        return;
+      }
 
-  if(data && (!data.status || String(data.status).toLowerCase() === "active")){
-    isWebsiteAdmin = true;
-    showAdminButtons(true);
-  }
-}
+      if(data){
+        isWebsiteAdmin = true;
+        showAdminButtons(true);
+      }
+    }
 
-async function openAdminPanel(){
-  if(!currentUser){
-    alert("Pehle admin email se login karo.");
-    openAuthModal();
-    return;
-  }
+    async function openAdminPanel(){
+      if(!currentUser){
+        alert("Pehle admin email se login karo.");
+        openAuthModal();
+        return;
+      }
 
-  await checkWebsiteAdmin(currentUser);
+      await checkWebsiteAdmin(currentUser);
 
-  if(!isWebsiteAdmin){
-    alert("Ye email admin nahi hai. Supabase admin_users table me email add karo.");
-    return;
-  }
+      if(!isWebsiteAdmin){
+        alert("Ye email admin nahi hai. Supabase admin_users table me email add karo.");
+        return;
+      }
 
-  openModal("adminModal");
-  loadAdminVendors();
-}
+      openModal("adminModal");
+      loadAdminVendors();
+    }
 
-async function loadAdminVendors(){
-  const box = document.getElementById("adminContent");
+    async function loadAdminVendors(){
+      const box = document.getElementById("adminContent");
 
-  if(!supabaseClient){
-    box.innerHTML = "Supabase connect nahi hai.";
-    return;
-  }
+      if(!supabaseClient){
+        box.innerHTML = "Supabase connect nahi hai.";
+        return;
+      }
 
-  box.innerHTML = "Loading pending vendors...";
+      box.innerHTML = "Loading pending vendors...";
 
-  const { data, error } = await supabaseClient
-    .from("vendors")
-    .select("*")
-    .in("status", ["pending_payment", "pending"])
-    .order("created_at", { ascending:false });
+      const { data: vendorData, error: vendorError } = await supabaseClient
+        .from("vendors")
+        .select("*")
+        .in("status", ["pending_payment", "pending"])
+        .order("created_at", { ascending:false });
 
-  if(error){
-    box.innerHTML = "Error: " + error.message;
-    return;
-  }
+      if(vendorError){
+        box.innerHTML = "Error: " + vendorError.message;
+        return;
+      }
 
-  if(!data || data.length === 0){
-    box.innerHTML = "<b>Abhi koi pending vendor nahi hai ✅</b>";
-    return;
-  }
+      if(!vendorData || vendorData.length === 0){
+        box.innerHTML = "<b>Abhi koi pending vendor nahi hai ✅</b>";
+        return;
+      }
 
-  box.innerHTML = data.map(raw => {
-    const v = normalizeVendor(raw);
+      const { data: imageData, error: imageError } = await supabaseClient
+        .from("vendor_images")
+        .select("vendor_id, image_url");
 
-    return `
-      <div style="border:1px solid #e2c15d;border-radius:14px;padding:12px;margin:12px 0;background:#fffaf0;">
-        <img src="${v.img}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />
+      if(imageError){
+        console.log("Admin image load error:", imageError.message);
+      }
 
-        <h3 style="color:#043b2f;margin-bottom:6px;">${v.name}</h3>
-        <p><b>Owner:</b> ${v.owner_name}</p>
-        <p><b>City:</b> ${v.city}</p>
-        <p><b>Category:</b> ${v.category}</p>
-        <p><b>Price:</b> ₹${v.price}</p>
-        <p><b>Status:</b> ${raw.status}</p>
+      const imagesByVendor = {};
 
-        <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">
-          Approve Vendor
-        </button>
+      if(imageData && imageData.length > 0){
+        imageData.forEach(img => {
+          if(!imagesByVendor[img.vendor_id]){
+            imagesByVendor[img.vendor_id] = [];
+          }
 
-        <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','rejected')">
-          Reject Vendor
-        </button>
-      </div>
-    `;
-  }).join("");
-}
+          imagesByVendor[img.vendor_id].push({
+            image_url: img.image_url
+          });
+        });
+      }
 
-async function updateVendorStatus(vendorId, status){
-  if(!isWebsiteAdmin){
-    alert("Admin access required.");
-    return;
-  }
+      const finalData = vendorData.map(v => {
+        return {
+          ...v,
+          vendor_images: imagesByVendor[v.id] || []
+        };
+      });
 
-  const { error } = await supabaseClient
-    .from("vendors")
-    .update({ status: status })
-    .eq("id", vendorId);
+      box.innerHTML = finalData.map(raw => {
+        const v = normalizeVendor(raw);
 
-  if(error){
-    alert("Update error: " + error.message);
-    return;
-  }
+        const gallery = v.photos && v.photos.length > 0
+          ? v.photos.slice(0, 4).map(url => `
+              <img src="${url}" style="width:48%;height:95px;object-fit:cover;border-radius:10px;margin:4px;" />
+            `).join("")
+          : `<img src="${v.img}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />`;
 
-  alert("Vendor " + status + " ho gaya ✅");
+        const videoBox = v.video_url
+          ? `<video controls style="width:100%;border-radius:12px;margin:8px 0;max-height:210px;">
+               <source src="${v.video_url}">
+             </video>`
+          : `<p><b>Video:</b> Not uploaded</p>`;
 
-  loadAdminVendors();
-  loadVendors();
-}
-    function openAuthModal(){
+        return `
+          <div style="border:1px solid #e2c15d;border-radius:14px;padding:12px;margin:12px 0;background:#fffaf0;">
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
+              ${gallery}
+            </div>
+
+            ${videoBox}
+
+            <h3 style="color:#043b2f;margin-bottom:6px;">${v.name}</h3>
+            <p><b>Owner:</b> ${v.owner_name}</p>
+            <p><b>City:</b> ${v.city}</p>
+            <p><b>Category:</b> ${v.category}</p>
+            <p><b>Phone:</b> ${v.phone}</p>
+            <p><b>Price:</b> ₹${v.price}</p>
+            <p><b>Status:</b> ${raw.status}</p>
+            <p><b>Description:</b> ${v.desc}</p>
+
+            <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">
+              ✅ Approve Vendor
+            </button>
+
+            <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','rejected')">
+              ❌ Reject Vendor
+            </button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function updateVendorStatus(vendorId, status){
+      if(!isWebsiteAdmin){
+        alert("Admin access required.");
+        return;
+      }
+
+      const { error } = await supabaseClient
+        .from("vendors")
+        .update({ status: status })
+        .eq("id", vendorId);
+
+      if(error){
+        alert("Update error: " + error.message);
+        return;
+      }
+
+      alert("Vendor " + status + " ho gaya ✅");
+
+      loadAdminVendors();
+      loadVendors();
+    }
+
+    function openAuthModal(){    function openAuthModal(){
       if(currentUser){
         showAccountScreen();
       }else{
