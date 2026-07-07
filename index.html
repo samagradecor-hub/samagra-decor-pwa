@@ -6,1083 +6,191 @@
 
   <title>Samagra Decor - Har Function Ki Puri Tayari</title>
   <meta name="description" content="Samagra Decor - All in One Event & Decoration Marketplace. Tent House, Decoration, Catering, DJ, Photography, Lighting, Makeup, Marriage Garden, Banquet Hall aur sabhi event services." />
+  <meta property="og:title" content="Samagra Decor" />
+  <meta property="og:description" content="Har Function Ki Puri Tayari - Event & Decoration Marketplace" />
+  <meta property="og:image" content="logo.png?v=5" />
 
-  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Browser tab icon: SD simple icon. Google/browser favicon ke liye favicon.png bhi same folder me rakho. -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23043b2f%22%2F%3E%3Ctext%20x%3D%2232%22%20y%3D%2241%22%20font-size%3D%2228%22%20font-family%3D%22Arial%22%20font-weight%3D%22700%22%20text-anchor%3D%22middle%22%20fill%3D%22%23d6a53a%22%3ESD%3C%2Ftext%3E%3C%2Fsvg%3E">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=5">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon.png?v=5">
+  <link rel="apple-touch-icon" sizes="180x180" href="logo.png?v=5">
+  <meta name="msapplication-TileImage" content="favicon.png?v=5">
+  <meta name="msapplication-TileColor" content="#043b2f">
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#043b2f" />
 
   <style>
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-      font-family:Arial, sans-serif;
-    }
-
-    html{
-      scroll-behavior:smooth;
-    }
-
-    body{
-      background:#fffaf0;
-      color:#10382f;
-    }
-
-    :root{
-      --green:#043b2f;
-      --dark:#02251f;
-      --gold:#d6a53a;
-      --light:#fffaf0;
-      --white:#ffffff;
-      --text:#1b2b25;
-      --blue:#061b3a;
-      --red:#b00020;
-    }
-
-    button{
-      cursor:pointer;
-    }
-
-    .top{
-      background:linear-gradient(135deg,#02251f,#07523f);
-      color:white;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .nav{
-      max-width:1200px;
-      margin:auto;
-      padding:16px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:15px;
-      position:relative;
-      z-index:2;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
-    .logoCircle{
-      width:62px;
-      height:62px;
-      border-radius:50%;
-      border:2px solid var(--gold);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:0 0 20px rgba(214,165,58,.45);
-      flex:none;
-      overflow:hidden;
-      background:#fffaf0;
-    }
-
-    .navLogo{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      border-radius:50%;
-      display:block;
-    }
-
-    .brand h1{
-      color:var(--gold);
-      font-size:25px;
-      line-height:1.1;
-      text-transform:uppercase;
-      letter-spacing:.5px;
-    }
-
-    .brand small{
-      color:#fff6d8;
-      font-size:12px;
-    }
-
-    .menu{
-      display:flex;
-      align-items:center;
-      gap:18px;
-      font-weight:bold;
-      font-size:14px;
-    }
-
-    .menu a{
-      color:white;
-      text-decoration:none;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-
-    .menu a:hover{
-      color:var(--gold);
-    }
-
-    .mobileMenuBtn{
-      display:none;
-      font-size:30px;
-      color:white;
-      cursor:pointer;
-    }
-
-    .hero{
-      max-width:1200px;
-      margin:auto;
-      padding:36px 18px 82px;
-      display:grid;
-      grid-template-columns:1fr 1.15fr;
-      align-items:center;
-      gap:25px;
-      position:relative;
-      z-index:1;
-    }
-
-    .heroText .mini{
-      color:#f6d889;
-      font-weight:bold;
-      margin-bottom:14px;
-      letter-spacing:.4px;
-    }
-
-    .heroText h2{
-      font-family:Georgia,serif;
-      font-size:58px;
-      line-height:.98;
-      color:white;
-      margin-bottom:18px;
-    }
-
-    .heroText h2 span{
-      color:var(--gold);
-    }
-
-    .heroText p{
-      color:#fff5dc;
-      font-size:16px;
-      line-height:1.5;
-      max-width:520px;
-      margin-bottom:18px;
-    }
-
-    .trust{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:18px;
-    }
-
-    .trust span{
-      background:rgba(255,255,255,.09);
-      border:1px solid rgba(214,165,58,.45);
-      color:#fff8df;
-      padding:9px 12px;
-      border-radius:30px;
-      font-size:13px;
-      font-weight:bold;
-    }
-
-    .heroImage{
-      min-height:360px;
-      border-radius:260px 0 0 260px;
-      background:
-        linear-gradient(90deg,rgba(4,59,47,.1),rgba(4,59,47,.35)),
-        url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80");
-      background-size:cover;
-      background-position:center;
-      border-left:4px solid var(--gold);
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
-    }
-
-    .quickButtons{
-      max-width:1120px;
-      margin:-48px auto 12px;
-      padding:0 18px;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-      position:relative;
-      z-index:6;
-    }
-
-    .quickBtn,.quickGoldBtn{
-      padding:14px 12px;
-      border-radius:12px;
-      font-size:15px;
-      font-weight:bold;
-      border:2px solid #043b2f;
-      box-shadow:0 8px 22px rgba(0,0,0,.18);
-      background:linear-gradient(135deg,#efc55a,#d9a42d);
-      color:#111111;
-    }
-
-    .quickBtn:hover,.quickGoldBtn:hover{
-      transform:translateY(-1px);
-      opacity:.95;
-    }
-
-    .redHeart{
-      color:red;
-      font-weight:bold;
-    }
-
-    .searchBox{
-      max-width:1120px;
-      margin:0 auto;
-      background:white;
-      border-radius:15px;
-      padding:16px;
-      box-shadow:0 12px 35px rgba(0,0,0,.18);
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr 1fr;
-      gap:12px;
-      position:relative;
-      z-index:5;
-      border:1px solid rgba(214,165,58,.45);
-    }
-
-    .field{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      border-right:1px solid #eee;
-      padding-right:12px;
-    }
-
-    .fieldIcon{
-      width:46px;
-      height:46px;
-      border-radius:50%;
-      background:#073b2f;
-      color:var(--gold);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:22px;
-      flex:none;
-    }
-
-    .field label{
-      display:block;
-      font-weight:bold;
-      font-size:14px;
-      margin-bottom:5px;
-    }
-
-    .field select{
-      width:100%;
-      border:none;
-      outline:none;
-      color:#555;
-      background:white;
-      font-size:14px;
-    }
-
-    .searchBtn{
-      border:none;
-      background:linear-gradient(135deg,#07523f,#02251f);
-      color:white;
-      border-radius:10px;
-      font-size:16px;
-      font-weight:bold;
-      padding:12px;
-    }
-
-    section{
-      max-width:1200px;
-      margin:auto;
-      padding:28px 18px;
-    }
-
-    .heading{
-      text-align:center;
-      font-family:Georgia,serif;
-      font-size:34px;
-      color:#043b2f;
-      margin-bottom:18px;
-    }
-
-    .heading span{
-      color:var(--gold);
-    }
-
-    .sectionSub{
-      text-align:center;
-      color:#555;
-      margin-top:-10px;
-      margin-bottom:18px;
-      font-size:15px;
-    }
-
-    .categoryRow{
-      display:grid;
-      grid-template-columns:repeat(6,1fr);
-      gap:14px;
-      margin-top:18px;
-    }
-
-    .category{
-      background:white;
-      border:1px solid #f0dfb8;
-      border-radius:14px;
-      min-height:98px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      box-shadow:0 5px 18px rgba(0,0,0,.06);
-      cursor:pointer;
-      transition:.2s;
-      text-align:center;
-      font-weight:bold;
-      font-size:13px;
-      padding:10px;
-    }
-
-    .category:hover{
-      transform:translateY(-4px);
-      border-color:var(--gold);
-      box-shadow:0 10px 24px rgba(0,0,0,.12);
-    }
-
-    .catIcon{
-      font-size:32px;
-    }
-
-    .vendorTop{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-    }
-
-    .viewAll{
-      color:#043b2f;
-      font-weight:bold;
-      cursor:pointer;
-    }
-
-    .vendors{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:18px;
-    }
-
-    .vendorCard{
-      background:white;
-      border-radius:15px;
-      overflow:hidden;
-      border:1px solid #f0dfb8;
-      box-shadow:0 8px 25px rgba(0,0,0,.08);
-      transition:.2s;
-    }
-
-    .vendorCard:hover{
-      transform:translateY(-4px);
-      box-shadow:0 12px 35px rgba(0,0,0,.14);
-    }
-
-    .vendorImg{
-      height:155px;
-      position:relative;
-      background:#eee;
-      overflow:hidden;
-    }
-
-    .vendorImg img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-
-    .badge{
-      position:absolute;
-      top:10px;
-      left:10px;
-      background:#043b2f;
-      color:#f9d77c;
-      padding:6px 10px;
-      border-radius:20px;
-      font-size:12px;
-      font-weight:bold;
-    }
-
-    .vendorBody{
-      padding:13px;
-    }
-
-    .vendorBody h3{
-      color:#082f28;
-      margin-bottom:7px;
-      font-size:17px;
-    }
-
-    .meta{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      font-size:13px;
-      color:#555;
-      margin-bottom:8px;
-    }
-
-    .price{
-      font-weight:bold;
-      color:#043b2f;
-      margin-bottom:12px;
-    }
-
-    .cardActions{
-      display:grid;
-      grid-template-columns:48px 1fr 42px;
-      gap:8px;
-    }
-
-    .waBtn,.detailBtn,.favBtn{
-      border:none;
-      border-radius:8px;
-      padding:10px;
-      font-weight:bold;
-    }
-
-    .waBtn{
-      background:#0dbb59;
-      color:white;
-      font-size:18px;
-    }
-
-    .detailBtn{
-      background:white;
-      border:1px solid #ccc;
-      color:#043b2f;
-    }
-
-    .favBtn{
-      background:#fff1cc;
-      color:#a67400;
-    }
-
-    .why{
-      max-width:none;
-      background:linear-gradient(135deg,#02251f,#07523f);
-      color:white;
-      margin-top:20px;
-      padding:0;
-    }
-
-    .whyInner{
-      max-width:1200px;
-      margin:auto;
-      padding:22px 18px;
-      display:grid;
-      grid-template-columns:repeat(6,1fr);
-      gap:14px;
-    }
-
-    .whyItem{
-      text-align:center;
-      border-right:1px solid rgba(255,255,255,.15);
-      padding:10px;
-    }
-
-    .whyItem:last-child{
-      border-right:none;
-    }
-
-    .whyIcon{
-      width:50px;
-      height:50px;
-      border-radius:50%;
-      border:2px solid var(--gold);
-      color:var(--gold);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin:0 auto 8px;
-      font-size:24px;
-    }
-
-    .whyItem h4{
-      color:#f7d77d;
-      margin-bottom:4px;
-      font-size:14px;
-    }
-
-    .whyItem p{
-      font-size:12px;
-      color:#fff5df;
-      line-height:1.3;
-    }
-
-    .reviews{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:18px;
-    }
-
-    .reviewCard{
-      background:white;
-      border-radius:15px;
-      padding:20px;
-      border:1px solid #f0dfb8;
-      box-shadow:0 8px 25px rgba(0,0,0,.06);
-    }
-
-    .quote{
-      color:#b68116;
-      font-size:30px;
-      line-height:1;
-    }
-
-    .reviewText{
-      color:#555;
-      font-style:italic;
-      margin:8px 0 15px;
-      line-height:1.5;
-    }
-
-    .reviewUser{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-    }
-
-    .stars{
-      color:#f4a700;
-      font-weight:bold;
-    }
-
-    footer{
-      background:linear-gradient(135deg,#02251f,#064533);
-      color:white;
-      margin-top:25px;
-    }
-
-    .footerInner{
-      max-width:1200px;
-      margin:auto;
-      padding:34px 18px 18px;
-      display:grid;
-      grid-template-columns:1.4fr 1fr 1fr 1fr 1.2fr;
-      gap:25px;
-    }
-
-    .footerBrand h2{
-      color:var(--gold);
-      margin-bottom:7px;
-    }
-
-    .footerBrand p,.footerCol p,.footerCol a{
-      color:#fff3d2;
-      font-size:14px;
-      line-height:1.6;
-      text-decoration:none;
-      display:block;
-      margin-bottom:5px;
-      cursor:pointer;
-    }
-
-    .footerCol h3{
-      color:var(--gold);
-      margin-bottom:10px;
-      font-size:17px;
-    }
-
-    .social{
-      display:flex;
-      gap:8px;
-      margin-top:12px;
-    }
-
-    .social span{
-      width:28px;
-      height:28px;
-      border-radius:50%;
-      background:var(--gold);
-      color:#043b2f;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:bold;
-    }
-
-    .newsletter{
-      display:flex;
-      margin-top:8px;
-    }
-
-    .newsletter input{
-      flex:1;
-      padding:12px;
-      border:1px solid rgba(255,255,255,.25);
-      background:rgba(255,255,255,.08);
-      color:white;
-      outline:none;
-      border-radius:8px 0 0 8px;
-      min-width:0;
-    }
-
-    .newsletter button{
-      padding:12px 15px;
-      border:none;
-      background:var(--gold);
-      color:#043b2f;
-      font-weight:bold;
-      border-radius:0 8px 8px 0;
-    }
-
-    .bottom{
-      border-top:1px solid rgba(255,255,255,.15);
-      text-align:center;
-      padding:12px;
-      font-size:13px;
-      color:#fff3d2;
-    }
-
-    .floatWhatsApp{
-      position:fixed;
-      right:20px;
-      bottom:20px;
-      width:58px;
-      height:58px;
-      border-radius:50%;
-      background:#10b85a;
-      color:white;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:30px;
-      text-decoration:none;
-      box-shadow:0 8px 25px rgba(0,0,0,.25);
-      z-index:50;
-    }
-
-    .installBar{
-      position:fixed;
-      left:15px;
-      bottom:20px;
-      background:white;
-      border:1px solid #f0dfb8;
-      border-radius:13px;
-      padding:12px 14px;
-      box-shadow:0 8px 25px rgba(0,0,0,.18);
-      z-index:45;
-      display:flex;
-      align-items:center;
-      gap:10px;
-    }
-
-    .installBar button{
-      background:var(--gold);
-      color:#043b2f;
-      border:none;
-      padding:9px 12px;
-      border-radius:8px;
-      font-weight:bold;
-    }
-
-    .modal{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.62);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:100;
-      padding:18px;
-    }
-
-    .modalBox{
-      background:white;
-      border-radius:18px;
-      width:100%;
-      max-width:560px;
-      padding:24px;
-      position:relative;
-      box-shadow:0 15px 50px rgba(0,0,0,.35);
-      max-height:90vh;
-      overflow:auto;
-    }
-
-    .wideBox{
-      max-width:850px;
-    }
-
-    .authBox{
-      background:white;
-      border-radius:32px;
-      width:100%;
-      max-width:520px;
-      padding:34px 28px;
-      position:relative;
-      box-shadow:0 15px 50px rgba(0,0,0,.4);
-      border:2px solid var(--gold);
-      max-height:92vh;
-      overflow:auto;
-      text-align:center;
-    }
-
-    .authIcon{
-      font-size:54px;
-      margin-bottom:10px;
-    }
-
-    .authTitle{
-      color:var(--blue);
-      font-size:34px;
-      font-weight:bold;
-      margin-bottom:8px;
-    }
-
-    .authSub{
-      color:#c49a29;
-      font-size:20px;
-      margin-bottom:15px;
-    }
-
-    .authInput{
-      width:100%;
-      padding:15px 16px;
-      margin:8px 0;
-      border:1px solid #ddd;
-      border-radius:12px;
-      outline:none;
-      font-size:17px;
-    }
-
-    .authMainBtn{
-      width:100%;
-      padding:16px;
-      border:none;
-      background:var(--blue);
-      color:var(--gold);
-      border-radius:16px;
-      font-weight:bold;
-      font-size:18px;
-      margin-top:10px;
-      box-shadow:0 8px 18px rgba(0,0,0,.18);
-    }
-
-    .authOutlineBtn{
-      width:100%;
-      padding:14px;
-      border:1px solid var(--gold);
-      background:white;
-      color:var(--blue);
-      border-radius:30px;
-      font-weight:bold;
-      font-size:17px;
-      margin-top:12px;
-    }
-
-    .authTextBtn{
-      background:transparent;
-      border:none;
-      color:var(--blue);
-      font-size:17px;
-      font-weight:bold;
-      margin-top:14px;
-      text-decoration:underline;
-    }
-
-    .authDivider{
-      margin:14px 0;
-      color:#c49a29;
-      font-weight:bold;
-    }
-
-    .close{
-      position:absolute;
-      top:16px;
-      right:20px;
-      font-size:30px;
-      cursor:pointer;
-      color:#111;
-      z-index:2;
-    }
-
-    .modalBox h2{
-      color:#043b2f;
-      margin-bottom:10px;
-    }
-
-    .modalBox p{
-      color:#555;
-      line-height:1.5;
-      margin-bottom:12px;
-    }
-
-    .modalBox input,.modalBox select,.modalBox textarea{
-      width:100%;
-      padding:12px;
-      margin:8px 0;
-      border:1px solid #ddd;
-      border-radius:10px;
-      outline:none;
-    }
-
-    .modalBox button{
-      width:100%;
-      padding:13px;
-      border:none;
-      background:#043b2f;
-      color:white;
-      border-radius:10px;
-      font-weight:bold;
-      margin-top:8px;
-    }
-
-    .vendorFormTitle{
-      text-align:center;
-      color:var(--blue);
-      font-size:30px;
-      font-weight:bold;
-      margin-bottom:8px;
-    }
-
-    .vendorFormSub{
-      text-align:center;
-      color:#666;
-      font-size:16px;
-      margin-bottom:14px;
-    }
-
-    .vendorInput,.vendorSelect,.vendorTextarea{
-      width:100%;
-      padding:14px 16px;
-      margin:7px 0;
-      border:1px solid #ddd;
-      border-radius:12px;
-      outline:none;
-      font-size:16px;
-      background:#fff;
-    }
-
-    .vendorSelect{
-      height:54px;
-    }
-
-    .vendorTextarea{
-      min-height:110px;
-      resize:vertical;
-    }
-
-    .mediaTitle{
-      text-align:center;
-      color:var(--blue);
-      font-size:26px;
-      font-weight:bold;
-      margin:18px 0 10px;
-    }
-
-    .uploadBtn{
-      width:100%;
-      padding:15px;
-      border:none !important;
-      border-radius:14px !important;
-      background:linear-gradient(135deg,#efc55a,#d9a42d) !important;
-      color:#111 !important;
-      font-size:18px;
-      font-weight:bold;
-      margin:8px 0;
-      box-shadow:0 8px 18px rgba(0,0,0,.15);
-    }
-
-    .mediaStatus{
-      color:#666;
-      font-size:15px;
-      margin:5px 0 12px;
-    }
-
-    .monthlyBtn{
-      width:100%;
-      padding:16px !important;
-      border:none !important;
-      border-radius:14px !important;
-      background:#061b3a !important;
-      color:#d6a53a !important;
-      font-size:18px;
-      font-weight:bold;
-      margin-top:12px;
-    }
-
-    .planBox{
-      text-align:center;
-    }
-
-    .planPrice{
-      font-size:42px;
-      font-weight:bold;
-      color:#061b3a;
-      margin:12px 0;
-    }
-
-    .planPrice span{
-      font-size:18px;
-      color:#777;
-    }
-
-    .planFeatures{
-      text-align:left;
-      margin:15px 0;
-      color:#444;
-      line-height:1.8;
-    }
-
-    .planNote{
-      background:#fff7df;
-      border:1px solid #e7c45a;
-      padding:12px;
-      border-radius:12px;
-      color:#5a4300;
-      margin:12px 0;
-    }
-
-    .moreServicesGrid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:8px;
-      margin-top:12px;
-    }
-
-    .moreServiceItem{
-      background:#fffaf0;
-      border:1px solid #f0dfb8;
-      border-radius:10px;
-      padding:10px;
-      font-weight:bold;
-      color:#043b2f;
-      cursor:pointer;
-      font-size:14px;
-    }
-
-    .moreServiceItem:hover{
-      background:#fff1cc;
-    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+    html{scroll-behavior:smooth}
+    body{background:#fffaf0;color:#10382f}
+    :root{--green:#043b2f;--dark:#02251f;--gold:#d6a53a;--blue:#061b3a;--light:#fffaf0;--white:#fff}
+    button{cursor:pointer}
+
+    .top{background:linear-gradient(135deg,#02251f,#07523f);color:white;position:relative;overflow:hidden}
+    .nav{max-width:1220px;margin:auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:10}
+    .brand{display:flex;align-items:center;gap:14px;min-width:270px}
+    .logoCircle{width:92px;height:92px;min-width:92px;min-height:92px;border-radius:18px;border:3px solid var(--gold);background:#fff;padding:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 22px rgba(214,165,58,.45)}
+    .logoCircle.logoFallback::after{content:"SD";width:100%;height:100%;border-radius:12px;background:#043b2f;color:#d6a53a;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold}
+    .navLogo{width:100%;height:100%;object-fit:contain;border-radius:12px;background:#fff;display:block}
+    .brandText h1{color:var(--gold);font-size:26px;line-height:1.05;text-transform:uppercase;letter-spacing:.6px;margin:0}
+    .brandText small{display:block;color:#fff6d8;font-size:12px;margin-top:5px;font-weight:bold}
+
+    .menu{display:flex;align-items:center;gap:18px;font-weight:bold;font-size:14px}
+    .menu a{color:white;text-decoration:none;cursor:pointer;white-space:nowrap}
+    .menu a:hover{color:var(--gold)}
+    .mobileMenuBtn{display:none;font-size:30px;color:#fff;cursor:pointer}
+    .redHeart{color:red;font-weight:bold}
+
+    .hero{max-width:1220px;margin:auto;padding:34px 18px 82px;display:grid;grid-template-columns:1fr 1.15fr;align-items:center;gap:25px;position:relative;z-index:1}
+    .heroText .mini{color:#f6d889;font-weight:bold;margin-bottom:14px;letter-spacing:.4px}
+    .heroText h2{font-family:Georgia,serif;font-size:58px;line-height:.98;color:#fff;margin-bottom:18px}
+    .heroText h2 span{color:var(--gold)}
+    .heroText p{color:#fff5dc;font-size:17px;line-height:1.55;max-width:540px;margin-bottom:18px}
+    .trust{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .trust span{background:rgba(255,255,255,.09);border:1px solid rgba(214,165,58,.45);color:#fff8df;padding:9px 12px;border-radius:30px;font-size:13px;font-weight:bold}
+    .heroImage{min-height:360px;border-radius:260px 0 0 260px;background:linear-gradient(90deg,rgba(4,59,47,.1),rgba(4,59,47,.35)),url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80");background-size:cover;background-position:center;border-left:4px solid var(--gold);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+
+    .quickButtons{max-width:1120px;margin:-48px auto 12px;padding:0 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;position:relative;z-index:6}
+    .quickBtn,.quickGoldBtn{padding:15px 12px;border-radius:12px;font-size:16px;font-weight:bold;border:2px solid #043b2f;box-shadow:0 8px 22px rgba(0,0,0,.18);background:linear-gradient(135deg,#efc55a,#d9a42d);color:#111}
+    .quickBtn:hover,.quickGoldBtn:hover{transform:translateY(-1px);opacity:.95}
+
+    .searchBox{max-width:1120px;margin:0 auto;background:white;border-radius:15px;padding:16px;box-shadow:0 12px 35px rgba(0,0,0,.18);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;position:relative;z-index:5;border:1px solid rgba(214,165,58,.45)}
+    .field{display:flex;align-items:center;gap:10px;border-right:1px solid #eee;padding-right:12px}
+    .fieldIcon{width:46px;height:46px;border-radius:50%;background:#073b2f;color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+    .field label{display:block;font-weight:bold;font-size:14px;margin-bottom:5px}
+    .field select{width:100%;border:none;outline:none;color:#555;background:white;font-size:14px}
+    .searchBtn{border:none;background:linear-gradient(135deg,#07523f,#02251f);color:white;border-radius:10px;font-size:16px;font-weight:bold;padding:12px}
+
+    section{max-width:1220px;margin:auto;padding:28px 18px}
+    .heading{text-align:center;font-family:Georgia,serif;font-size:34px;color:#043b2f;margin-bottom:18px}
+    .heading span{color:var(--gold)}
+    .sectionSub{text-align:center;color:#555;margin-top:-10px;margin-bottom:18px;font-size:15px}
+    .categoryRow{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-top:18px}
+    .category{background:white;border:1px solid #f0dfb8;border-radius:14px;min-height:98px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-shadow:0 5px 18px rgba(0,0,0,.06);cursor:pointer;transition:.2s;text-align:center;font-weight:bold;font-size:13px;padding:10px}
+    .category:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 10px 24px rgba(0,0,0,.12)}
+    .catIcon{font-size:32px}
+
+    .vendorTop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .viewAll{color:#043b2f;font-weight:bold;cursor:pointer}
+    .vendors{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .vendorCard{background:white;border-radius:15px;overflow:hidden;border:1px solid #f0dfb8;box-shadow:0 8px 25px rgba(0,0,0,.08);transition:.2s}
+    .vendorCard:hover{transform:translateY(-4px);box-shadow:0 12px 35px rgba(0,0,0,.14)}
+    .vendorImg{height:155px;position:relative;background:#eee;overflow:hidden}
+    .vendorImg img{width:100%;height:100%;object-fit:cover;display:block}
+    .badge{position:absolute;top:10px;left:10px;background:#043b2f;color:#f9d77c;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold}
+    .vendorBody{padding:13px}
+    .vendorBody h3{color:#082f28;margin-bottom:7px;font-size:17px}
+    .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:#555;margin-bottom:8px}
+    .price{font-weight:bold;color:#043b2f;margin-bottom:12px}
+    .cardActions{display:grid;grid-template-columns:48px 1fr 42px;gap:8px}
+    .waBtn,.detailBtn,.favBtn{border:none;border-radius:8px;padding:10px;font-weight:bold}
+    .waBtn{background:#0dbb59;color:white;font-size:18px}
+    .detailBtn{background:white;border:1px solid #ccc;color:#043b2f}
+    .favBtn{background:#fff1cc;color:#a67400}
+
+    .why{max-width:none;background:linear-gradient(135deg,#02251f,#07523f);color:white;margin-top:20px;padding:0}
+    .whyInner{max-width:1220px;margin:auto;padding:22px 18px;display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
+    .whyItem{text-align:center;border-right:1px solid rgba(255,255,255,.15);padding:10px}
+    .whyItem:last-child{border-right:none}
+    .whyIcon{width:50px;height:50px;border-radius:50%;border:2px solid var(--gold);color:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:24px}
+    .whyItem h4{color:#f7d77d;margin-bottom:4px;font-size:14px}
+    .whyItem p{font-size:12px;color:#fff5df;line-height:1.3}
+
+    .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .reviewCard{background:white;border-radius:15px;padding:20px;border:1px solid #f0dfb8;box-shadow:0 8px 25px rgba(0,0,0,.06)}
+    .quote{color:#b68116;font-size:30px;line-height:1}
+    .reviewText{color:#555;font-style:italic;margin:8px 0 15px;line-height:1.5}
+    .reviewUser{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .stars{color:#f4a700;font-weight:bold}
+
+    footer{background:linear-gradient(135deg,#02251f,#064533);color:white;margin-top:25px}
+    .footerInner{max-width:1220px;margin:auto;padding:34px 18px 18px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr 1.2fr;gap:25px}
+    .footerBrand h2{color:var(--gold);margin-bottom:7px}
+    .footerBrand p,.footerCol p,.footerCol a{color:#fff3d2;font-size:14px;line-height:1.6;text-decoration:none;display:block;margin-bottom:5px;cursor:pointer}
+    .footerCol h3{color:var(--gold);margin-bottom:10px;font-size:17px}
+    .social{display:flex;gap:8px;margin-top:12px}
+    .social span{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#043b2f;display:flex;align-items:center;justify-content:center;font-weight:bold}
+    .newsletter{display:flex;margin-top:8px}
+    .newsletter input{flex:1;padding:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:white;outline:none;border-radius:8px 0 0 8px;min-width:0}
+    .newsletter button{padding:12px 15px;border:none;background:var(--gold);color:#043b2f;font-weight:bold;border-radius:0 8px 8px 0}
+    .bottom{border-top:1px solid rgba(255,255,255,.15);text-align:center;padding:12px;font-size:13px;color:#fff3d2}
+
+    .floatWhatsApp{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;background:#10b85a;color:white;display:flex;align-items:center;justify-content:center;font-size:30px;text-decoration:none;box-shadow:0 8px 25px rgba(0,0,0,.25);z-index:50}
+    .installBar{position:fixed;left:15px;bottom:20px;background:white;border:1px solid #f0dfb8;border-radius:13px;padding:12px 14px;box-shadow:0 8px 25px rgba(0,0,0,.18);z-index:45;display:flex;align-items:center;gap:10px}
+    .installBar button{background:var(--gold);color:#043b2f;border:none;padding:9px 12px;border-radius:8px;font-weight:bold}
+
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}
+    .modalBox{background:white;border-radius:18px;width:100%;max-width:560px;padding:24px;position:relative;box-shadow:0 15px 50px rgba(0,0,0,.35);max-height:90vh;overflow:auto}
+    .wideBox{max-width:850px}
+    .authBox{background:white;border-radius:32px;width:100%;max-width:520px;padding:34px 28px;position:relative;box-shadow:0 15px 50px rgba(0,0,0,.4);border:2px solid var(--gold);max-height:92vh;overflow:auto;text-align:center}
+    .authIcon{font-size:54px;margin-bottom:10px}
+    .authTitle{color:var(--blue);font-size:34px;font-weight:bold;margin-bottom:8px}
+    .authSub{color:#c49a29;font-size:20px;margin-bottom:15px}
+    .authInput{width:100%;padding:15px 16px;margin:8px 0;border:1px solid #ddd;border-radius:12px;outline:none;font-size:17px}
+    .authMainBtn{width:100%;padding:16px;border:none;background:var(--blue);color:var(--gold);border-radius:16px;font-weight:bold;font-size:18px;margin-top:10px;box-shadow:0 8px 18px rgba(0,0,0,.18)}
+    .authOutlineBtn{width:100%;padding:14px;border:1px solid var(--gold);background:white;color:var(--blue);border-radius:30px;font-weight:bold;font-size:17px;margin-top:12px}
+    .authTextBtn{background:transparent;border:none;color:var(--blue);font-size:17px;font-weight:bold;margin-top:14px;text-decoration:underline}
+    .authDivider{margin:14px 0;color:#c49a29;font-weight:bold}
+    .close{position:absolute;top:16px;right:20px;font-size:30px;cursor:pointer;color:#111;z-index:2}
+    .modalBox h2{color:#043b2f;margin-bottom:10px}
+    .modalBox p{color:#555;line-height:1.5;margin-bottom:12px}
+    .modalBox input,.modalBox select,.modalBox textarea{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:10px;outline:none}
+    .modalBox button{width:100%;padding:13px;border:none;background:#043b2f;color:white;border-radius:10px;font-weight:bold;margin-top:8px}
+    .vendorFormTitle{text-align:center;color:var(--blue);font-size:30px;font-weight:bold;margin-bottom:8px}
+    .vendorFormSub{text-align:center;color:#666;font-size:16px;margin-bottom:14px}
+    .vendorInput,.vendorSelect,.vendorTextarea{width:100%;padding:14px 16px;margin:7px 0;border:1px solid #ddd;border-radius:12px;outline:none;font-size:16px;background:#fff}
+    .vendorSelect{height:54px}
+    .vendorTextarea{min-height:110px;resize:vertical}
+    .mediaTitle{text-align:center;color:var(--blue);font-size:26px;font-weight:bold;margin:18px 0 10px}
+    .uploadBtn{width:100%;padding:15px;border:none!important;border-radius:14px!important;background:linear-gradient(135deg,#efc55a,#d9a42d)!important;color:#111!important;font-size:18px;font-weight:bold;margin:8px 0;box-shadow:0 8px 18px rgba(0,0,0,.15)}
+    .mediaStatus{color:#666;font-size:15px;margin:5px 0 12px}
+    .monthlyBtn{width:100%;padding:16px!important;border:none!important;border-radius:14px!important;background:#061b3a!important;color:#d6a53a!important;font-size:18px;font-weight:bold;margin-top:12px}
+    .planBox{text-align:center}
+    .planPrice{font-size:42px;font-weight:bold;color:#061b3a;margin:12px 0}
+    .planPrice span{font-size:18px;color:#777}
+    .planFeatures{text-align:left;margin:15px 0;color:#444;line-height:1.8}
+    .planNote{background:#fff7df;border:1px solid #e7c45a;padding:12px;border-radius:12px;color:#5a4300;margin:12px 0}
+    .moreServicesGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+    .moreServiceItem{background:#fffaf0;border:1px solid #f0dfb8;border-radius:10px;padding:10px;font-weight:bold;color:#043b2f;cursor:pointer;font-size:14px}
+    .moreServiceItem:hover{background:#fff1cc}
 
     @media(max-width:950px){
-      .menu{
-        display:none;
-      }
-
-      .mobileMenuBtn{
-        display:block;
-      }
-
-      .menu.show{
-        display:flex;
-        position:absolute;
-        left:18px;
-        right:18px;
-        top:85px;
-        background:#02251f;
-        border:1px solid var(--gold);
-        border-radius:14px;
-        padding:18px;
-        flex-direction:column;
-        align-items:flex-start;
-        z-index:20;
-      }
-
-      .hero{
-        grid-template-columns:1fr;
-        padding-top:25px;
-        padding-bottom:42px;
-      }
-
-      .heroText h2{
-        font-size:43px;
-      }
-
-      .heroImage{
-        min-height:245px;
-        border-radius:30px;
-        border-left:none;
-        border:3px solid var(--gold);
-      }
-
-      .quickButtons{
-        grid-template-columns:1fr;
-        margin:15px 18px 12px;
-        padding:0;
-      }
-
-      .quickBtn,.quickGoldBtn{
-        padding:17px;
-        font-size:16px;
-      }
-
-      .searchBox{
-        grid-template-columns:1fr;
-        margin:15px 18px 0;
-      }
-
-      .field{
-        border-right:none;
-        border-bottom:1px solid #eee;
-        padding-bottom:10px;
-      }
-
-      .categoryRow{
-        grid-template-columns:repeat(2,1fr);
-      }
-
-      .vendors,.reviews{
-        grid-template-columns:1fr;
-      }
-
-      .whyInner{
-        grid-template-columns:repeat(2,1fr);
-      }
-
-      .footerInner{
-        grid-template-columns:1fr;
-      }
-
-      .installBar{
-        display:none;
-      }
-
-      .authBox{
-        border-radius:28px;
-        padding:32px 22px;
-      }
-
-      .authTitle{
-        font-size:31px;
-      }
-
-      .brand h1{
-        font-size:20px;
-      }
-
-      .logoCircle{
-        width:55px;
-        height:55px;
-      }
-
-      .moreServicesGrid{
-        grid-template-columns:1fr;
-      }
+      .menu{display:none}
+      .mobileMenuBtn{display:block}
+      .menu.show{display:flex;position:absolute;left:18px;right:18px;top:98px;background:#02251f;border:1px solid var(--gold);border-radius:14px;padding:18px;flex-direction:column;align-items:flex-start;z-index:20}
+      .brand{min-width:0;gap:10px}
+      .brandText h1{font-size:20px}
+      .brandText small{font-size:11px}
+      .logoCircle{width:68px;height:68px;min-width:68px;min-height:68px;border-radius:15px;padding:5px}
+      .navLogo{border-radius:10px}
+      .hero{grid-template-columns:1fr;padding-top:25px;padding-bottom:42px}
+      .heroText h2{font-size:43px}
+      .heroImage{min-height:245px;border-radius:30px;border-left:none;border:3px solid var(--gold)}
+      .quickButtons{grid-template-columns:1fr;margin:15px 18px 12px;padding:0}
+      .quickBtn,.quickGoldBtn{padding:17px;font-size:16px}
+      .searchBox{grid-template-columns:1fr;margin:15px 18px 0}
+      .field{border-right:none;border-bottom:1px solid #eee;padding-bottom:10px}
+      .categoryRow{grid-template-columns:repeat(2,1fr)}
+      .vendors,.reviews{grid-template-columns:1fr}
+      .whyInner{grid-template-columns:repeat(2,1fr)}
+      .footerInner{grid-template-columns:1fr}
+      .installBar{display:none}
+      .authBox{border-radius:28px;padding:32px 22px}
+      .authTitle{font-size:31px}
+      .moreServicesGrid{grid-template-columns:1fr}
     }
   </style>
 </head>
 
 <body>
-
   <div class="top" id="home">
     <div class="nav">
       <div class="brand">
         <div class="logoCircle">
-          <img src="logo.png" alt="Samagra Decor Logo" class="navLogo">
+          <img src="logo.png?v=5" alt="Samagra Decor Logo" class="navLogo" onerror="this.style.display='none';this.parentElement.classList.add('logoFallback');">
         </div>
-        <div>
+        <div class="brandText">
           <h1>Samagra Decor</h1>
           <small>Har Function Ki Puri Tayari</small>
         </div>
@@ -1107,10 +215,7 @@
       <div class="heroText">
         <div class="mini">India's All-in-One Event & Decoration Marketplace</div>
         <h2>Har Function<br><span>Ki Puri Tayari</span></h2>
-        <p>
-          Samagra Decor par aap Tent Wale, Decoration, Catering, DJ, Photographer,
-          Makeup, Marriage Garden aur event ki sabhi services ek jagah dhoondh sakte ho.
-        </p>
+        <p>Samagra Decor par aap Tent Wale, Decoration, Catering, DJ, Photographer, Makeup, Marriage Garden aur event ki sabhi services ek jagah dhoondh sakte ho.</p>
         <div class="trust">
           <span>✅ Verified Vendors</span>
           <span>💰 Best Price</span>
@@ -1136,17 +241,9 @@
         <label>City</label>
         <select id="city">
           <option value="">Select your city</option>
-          <option>Bhopal</option>
-          <option>Indore</option>
-          <option>Delhi</option>
-          <option>Mumbai</option>
-          <option>Jaipur</option>
-          <option>Lucknow</option>
-          <option>Noida</option>
-          <option>Jabalpur</option>
-          <option>Gwalior</option>
-          <option>Ujjain</option>
-          <option>All India</option>
+          <option>Bhopal</option><option>Indore</option><option>Delhi</option><option>Mumbai</option>
+          <option>Jaipur</option><option>Lucknow</option><option>Noida</option><option>Jabalpur</option>
+          <option>Gwalior</option><option>Ujjain</option><option>All India</option>
         </select>
       </div>
     </div>
@@ -1155,9 +252,7 @@
       <div class="fieldIcon">▦</div>
       <div style="width:100%;">
         <label>Category</label>
-        <select id="category">
-          <option value="">All Categories</option>
-        </select>
+        <select id="category"><option value="">All Categories</option></select>
       </div>
     </div>
 
@@ -1182,7 +277,6 @@
   <section id="services">
     <h2 class="heading">Popular <span>Services</span></h2>
     <p class="sectionSub">Gaon se lekar metro city tak, har function ki service ek jagah.</p>
-
     <div class="categoryRow" id="mainCategoryRow"></div>
   </section>
 
@@ -1208,23 +302,9 @@
   <section>
     <h2 class="heading">What Our <span>Clients Say</span></h2>
     <div class="reviews">
-      <div class="reviewCard">
-        <div class="quote">“</div>
-        <p class="reviewText">Samagra Decor se shaadi ka decoration aur catering vendor dhoondhna bahut easy ho gaya.</p>
-        <div class="reviewUser"><b>Neha Sharma<br><small>Delhi</small></b><span class="stars">★★★★★ 5.0</span></div>
-      </div>
-
-      <div class="reviewCard">
-        <div class="quote">“</div>
-        <p class="reviewText">Ek hi website par tent wale, DJ aur photographer ki details mil gayi. Bahut useful platform.</p>
-        <div class="reviewUser"><b>Rohit Verma<br><small>Jaipur</small></b><span class="stars">★★★★★ 5.0</span></div>
-      </div>
-
-      <div class="reviewCard">
-        <div class="quote">“</div>
-        <p class="reviewText">Birthday party ke liye decoration aur cake vendor easily mil gaya. Good service idea.</p>
-        <div class="reviewUser"><b>Ananya Kapoor<br><small>Mumbai</small></b><span class="stars">★★★★★ 5.0</span></div>
-      </div>
+      <div class="reviewCard"><div class="quote">“</div><p class="reviewText">Samagra Decor se shaadi ka decoration aur catering vendor dhoondhna bahut easy ho gaya.</p><div class="reviewUser"><b>Neha Sharma<br><small>Delhi</small></b><span class="stars">★★★★★ 5.0</span></div></div>
+      <div class="reviewCard"><div class="quote">“</div><p class="reviewText">Ek hi website par tent wale, DJ aur photographer ki details mil gayi. Bahut useful platform.</p><div class="reviewUser"><b>Rohit Verma<br><small>Jaipur</small></b><span class="stars">★★★★★ 5.0</span></div></div>
+      <div class="reviewCard"><div class="quote">“</div><p class="reviewText">Birthday party ke liye decoration aur cake vendor easily mil gaya. Good service idea.</p><div class="reviewUser"><b>Ananya Kapoor<br><small>Mumbai</small></b><span class="stars">★★★★★ 5.0</span></div></div>
     </div>
   </section>
 
@@ -1235,7 +315,6 @@
         <p>All-in-One Event & Decoration Marketplace. Har function ki puri tayari ek jagah.</p>
         <div class="social"><span>f</span><span>i</span><span>▶</span><span>p</span><span>w</span></div>
       </div>
-
       <div class="footerCol">
         <h3>Quick Links</h3>
         <a onclick="goTo('home')">Home</a>
@@ -1245,7 +324,6 @@
         <a onclick="openModal('aboutModal')">About Us</a>
         <a onclick="openModal('contactModal')">Contact Us</a>
       </div>
-
       <div class="footerCol">
         <h3>Popular Services</h3>
         <a onclick="selectCategory('Tent House / Tent Wale')">Tent Wale</a>
@@ -1255,7 +333,6 @@
         <a onclick="selectCategory('Photography')">Photography</a>
         <a onclick="selectCategory('Marriage Garden / Function Garden')">Marriage Garden</a>
       </div>
-
       <div class="footerCol">
         <h3>For Businesses</h3>
         <a onclick="openModal('businessModal')">List Your Business</a>
@@ -1263,13 +340,11 @@
         <a onclick="openModal('aboutModal')">How It Works</a>
         <a onclick="openModal('contactModal')">Partner With Us</a>
       </div>
-
       <div class="footerCol">
         <h3>Contact Us</h3>
         <p>📞 +91 99999 99999</p>
         <p>✉ info@samagradecor.com</p>
         <p>📍 India</p>
-
         <h3 style="margin-top:15px;">Newsletter</h3>
         <div class="newsletter">
           <input id="newsletterEmail" placeholder="Enter your email" />
@@ -1277,7 +352,6 @@
         </div>
       </div>
     </div>
-
     <div class="bottom">
       © 2026 Samagra Decor. All Rights Reserved. |
       <span onclick="openModal('privacyModal')" style="cursor:pointer;">Privacy Policy</span> |
@@ -1293,17 +367,11 @@
     <button onclick="installApp()">Add</button>
   </div>
 
-  <div class="modal" id="loginModal">
-    <div class="authBox">
-      <span class="close" onclick="closeModal('loginModal')">×</span>
-      <div id="authContent"></div>
-    </div>
-  </div>
+  <div class="modal" id="loginModal"><div class="authBox"><span class="close" onclick="closeModal('loginModal')">×</span><div id="authContent"></div></div></div>
 
   <div class="modal" id="businessModal">
     <div class="modalBox">
       <span class="close" onclick="closeModal('businessModal')">×</span>
-
       <div class="vendorFormTitle">Vendor Registration</div>
       <div class="vendorFormSub">Apna business Samagra Decor par list karein</div>
 
@@ -1311,16 +379,11 @@
       <input class="vendorInput" id="bizOwner" placeholder="Owner Name / Malik ka naam" />
       <input class="vendorInput" id="bizPhone" placeholder="Mobile Number / WhatsApp Number" />
       <input class="vendorInput" id="bizCity" placeholder="City / Shehar / Gaon" />
-
-      <select class="vendorSelect" id="bizCategory">
-        <option value="">📋 Select Service Category</option>
-      </select>
-
+      <select class="vendorSelect" id="bizCategory"><option value="">📋 Select Service Category</option></select>
       <input class="vendorInput" id="bizPrice" type="number" placeholder="Starting Price जैसे ₹25000" />
       <textarea class="vendorTextarea" id="bizDesc" placeholder="Business Description - Aap kya service dete ho?"></textarea>
 
       <div class="mediaTitle">Photos aur Video Upload</div>
-
       <input id="vendorPhotos" type="file" accept="image/*" multiple style="display:none;" onchange="handlePhotoSelect(event)" />
       <button class="uploadBtn" onclick="document.getElementById('vendorPhotos').click()">➕ Add Photos (Max 4)</button>
       <div class="mediaStatus" id="photoStatus">Abhi koi photo select nahi hui</div>
@@ -1336,11 +399,9 @@
   <div class="modal" id="planModal">
     <div class="modalBox">
       <span class="close" onclick="closeModal('planModal')">×</span>
-
       <div class="planBox">
         <h2>Samagra Decor Monthly Plan</h2>
         <div class="planPrice">₹19 <span>/ month</span></div>
-
         <div class="planFeatures">
           ✅ Vendor listing website par<br>
           ✅ Photos max 4 upload<br>
@@ -1348,11 +409,7 @@
           ✅ Customer WhatsApp inquiry<br>
           ✅ Admin approval ke baad live
         </div>
-
-        <div class="planNote">
-          Abhi payment gateway connect nahi hai. Vendor request <b>pending_payment</b> status me save hogi.
-        </div>
-
+        <div class="planNote">Abhi payment gateway connect nahi hai. Vendor request <b>pending_payment</b> status me save hogi.</div>
         <button class="monthlyBtn" onclick="submitBusinessWithPlan()">Submit Vendor Request</button>
         <button class="authOutlineBtn" onclick="closeModal('planModal')">Cancel</button>
       </div>
@@ -1362,24 +419,14 @@
   <div class="modal" id="adminModal">
     <div class="modalBox wideBox">
       <span class="close" onclick="closeModal('adminModal')">×</span>
-
       <h2 style="color:#061b3a;text-align:center;">Website Admin Panel</h2>
       <p style="text-align:center;">Pending vendors ko approve/reject karein.</p>
-
       <button class="monthlyBtn" onclick="loadAdminVendors()">Refresh Pending Vendors</button>
-
-      <div id="adminContent" style="margin-top:15px;">
-        Loading...
-      </div>
+      <div id="adminContent" style="margin-top:15px;">Loading...</div>
     </div>
   </div>
 
-  <div class="modal" id="detailsModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('detailsModal')">×</span>
-      <div id="detailsContent"></div>
-    </div>
-  </div>
+  <div class="modal" id="detailsModal"><div class="modalBox"><span class="close" onclick="closeModal('detailsModal')">×</span><div id="detailsContent"></div></div></div>
 
   <div class="modal" id="moreServicesModal">
     <div class="modalBox wideBox">
@@ -1390,65 +437,14 @@
     </div>
   </div>
 
-  <div class="modal" id="aboutModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('aboutModal')">×</span>
-      <h2>About Samagra Decor</h2>
-      <p>Samagra Decor ek event services marketplace hai jahan customers trusted vendors find, compare aur contact kar sakte hain.</p>
-      <p>Humara goal hai Marriage Garden, Tent, DJ, Photographer, Catering, Decoration aur party services ko ek platform par lana.</p>
-    </div>
-  </div>
-
-  <div class="modal" id="contactModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('contactModal')">×</span>
-      <h2>Contact Us</h2>
-      <p>📞 Phone: +91 99999 99999</p>
-      <p>✉ Email: info@samagradecor.com</p>
-      <p>📍 Location: India</p>
-      <button onclick="window.open('https://wa.me/919999999999?text=Hello%20Samagra%20Decor')">WhatsApp Now</button>
-    </div>
-  </div>
-
-  <div class="modal" id="dealsModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('dealsModal')">×</span>
-      <h2>Latest Deals</h2>
-      <p>🎉 Wedding Decoration Package - Special Discount</p>
-      <p>🎧 DJ + Lighting Combo - Best Price</p>
-      <p>🍽️ Catering Bulk Booking - Offer Available</p>
-    </div>
-  </div>
-
-  <div class="modal" id="privacyModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('privacyModal')">×</span>
-      <h2>Privacy Policy</h2>
-      <p>Samagra Decor user details ko safe rakhne ka प्रयास karta hai. Contact details sirf service communication ke liye use ki jaati hain.</p>
-      <p>Vendor details approval ke baad public listing par show ho sakti hain.</p>
-    </div>
-  </div>
-
-  <div class="modal" id="termsModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('termsModal')">×</span>
-      <h2>Terms & Conditions</h2>
-      <p>Samagra Decor marketplace platform hai. Vendor aur customer ke beech final service, price aur booking ki zimmedari dono parties ki hogi.</p>
-      <p>Samagra Decor direct service provider nahi hai, ye vendors aur customers ko connect karne ka platform hai.</p>
-    </div>
-  </div>
-
-  <div class="modal" id="refundModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('refundModal')">×</span>
-      <h2>Refund Policy</h2>
-      <p>Vendor monthly plan fee normally non-refundable hogi. Payment ya duplicate payment issue hone par support team se contact karein.</p>
-      <p>Customer booking ka refund vendor aur customer ke agreement ke according hoga.</p>
-    </div>
-  </div>
+  <div class="modal" id="aboutModal"><div class="modalBox"><span class="close" onclick="closeModal('aboutModal')">×</span><h2>About Samagra Decor</h2><p>Samagra Decor ek event services marketplace hai jahan customers trusted vendors find, compare aur contact kar sakte hain.</p><p>Humara goal hai Marriage Garden, Tent, DJ, Photographer, Catering, Decoration aur party services ko ek platform par lana.</p></div></div>
+  <div class="modal" id="contactModal"><div class="modalBox"><span class="close" onclick="closeModal('contactModal')">×</span><h2>Contact Us</h2><p>📞 Phone: +91 99999 99999</p><p>✉ Email: info@samagradecor.com</p><p>📍 Location: India</p><button onclick="window.open('https://wa.me/919999999999?text=Hello%20Samagra%20Decor')">WhatsApp Now</button></div></div>
+  <div class="modal" id="dealsModal"><div class="modalBox"><span class="close" onclick="closeModal('dealsModal')">×</span><h2>Latest Deals</h2><p>🎉 Wedding Decoration Package - Special Discount</p><p>🎧 DJ + Lighting Combo - Best Price</p><p>🍽️ Catering Bulk Booking - Offer Available</p></div></div>
+  <div class="modal" id="privacyModal"><div class="modalBox"><span class="close" onclick="closeModal('privacyModal')">×</span><h2>Privacy Policy</h2><p>Samagra Decor user details ko safe rakhne ka प्रयास karta hai. Contact details sirf service communication ke liye use ki jaati hain.</p><p>Vendor details approval ke baad public listing par show ho sakti hain.</p></div></div>
+  <div class="modal" id="termsModal"><div class="modalBox"><span class="close" onclick="closeModal('termsModal')">×</span><h2>Terms & Conditions</h2><p>Samagra Decor marketplace platform hai. Vendor aur customer ke beech final service, price aur booking ki zimmedari dono parties ki hogi.</p><p>Samagra Decor direct service provider nahi hai, ye vendors aur customers ko connect karne ka platform hai.</p></div></div>
+  <div class="modal" id="refundModal"><div class="modalBox"><span class="close" onclick="closeModal('refundModal')">×</span><h2>Refund Policy</h2><p>Vendor monthly plan fee normally non-refundable hogi. Payment ya duplicate payment issue hone par support team se contact karein.</p><p>Customer booking ka refund vendor aur customer ke agreement ke according hoga.</p></div></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 
@@ -1458,14 +454,8 @@
     const SUPABASE_URL = "https://uomxewgvhbqjoamxfnnm.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_JizxCNPAlEeHRL1RaIGJXQ_Q8HeqzCq";
 
-    const isSupabaseReady =
-      SUPABASE_URL.includes("supabase.co") &&
-      SUPABASE_ANON_KEY &&
-      !SUPABASE_ANON_KEY.includes("YAHAN_");
-
-    const supabaseClient = isSupabaseReady
-      ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-      : null;
+    const isSupabaseReady = SUPABASE_URL.includes("supabase.co") && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes("YAHAN_");
+    const supabaseClient = isSupabaseReady ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
     const firebaseConfig = {
       apiKey: "AIzaSyAH4B2wWFUnuW7iO-vaHjO5iYpQsXHAv70",
@@ -1482,149 +472,54 @@
 
     let currentUser = null;
     let isWebsiteAdmin = false;
-
-    const mainCategories = [
-      { name:"Tent Wale", value:"Tent House / Tent Wale", icon:"⛺" },
-      { name:"Decoration", value:"Decoration / Sajawat", icon:"🎊" },
-      { name:"Catering / Halwai", value:"Catering / Halwai", icon:"🍽️" },
-      { name:"DJ", value:"DJ / Music", icon:"🎧" },
-      { name:"Photography", value:"Photography", icon:"📷" },
-      { name:"Makeup", value:"Makeup Artist", icon:"💄" },
-      { name:"Marriage Garden", value:"Marriage Garden / Function Garden", icon:"🏡" },
-      { name:"Light / Sound", value:"Sound System / Lighting", icon:"💡" },
-      { name:"Pandit Ji", value:"Pandit Ji / Puja Service", icon:"🕉️" },
-      { name:"Car Rental", value:"Car Rental", icon:"🚗" },
-      { name:"Planner", value:"Wedding Planner / Event Planner", icon:"📋" },
-      { name:"More Services", value:"More Services", icon:"➕" }
-    ];
-
-    const serviceCategories = [
-      "Marriage Garden / Function Garden",
-      "Banquet Hall / Party Hall",
-      "Tent House / Tent Wale",
-      "Stage Decoration / Stage Sajawat",
-      "Flower Decoration / Phool Sajawat",
-      "Wedding Decoration / Shaadi Sajawat",
-      "Catering / Halwai",
-      "DJ / Music",
-      "Sound System",
-      "Disco Light / Lighting",
-      "Photography",
-      "Videography",
-      "Makeup Artist",
-      "Mehndi Artist",
-      "Hair Stylist",
-      "Wedding Planner",
-      "Event Planner",
-      "Restaurant / Birthday Party",
-      "Birthday Decoration / Birthday Sajawat",
-      "Balloon Decoration / Balloon Sajawat",
-      "Baby Shower Decoration",
-      "Anniversary Decoration",
-      "House Warming / Griha Pravesh",
-      "Pandit Ji / Puja Service",
-      "Anchor / Host",
-      "Live Band",
-      "Dhol Wale",
-      "Shehnai Wale",
-      "Dance Choreographer",
-      "Invitation Card",
-      "Digital Invitation / E-Card",
-      "Wedding Cake / Bakery",
-      "Return Gifts",
-      "Gift Packing",
-      "Car Rental",
-      "Luxury Car / Vintage Car",
-      "Guest Transport",
-      "Hotel / Guest House Booking",
-      "Bridal Dress Rental / Dulhan Dress",
-      "Groom Dress Rental / Dulha Dress",
-      "Jewellery Rental",
-      "Generator Rental / Power Backup",
-      "Chair / Table / Sofa Rental",
-      "Crockery / Utensils Rental",
-      "AC / Cooler Rental",
-      "Security Guard",
-      "Farm House Booking",
-      "Resort Booking",
-      "Hotel Hall / Hotel Banquet",
-      "Party Plot",
-      "Community Hall / Samaj Bhawan",
-      "School / College Event Setup",
-      "Exhibition Stall Setup",
-      "Product Launch Setup",
-      "Conference / Seminar Setup",
-      "Office Party Setup",
-      "Corporate Event / Seminar Setup",
-      "Brand Promotion Team",
-      "Event Staff / Helper",
-      "Waiter Service",
-      "Cook Service / Rasoia",
-      "Bartan / Crockery Service",
-      "Juice / Mocktail Counter",
-      "Ice Cream Counter",
-      "Chaat Counter",
-      "Coffee / Tea Counter",
-      "Pan Counter",
-      "Sweet / Mithai Counter",
-      "Live Food Counter",
-      "Fireworks / Cold Pyro",
-      "Entry Gate Decoration / Welcome Gate",
-      "Mandap Decoration",
-      "Jaimala Stage Decoration",
-      "Sofa / Lounge Setup",
-      "Carpet / Flooring",
-      "Photo Booth",
-      "360 Video Booth",
-      "Drone Photography",
-      "Pre-Wedding Shoot",
-      "Album Printing",
-      "LED Wall / LED Screen",
-      "Projector Setup",
-      "Mic / Speaker Rental",
-      "Cooler / Fan Rental",
-      "Portable Toilet",
-      "Water Tanker",
-      "Parking Management",
-      "Bouncer / Security",
-      "CCTV Setup",
-      "Cleaning Staff",
-      "Housekeeping / Cleaning",
-      "Flower Garland / Varmala",
-      "Bridal Entry Service",
-      "Groom Entry Service",
-      "Ghodi / Baggi",
-      "Band Baja",
-      "Dhol Tasha",
-      "Singer / Live Artist",
-      "Magician",
-      "Kids Entertainment",
-      "Tattoo Artist",
-      "Game Zone",
-      "Invitation Video",
-      "Digital RSVP",
-      "QR Entry Pass",
-      "Live Streaming",
-      "Event Website",
-      "Social Media Coverage",
-      "Reels / Short Video Maker",
-      "Return Gift Supplier",
-      "Gift Hamper",
-      "Trousseau Packing",
-      "Bridal Lehenga",
-      "Sherwani Rental",
-      "Bridal Jewellery",
-      "Makeup Salon",
-      "Live Streaming / Online Event"
-    ];
-
-    const demoVendors = [];
-
     let vendors = [];
     let currentVendorList = [];
     let favorites = [];
     let selectedPhotos = [];
     let selectedVideo = null;
+
+    const mainCategories = [
+      {name:"Tent Wale",value:"Tent House / Tent Wale",icon:"⛺"},
+      {name:"Decoration",value:"Decoration / Sajawat",icon:"🎊"},
+      {name:"Catering / Halwai",value:"Catering / Halwai",icon:"🍽️"},
+      {name:"DJ",value:"DJ / Music",icon:"🎧"},
+      {name:"Photography",value:"Photography",icon:"📷"},
+      {name:"Makeup",value:"Makeup Artist",icon:"💄"},
+      {name:"Marriage Garden",value:"Marriage Garden / Function Garden",icon:"🏡"},
+      {name:"Light / Sound",value:"Sound System / Lighting",icon:"💡"},
+      {name:"Pandit Ji",value:"Pandit Ji / Puja Service",icon:"🕉️"},
+      {name:"Car Rental",value:"Car Rental",icon:"🚗"},
+      {name:"Planner",value:"Wedding Planner / Event Planner",icon:"📋"},
+      {name:"More Services",value:"More Services",icon:"➕"}
+    ];
+
+    const serviceCategories = [
+      "Marriage Garden / Function Garden","Banquet Hall / Party Hall","Tent House / Tent Wale",
+      "Stage Decoration / Stage Sajawat","Flower Decoration / Phool Sajawat","Wedding Decoration / Shaadi Sajawat",
+      "Catering / Halwai","DJ / Music","Sound System","Disco Light / Lighting","Photography","Videography",
+      "Makeup Artist","Mehndi Artist","Hair Stylist","Wedding Planner","Event Planner","Restaurant / Birthday Party",
+      "Birthday Decoration / Birthday Sajawat","Balloon Decoration / Balloon Sajawat","Baby Shower Decoration",
+      "Anniversary Decoration","House Warming / Griha Pravesh","Pandit Ji / Puja Service","Anchor / Host",
+      "Live Band","Dhol Wale","Shehnai Wale","Dance Choreographer","Invitation Card","Digital Invitation / E-Card",
+      "Wedding Cake / Bakery","Return Gifts","Gift Packing","Car Rental","Luxury Car / Vintage Car","Guest Transport",
+      "Hotel / Guest House Booking","Bridal Dress Rental / Dulhan Dress","Groom Dress Rental / Dulha Dress",
+      "Jewellery Rental","Generator Rental / Power Backup","Chair / Table / Sofa Rental","Crockery / Utensils Rental",
+      "AC / Cooler Rental","Security Guard","Farm House Booking","Resort Booking","Hotel Hall / Hotel Banquet",
+      "Party Plot","Community Hall / Samaj Bhawan","School / College Event Setup","Exhibition Stall Setup",
+      "Product Launch Setup","Conference / Seminar Setup","Office Party Setup","Corporate Event / Seminar Setup",
+      "Brand Promotion Team","Event Staff / Helper","Waiter Service","Cook Service / Rasoia","Bartan / Crockery Service",
+      "Juice / Mocktail Counter","Ice Cream Counter","Chaat Counter","Coffee / Tea Counter","Pan Counter",
+      "Sweet / Mithai Counter","Live Food Counter","Fireworks / Cold Pyro","Entry Gate Decoration / Welcome Gate",
+      "Mandap Decoration","Jaimala Stage Decoration","Sofa / Lounge Setup","Carpet / Flooring","Photo Booth",
+      "360 Video Booth","Drone Photography","Pre-Wedding Shoot","Album Printing","LED Wall / LED Screen",
+      "Projector Setup","Mic / Speaker Rental","Cooler / Fan Rental","Portable Toilet","Water Tanker",
+      "Parking Management","Bouncer / Security","CCTV Setup","Cleaning Staff","Housekeeping / Cleaning",
+      "Flower Garland / Varmala","Bridal Entry Service","Groom Entry Service","Ghodi / Baggi","Band Baja","Dhol Tasha",
+      "Singer / Live Artist","Magician","Kids Entertainment","Tattoo Artist","Game Zone","Invitation Video",
+      "Digital RSVP","QR Entry Pass","Live Streaming","Event Website","Social Media Coverage","Reels / Short Video Maker",
+      "Return Gift Supplier","Gift Hamper","Trousseau Packing","Bridal Lehenga","Sherwani Rental","Bridal Jewellery",
+      "Makeup Salon","Live Streaming / Online Event"
+    ];
 
     function escapeHtml(value){
       return String(value || "")
@@ -1635,7 +530,7 @@
         .replaceAll("'","&#039;");
     }
 
-    function safeText(value, fallback = ""){
+    function safeText(value, fallback=""){
       return value === null || value === undefined || value === "" ? fallback : String(value);
     }
 
@@ -1645,47 +540,33 @@
       const mainRow = document.getElementById("mainCategoryRow");
       const moreGrid = document.getElementById("moreServicesGrid");
 
-      if(categorySelect){
-        serviceCategories.forEach(cat=>{
-          const option = document.createElement("option");
-          option.value = cat;
-          option.textContent = cat;
-          categorySelect.appendChild(option);
-        });
-      }
-
-      if(bizCategorySelect){
-        serviceCategories.forEach(cat=>{
-          const option = document.createElement("option");
-          option.value = cat;
-          option.textContent = cat;
-          bizCategorySelect.appendChild(option);
-        });
-      }
+      serviceCategories.forEach(cat=>{
+        if(categorySelect){
+          const op = document.createElement("option");
+          op.value = cat;
+          op.textContent = cat;
+          categorySelect.appendChild(op);
+        }
+        if(bizCategorySelect){
+          const op2 = document.createElement("option");
+          op2.value = cat;
+          op2.textContent = cat;
+          bizCategorySelect.appendChild(op2);
+        }
+      });
 
       if(mainRow){
         mainRow.innerHTML = mainCategories.map(cat=>{
           if(cat.value === "More Services"){
-            return `
-              <div class="category" onclick="openModal('moreServicesModal')">
-                <div class="catIcon">${cat.icon}</div>
-                ${cat.name}
-              </div>
-            `;
+            return `<div class="category" onclick="openModal('moreServicesModal')"><div class="catIcon">${cat.icon}</div>${cat.name}</div>`;
           }
-
-          return `
-            <div class="category" onclick="selectCategory('${cat.value.replaceAll("'","\\'")}')">
-              <div class="catIcon">${cat.icon}</div>
-              ${cat.name}
-            </div>
-          `;
+          return `<div class="category" onclick="selectCategory('${cat.value.replaceAll("'","\\'")}')"><div class="catIcon">${cat.icon}</div>${cat.name}</div>`;
         }).join("");
       }
 
       if(moreGrid){
         moreGrid.innerHTML = serviceCategories.map(cat=>{
-          return `<div class="moreServiceItem" onclick="selectCategory('${cat.replaceAll("'","\\'")}'); closeModal('moreServicesModal');">${cat}</div>`;
+          return `<div class="moreServiceItem" onclick="selectCategory('${cat.replaceAll("'","\\'")}');closeModal('moreServicesModal');">${cat}</div>`;
         }).join("");
       }
     }
@@ -1697,20 +578,14 @@
         photos = v.vendor_images.map(img => img.image_url).filter(Boolean);
       }
 
-      const appImages = [
-        v.image_url,
-        v.image_url_1,
-        v.image_url_2,
-        v.image_url_3,
-        v.image_url_4
-      ].filter(url => url && url !== "EMPTY" && url !== "NULL" && url !== "null");
+      const appImages = [v.image_url, v.image_url_1, v.image_url_2, v.image_url_3, v.image_url_4]
+        .filter(url => url && url !== "EMPTY" && url !== "NULL" && url !== "null");
 
       photos = [...photos, ...appImages];
 
-      const mainImage =
-        photos.length > 0
-          ? photos[0]
-          : safeText(v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80");
+      const mainImage = photos.length > 0
+        ? photos[0]
+        : safeText(v.img, "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=800&q=80");
 
       return {
         id: v.id || "",
@@ -1731,8 +606,8 @@
 
     async function loadVendors(){
       if(!supabaseClient){
-        vendors = demoVendors.map(normalizeVendor);
-        currentVendorList = [...vendors];
+        vendors = [];
+        currentVendorList = [];
         renderVendors(currentVendorList);
         return;
       }
@@ -1740,17 +615,10 @@
       const { data: vendorData, error: vendorError } = await supabaseClient
         .from("vendors")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending:false });
 
-      if(vendorError){
-        console.log("Vendor load error:", vendorError.message);
-        vendors = [];
-        currentVendorList = [];
-        renderVendors(currentVendorList);
-        return;
-      }
-
-      if(!vendorData || vendorData.length === 0){
+      if(vendorError || !vendorData || vendorData.length === 0){
+        if(vendorError) console.log("Vendor load error:", vendorError.message);
         vendors = [];
         currentVendorList = [];
         renderVendors(currentVendorList);
@@ -1761,33 +629,23 @@
         .from("vendor_images")
         .select("vendor_id, image_url");
 
-      if(imageError){
-        console.log("Vendor images load error:", imageError.message);
-      }
+      if(imageError) console.log("Vendor images load error:", imageError.message);
 
       const imagesByVendor = {};
-
       if(imageData && imageData.length > 0){
-        imageData.forEach(img => {
-          if(!imagesByVendor[img.vendor_id]){
-            imagesByVendor[img.vendor_id] = [];
-          }
-
-          imagesByVendor[img.vendor_id].push({
-            image_url: img.image_url
-          });
+        imageData.forEach(img=>{
+          if(!imagesByVendor[img.vendor_id]) imagesByVendor[img.vendor_id] = [];
+          imagesByVendor[img.vendor_id].push({ image_url: img.image_url });
         });
       }
 
-      const finalData = vendorData.map(v => {
-        return {
-          ...v,
-          vendor_images: imagesByVendor[v.id] || []
-        };
-      });
+      const finalData = vendorData.map(v=>({
+        ...v,
+        vendor_images: imagesByVendor[v.id] || []
+      }));
 
       vendors = finalData
-        .filter(v => {
+        .filter(v=>{
           const status = String(v.status || "").toLowerCase().trim();
           return status === "approved" || status === "active";
         })
@@ -1830,8 +688,7 @@
                 <button class="favBtn" onclick="addFavorite(${index})">♡</button>
               </div>
             </div>
-          </div>
-        `;
+          </div>`;
       });
     }
 
@@ -1841,21 +698,9 @@
       const budget = document.getElementById("budget").value.trim();
 
       const result = vendors.filter(v=>{
-        const cityOk =
-          city === "" ||
-          city.toLowerCase() === "all india" ||
-          v.city.toLowerCase() === city.toLowerCase();
-
-        const catOk =
-          category === "" ||
-          v.category.toLowerCase().includes(category.toLowerCase()) ||
-          category.toLowerCase().includes(v.category.toLowerCase());
-
-        const budgetOk =
-          budget === "" ||
-          v.price === 0 ||
-          v.price <= Number(budget);
-
+        const cityOk = city === "" || city.toLowerCase() === "all india" || v.city.toLowerCase() === city.toLowerCase();
+        const catOk = category === "" || v.category.toLowerCase().includes(category.toLowerCase()) || category.toLowerCase().includes(v.category.toLowerCase());
+        const budgetOk = budget === "" || v.price === 0 || v.price <= Number(budget);
         return cityOk && catOk && budgetOk;
       });
 
@@ -1864,8 +709,7 @@
     }
 
     function selectCategory(cat){
-      const categorySelect = document.getElementById("category");
-      categorySelect.value = cat;
+      document.getElementById("category").value = cat;
       searchVendors();
     }
 
@@ -1882,15 +726,11 @@
       const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
 
       const photoGallery = v.photos && v.photos.length > 0
-        ? v.photos.map(url => `
-            <img src="${escapeHtml(url)}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />
-          `).join("")
+        ? v.photos.map(url=>`<img src="${escapeHtml(url)}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />`).join("")
         : `<img src="${escapeHtml(v.img)}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />`;
 
       const videoBox = v.video_url
-        ? `<video controls style="width:100%;border-radius:12px;margin:10px 0;max-height:260px;">
-             <source src="${escapeHtml(v.video_url)}">
-           </video>`
+        ? `<video controls style="width:100%;border-radius:12px;margin:10px 0;max-height:260px;"><source src="${escapeHtml(v.video_url)}"></video>`
         : "";
 
       document.getElementById("detailsContent").innerHTML = `
@@ -1903,9 +743,7 @@
         <p><b>Rating:</b> ⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)} reviews)</p>
         <p><b>Price:</b> ${priceText}</p>
         <p>${escapeHtml(v.desc)}</p>
-        <button onclick="vendorWhatsApp(${index})">Contact on WhatsApp</button>
-      `;
-
+        <button onclick="vendorWhatsApp(${index})">Contact on WhatsApp</button>`;
       openModal("detailsModal");
     }
 
@@ -1918,7 +756,6 @@
 
     function addFavorite(index){
       const v = currentVendorList[index];
-
       if(!favorites.includes(v.name)){
         favorites.push(v.name);
         alert(v.name + " favorites me add ho gaya.");
@@ -1928,16 +765,12 @@
     }
 
     function showFavorites(){
-      if(favorites.length === 0){
-        alert("Abhi koi favorite vendor add nahi hai.");
-      }else{
-        alert("Your Favorites:\n" + favorites.join("\n"));
-      }
+      if(favorites.length === 0) alert("Abhi koi favorite vendor add nahi hai.");
+      else alert("Your Favorites:\n" + favorites.join("\n"));
     }
 
     function handlePhotoSelect(event){
       const files = Array.from(event.target.files);
-
       if(files.length > 4){
         alert("Max 4 photos hi select kar sakte ho.");
         event.target.value = "";
@@ -1945,35 +778,31 @@
         document.getElementById("photoStatus").innerText = "Abhi koi photo select nahi hui";
         return;
       }
-
       selectedPhotos = files;
-      document.getElementById("photoStatus").innerText =
-        selectedPhotos.length + " photo select hui";
+      document.getElementById("photoStatus").innerText = selectedPhotos.length + " photo select hui";
     }
 
     function handleVideoSelect(event){
       const file = event.target.files[0];
-
       if(!file){
         selectedVideo = null;
         document.getElementById("videoStatus").innerText = "Abhi koi video select nahi hua";
         return;
       }
-
       selectedVideo = file;
       document.getElementById("videoStatus").innerText = "1 video select hua";
     }
 
     function getVendorFormData(){
-      const name = document.getElementById("bizName").value.trim();
-      const owner = document.getElementById("bizOwner").value.trim();
-      const phone = document.getElementById("bizPhone").value.trim();
-      const city = document.getElementById("bizCity").value.trim();
-      const cat = document.getElementById("bizCategory").value.trim();
-      const price = document.getElementById("bizPrice").value.trim();
-      const desc = document.getElementById("bizDesc").value.trim();
-
-      return { name, owner, phone, city, cat, price, desc };
+      return {
+        name: document.getElementById("bizName").value.trim(),
+        owner: document.getElementById("bizOwner").value.trim(),
+        phone: document.getElementById("bizPhone").value.trim(),
+        city: document.getElementById("bizCity").value.trim(),
+        cat: document.getElementById("bizCategory").value.trim(),
+        price: document.getElementById("bizPrice").value.trim(),
+        desc: document.getElementById("bizDesc").value.trim()
+      };
     }
 
     function continueToMonthlyPlan(){
@@ -1998,14 +827,9 @@
 
       const { error } = await supabaseClient.storage
         .from("vendor-media")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: false
-        });
+        .upload(fileName, file, { cacheControl:"3600", upsert:false });
 
-      if(error){
-        throw new Error(error.message);
-      }
+      if(error) throw new Error(error.message);
 
       const { data } = supabaseClient.storage
         .from("vendor-media")
@@ -2071,24 +895,12 @@
         }
 
         if(photoUrls.length > 0){
-          const imageRows = photoUrls.map(url => {
-            return {
-              vendor_id: vendor.id,
-              image_url: url
-            };
-          });
-
-          const { error: imageError } = await supabaseClient
-            .from("vendor_images")
-            .insert(imageRows);
-
-          if(imageError){
-            console.log("Image table save error:", imageError.message);
-          }
+          const imageRows = photoUrls.map(url=>({ vendor_id: vendor.id, image_url: url }));
+          const { error: imageError } = await supabaseClient.from("vendor_images").insert(imageRows);
+          if(imageError) console.log("Image table save error:", imageError.message);
         }
 
         alert("Vendor request submit ho gayi ✅ Monthly plan status pending_payment hai. Admin approval ke baad live hoga.");
-
         closeModal("planModal");
         closeModal("businessModal");
         clearBusinessForm();
@@ -2112,7 +924,6 @@
 
       const photoInput = document.getElementById("vendorPhotos");
       const videoInput = document.getElementById("vendorVideo");
-
       if(photoInput) photoInput.value = "";
       if(videoInput) videoInput.value = "";
 
@@ -2123,23 +934,15 @@
     function showAdminButtons(show){
       const adminMenuLink = document.getElementById("adminMenuLink");
       const adminQuickBtn = document.getElementById("adminQuickBtn");
-
-      if(adminMenuLink){
-        adminMenuLink.style.display = show ? "block" : "none";
-      }
-
-      if(adminQuickBtn){
-        adminQuickBtn.style.display = show ? "block" : "none";
-      }
+      if(adminMenuLink) adminMenuLink.style.display = show ? "block" : "none";
+      if(adminQuickBtn) adminQuickBtn.style.display = show ? "block" : "none";
     }
 
     async function checkWebsiteAdmin(user){
       isWebsiteAdmin = false;
       showAdminButtons(false);
 
-      if(!user || !supabaseClient){
-        return;
-      }
+      if(!user || !supabaseClient) return;
 
       const email = (user.email || "").toLowerCase().trim();
 
@@ -2208,54 +1011,36 @@
         .from("vendor_images")
         .select("vendor_id, image_url");
 
-      if(imageError){
-        console.log("Admin image load error:", imageError.message);
-      }
+      if(imageError) console.log("Admin image load error:", imageError.message);
 
       const imagesByVendor = {};
-
       if(imageData && imageData.length > 0){
-        imageData.forEach(img => {
-          if(!imagesByVendor[img.vendor_id]){
-            imagesByVendor[img.vendor_id] = [];
-          }
-
-          imagesByVendor[img.vendor_id].push({
-            image_url: img.image_url
-          });
+        imageData.forEach(img=>{
+          if(!imagesByVendor[img.vendor_id]) imagesByVendor[img.vendor_id] = [];
+          imagesByVendor[img.vendor_id].push({ image_url: img.image_url });
         });
       }
 
-      const finalData = vendorData.map(v => {
-        return {
-          ...v,
-          vendor_images: imagesByVendor[v.id] || []
-        };
-      });
+      const finalData = vendorData.map(v=>({
+        ...v,
+        vendor_images: imagesByVendor[v.id] || []
+      }));
 
-      box.innerHTML = finalData.map(raw => {
+      box.innerHTML = finalData.map(raw=>{
         const v = normalizeVendor(raw);
 
         const gallery = v.photos && v.photos.length > 0
-          ? v.photos.slice(0, 4).map(url => `
-              <img src="${escapeHtml(url)}" style="width:48%;height:95px;object-fit:cover;border-radius:10px;margin:4px;" />
-            `).join("")
+          ? v.photos.slice(0,4).map(url=>`<img src="${escapeHtml(url)}" style="width:48%;height:95px;object-fit:cover;border-radius:10px;margin:4px;" />`).join("")
           : `<img src="${escapeHtml(v.img)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />`;
 
         const videoBox = v.video_url
-          ? `<video controls style="width:100%;border-radius:12px;margin:8px 0;max-height:210px;">
-               <source src="${escapeHtml(v.video_url)}">
-             </video>`
+          ? `<video controls style="width:100%;border-radius:12px;margin:8px 0;max-height:210px;"><source src="${escapeHtml(v.video_url)}"></video>`
           : `<p><b>Video:</b> Not uploaded</p>`;
 
         return `
           <div style="border:1px solid #e2c15d;border-radius:14px;padding:12px;margin:12px 0;background:#fffaf0;">
-            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
-              ${gallery}
-            </div>
-
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">${gallery}</div>
             ${videoBox}
-
             <h3 style="color:#043b2f;margin-bottom:6px;">${escapeHtml(v.name)}</h3>
             <p><b>Owner:</b> ${escapeHtml(v.owner_name)}</p>
             <p><b>City:</b> ${escapeHtml(v.city)}</p>
@@ -2265,15 +1050,9 @@
             <p><b>Status:</b> ${escapeHtml(raw.status)}</p>
             <p><b>Description:</b> ${escapeHtml(v.desc)}</p>
 
-            <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">
-              ✅ Approve Vendor
-            </button>
-
-            <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','rejected')">
-              ❌ Reject Vendor
-            </button>
-          </div>
-        `;
+            <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">✅ Approve Vendor</button>
+            <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','rejected')">❌ Reject Vendor</button>
+          </div>`;
       }).join("");
     }
 
@@ -2294,17 +1073,13 @@
       }
 
       alert("Vendor " + status + " ho gaya ✅");
-
       loadAdminVendors();
       loadVendors();
     }
 
     function openAuthModal(){
-      if(currentUser){
-        showAccountScreen();
-      }else{
-        showLoginScreen();
-      }
+      if(currentUser) showAccountScreen();
+      else showLoginScreen();
       openModal("loginModal");
     }
 
@@ -2313,17 +1088,13 @@
         <div class="authIcon">👤</div>
         <div class="authTitle">Welcome Back</div>
         <div class="authSub">Login to continue</div>
-
         <input class="authInput" id="loginEmail" type="email" placeholder="✉  Email address" />
         <input class="authInput" id="loginPassword" type="password" placeholder="🔒  Password" />
-
         <button class="authTextBtn" onclick="forgotPassword()">Forgot Password?</button>
         <button class="authMainBtn" onclick="loginUser()">LOGIN →</button>
-
         <div class="authDivider">OR</div>
         <button class="authOutlineBtn" onclick="showCreateAccountScreen()">Create Account</button>
-        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
-      `;
+        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>`;
     }
 
     function showCreateAccountScreen(){
@@ -2331,17 +1102,13 @@
         <div class="authIcon">👥</div>
         <div class="authTitle">Create Account</div>
         <div class="authSub">Join Samagra Decor</div>
-
         <input class="authInput" id="createName" type="text" placeholder="👤  Full Name" />
         <input class="authInput" id="createEmail" type="email" placeholder="✉  Email address" />
         <input class="authInput" id="createPassword" type="password" placeholder="🔒  Password" />
-
         <button class="authMainBtn" onclick="createAccount()">CREATE ACCOUNT →</button>
-
         <div class="authDivider">OR</div>
         <button class="authOutlineBtn" onclick="showLoginScreen()">Login</button>
-        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
-      `;
+        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>`;
     }
 
     function showAccountScreen(){
@@ -2353,10 +1120,8 @@
         <div class="authTitle">Welcome</div>
         <div class="authSub">${escapeHtml(name)}</div>
         <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
-
         <button class="authMainBtn" onclick="logoutUser()">LOGOUT</button>
-        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
-      `;
+        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>`;
     }
 
     function createAccount(){
@@ -2376,9 +1141,7 @@
 
       firebaseAuth.createUserWithEmailAndPassword(email, password)
         .then(function(result){
-          return result.user.updateProfile({
-            displayName:name
-          });
+          return result.user.updateProfile({ displayName:name });
         })
         .then(function(){
           alert("Account create ho gaya ✅");
@@ -2438,7 +1201,6 @@
 
     firebaseAuth.onAuthStateChanged(function(user){
       currentUser = user;
-
       checkWebsiteAdmin(user);
 
       const authQuickBtn = document.getElementById("authQuickBtn");
@@ -2467,29 +1229,20 @@
 
     function openModal(id){
       const el = document.getElementById(id);
-      if(el){
-        el.style.display = "flex";
-      }
+      if(el) el.style.display = "flex";
     }
 
     function closeModal(id){
       const el = document.getElementById(id);
-      if(el){
-        el.style.display = "none";
-      }
+      if(el) el.style.display = "none";
     }
 
     function goTo(id){
       const section = document.getElementById(id);
-
-      if(section){
-        section.scrollIntoView({behavior:"smooth"});
-      }
+      if(section) section.scrollIntoView({behavior:"smooth"});
 
       const menu = document.getElementById("menu");
-      if(menu){
-        menu.classList.remove("show");
-      }
+      if(menu) menu.classList.remove("show");
     }
 
     function toggleMenu(){
