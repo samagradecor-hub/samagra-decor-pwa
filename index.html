@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Samagra Decor - Har Function Ki Puri Tayari</title>
-  <meta name="description" content="Samagra Decor - Tent House, Decoration, Catering, DJ, Photography, Lighting, Makeup aur Marriage Garden vendors ke liye event services marketplace." />
+  <meta name="description" content="Samagra Decor - All in One Event & Decoration Marketplace. Tent House, Decoration, Catering, DJ, Photography, Lighting, Makeup, Marriage Garden, Banquet Hall aur sabhi event services." />
 
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#043b2f" />
 
@@ -35,6 +36,7 @@
       --white:#ffffff;
       --text:#1b2b25;
       --blue:#061b3a;
+      --red:#b00020;
     }
 
     button{
@@ -51,7 +53,7 @@
     .nav{
       max-width:1200px;
       margin:auto;
-      padding:18px 18px;
+      padding:16px 18px;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -67,24 +69,33 @@
     }
 
     .logoCircle{
-      width:58px;
-      height:58px;
+      width:62px;
+      height:62px;
       border-radius:50%;
       border:2px solid var(--gold);
       display:flex;
       align-items:center;
       justify-content:center;
-      color:var(--gold);
-      font-weight:bold;
-      font-size:26px;
-      box-shadow:0 0 20px rgba(214,165,58,.35);
+      box-shadow:0 0 20px rgba(214,165,58,.45);
       flex:none;
+      overflow:hidden;
+      background:#fffaf0;
+    }
+
+    .navLogo{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius:50%;
+      display:block;
     }
 
     .brand h1{
       color:var(--gold);
       font-size:25px;
       line-height:1.1;
+      text-transform:uppercase;
+      letter-spacing:.5px;
     }
 
     .brand small{
@@ -113,7 +124,7 @@
 
     .mobileMenuBtn{
       display:none;
-      font-size:28px;
+      font-size:30px;
       color:white;
       cursor:pointer;
     }
@@ -121,9 +132,9 @@
     .hero{
       max-width:1200px;
       margin:auto;
-      padding:35px 18px 82px;
+      padding:36px 18px 82px;
       display:grid;
-      grid-template-columns:1fr 1.2fr;
+      grid-template-columns:1fr 1.15fr;
       align-items:center;
       gap:25px;
       position:relative;
@@ -139,7 +150,7 @@
 
     .heroText h2{
       font-family:Georgia,serif;
-      font-size:60px;
+      font-size:58px;
       line-height:.98;
       color:white;
       margin-bottom:18px;
@@ -153,7 +164,7 @@
       color:#fff5dc;
       font-size:16px;
       line-height:1.5;
-      max-width:500px;
+      max-width:520px;
       margin-bottom:18px;
     }
 
@@ -175,7 +186,7 @@
     }
 
     .heroImage{
-      min-height:350px;
+      min-height:360px;
       border-radius:260px 0 0 260px;
       background:
         linear-gradient(90deg,rgba(4,59,47,.1),rgba(4,59,47,.35)),
@@ -191,7 +202,7 @@
       margin:-48px auto 12px;
       padding:0 18px;
       display:grid;
-      grid-template-columns:repeat(3, 1fr);
+      grid-template-columns:repeat(3,1fr);
       gap:12px;
       position:relative;
       z-index:6;
@@ -220,7 +231,7 @@
 
     .searchBox{
       max-width:1120px;
-      margin:0 auto 0;
+      margin:0 auto;
       background:white;
       border-radius:15px;
       padding:16px;
@@ -277,46 +288,13 @@
       border-radius:10px;
       font-size:16px;
       font-weight:bold;
+      padding:12px;
     }
 
     section{
       max-width:1200px;
       margin:auto;
       padding:28px 18px;
-    }
-
-    .categoryRow{
-      display:grid;
-      grid-template-columns:repeat(8,1fr);
-      gap:14px;
-      margin-top:18px;
-    }
-
-    .category{
-      background:white;
-      border:1px solid #f0dfb8;
-      border-radius:14px;
-      min-height:95px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      box-shadow:0 5px 18px rgba(0,0,0,.06);
-      cursor:pointer;
-      transition:.2s;
-      text-align:center;
-      font-weight:bold;
-      font-size:13px;
-    }
-
-    .category:hover{
-      transform:translateY(-4px);
-      border-color:var(--gold);
-    }
-
-    .catIcon{
-      font-size:32px;
     }
 
     .heading{
@@ -329,6 +307,50 @@
 
     .heading span{
       color:var(--gold);
+    }
+
+    .sectionSub{
+      text-align:center;
+      color:#555;
+      margin-top:-10px;
+      margin-bottom:18px;
+      font-size:15px;
+    }
+
+    .categoryRow{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .category{
+      background:white;
+      border:1px solid #f0dfb8;
+      border-radius:14px;
+      min-height:98px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      box-shadow:0 5px 18px rgba(0,0,0,.06);
+      cursor:pointer;
+      transition:.2s;
+      text-align:center;
+      font-weight:bold;
+      font-size:13px;
+      padding:10px;
+    }
+
+    .category:hover{
+      transform:translateY(-4px);
+      border-color:var(--gold);
+      box-shadow:0 10px 24px rgba(0,0,0,.12);
+    }
+
+    .catIcon{
+      font-size:32px;
     }
 
     .vendorTop{
@@ -365,10 +387,17 @@
     }
 
     .vendorImg{
-      height:150px;
-      background-size:cover;
-      background-position:center;
+      height:155px;
       position:relative;
+      background:#eee;
+      overflow:hidden;
+    }
+
+    .vendorImg img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
     .badge{
@@ -596,6 +625,7 @@
       color:white;
       outline:none;
       border-radius:8px 0 0 8px;
+      min-width:0;
     }
 
     .newsletter button{
@@ -672,12 +702,16 @@
       background:white;
       border-radius:18px;
       width:100%;
-      max-width:520px;
+      max-width:560px;
       padding:24px;
       position:relative;
       box-shadow:0 15px 50px rgba(0,0,0,.35);
       max-height:90vh;
       overflow:auto;
+    }
+
+    .wideBox{
+      max-width:850px;
     }
 
     .authBox{
@@ -910,6 +944,28 @@
       margin:12px 0;
     }
 
+    .moreServicesGrid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .moreServiceItem{
+      background:#fffaf0;
+      border:1px solid #f0dfb8;
+      border-radius:10px;
+      padding:10px;
+      font-weight:bold;
+      color:#043b2f;
+      cursor:pointer;
+      font-size:14px;
+    }
+
+    .moreServiceItem:hover{
+      background:#fff1cc;
+    }
+
     @media(max-width:950px){
       .menu{
         display:none;
@@ -936,15 +992,16 @@
 
       .hero{
         grid-template-columns:1fr;
-        padding-bottom:70px;
+        padding-top:25px;
+        padding-bottom:42px;
       }
 
       .heroText h2{
-        font-size:46px;
+        font-size:43px;
       }
 
       .heroImage{
-        min-height:250px;
+        min-height:245px;
         border-radius:30px;
         border-left:none;
         border:3px solid var(--gold);
@@ -957,7 +1014,7 @@
       }
 
       .quickBtn,.quickGoldBtn{
-        padding:18px;
+        padding:17px;
         font-size:16px;
       }
 
@@ -970,10 +1027,6 @@
         border-right:none;
         border-bottom:1px solid #eee;
         padding-bottom:10px;
-      }
-
-      .searchBtn{
-        padding:15px;
       }
 
       .categoryRow{
@@ -1004,6 +1057,19 @@
       .authTitle{
         font-size:31px;
       }
+
+      .brand h1{
+        font-size:20px;
+      }
+
+      .logoCircle{
+        width:55px;
+        height:55px;
+      }
+
+      .moreServicesGrid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -1013,7 +1079,9 @@
   <div class="top" id="home">
     <div class="nav">
       <div class="brand">
-        <div class="logoCircle">SD</div>
+        <div class="logoCircle">
+          <img src="logo.png" alt="Samagra Decor Logo" class="navLogo">
+        </div>
         <div>
           <h1>Samagra Decor</h1>
           <small>Har Function Ki Puri Tayari</small>
@@ -1037,17 +1105,17 @@
 
     <div class="hero">
       <div class="heroText">
-        <div class="mini">India's Most Loved Event Services Marketplace</div>
+        <div class="mini">India's All-in-One Event & Decoration Marketplace</div>
         <h2>Har Function<br><span>Ki Puri Tayari</span></h2>
         <p>
-          One platform. Trusted vendors. Weddings, Corporate Events,
-          Birthday Parties aur more. Find, compare & book the best all in one place.
+          Samagra Decor par aap Tent Wale, Decoration, Catering, DJ, Photographer,
+          Makeup, Marriage Garden aur event ki sabhi services ek jagah dhoondh sakte ho.
         </p>
         <div class="trust">
           <span>✅ Verified Vendors</span>
           <span>💰 Best Price</span>
-          <span>🔒 Secure Booking</span>
-          <span>🎧 24x7 Support</span>
+          <span>🔒 Secure Contact</span>
+          <span>🎧 Support</span>
         </div>
       </div>
       <div class="heroImage"></div>
@@ -1076,6 +1144,9 @@
           <option>Lucknow</option>
           <option>Noida</option>
           <option>Jabalpur</option>
+          <option>Gwalior</option>
+          <option>Ujjain</option>
+          <option>All India</option>
         </select>
       </div>
     </div>
@@ -1086,15 +1157,6 @@
         <label>Category</label>
         <select id="category">
           <option value="">All Categories</option>
-          <option>Tent House</option>
-          <option>Decoration</option>
-          <option>Catering</option>
-          <option>DJ Music</option>
-          <option>Photography</option>
-          <option>Lighting</option>
-          <option>Banquet Hall</option>
-          <option>Makeup</option>
-          <option>Marriage Garden</option>
         </select>
       </div>
     </div>
@@ -1105,9 +1167,11 @@
         <label>Budget</label>
         <select id="budget">
           <option value="">Select Budget</option>
+          <option value="10000">Under ₹10,000</option>
           <option value="20000">Under ₹20,000</option>
           <option value="50000">Under ₹50,000</option>
           <option value="100000">Under ₹1,00,000</option>
+          <option value="200000">Under ₹2,00,000</option>
         </select>
       </div>
     </div>
@@ -1116,16 +1180,10 @@
   </div>
 
   <section id="services">
-    <div class="categoryRow">
-      <div class="category" onclick="selectCategory('Tent House')"><div class="catIcon">⛺</div>Tent House</div>
-      <div class="category" onclick="selectCategory('Decoration')"><div class="catIcon">🎊</div>Decoration</div>
-      <div class="category" onclick="selectCategory('Catering')"><div class="catIcon">🍽️</div>Catering</div>
-      <div class="category" onclick="selectCategory('DJ Music')"><div class="catIcon">🎧</div>DJ Music</div>
-      <div class="category" onclick="selectCategory('Photography')"><div class="catIcon">📷</div>Photography</div>
-      <div class="category" onclick="selectCategory('Lighting')"><div class="catIcon">💡</div>Lighting</div>
-      <div class="category" onclick="selectCategory('Banquet Hall')"><div class="catIcon">🏛️</div>Banquet Hall</div>
-      <div class="category" onclick="selectCategory('Makeup')"><div class="catIcon">💄</div>Makeup</div>
-    </div>
+    <h2 class="heading">Popular <span>Services</span></h2>
+    <p class="sectionSub">Gaon se lekar metro city tak, har function ki service ek jagah.</p>
+
+    <div class="categoryRow" id="mainCategoryRow"></div>
   </section>
 
   <section id="vendors">
@@ -1138,12 +1196,12 @@
 
   <div class="why">
     <div class="whyInner">
-      <div class="whyItem"><div class="whyIcon">🛡️</div><h4>Trusted Vendors</h4><p>All vendors verified for quality.</p></div>
-      <div class="whyItem"><div class="whyIcon">💰</div><h4>Best Price</h4><p>Get best deals & transparent pricing.</p></div>
-      <div class="whyItem"><div class="whyIcon">📅</div><h4>Easy Booking</h4><p>Compare, connect and book fast.</p></div>
-      <div class="whyItem"><div class="whyIcon">💎</div><h4>Wide Choice</h4><p>All event categories.</p></div>
-      <div class="whyItem"><div class="whyIcon">🔒</div><h4>Secure</h4><p>Safe and trusted communication.</p></div>
-      <div class="whyItem"><div class="whyIcon">🎧</div><h4>Support</h4><p>Support anytime, anywhere.</p></div>
+      <div class="whyItem"><div class="whyIcon">🛡️</div><h4>Trusted Vendors</h4><p>Quality vendors ko list karte hain.</p></div>
+      <div class="whyItem"><div class="whyIcon">💰</div><h4>Best Price</h4><p>Compare karke best price pao.</p></div>
+      <div class="whyItem"><div class="whyIcon">📅</div><h4>Easy Booking</h4><p>Vendor se direct contact karo.</p></div>
+      <div class="whyItem"><div class="whyIcon">💎</div><h4>Wide Choice</h4><p>Event ki sabhi categories.</p></div>
+      <div class="whyItem"><div class="whyIcon">🔒</div><h4>Secure</h4><p>Safe aur simple platform.</p></div>
+      <div class="whyItem"><div class="whyIcon">🎧</div><h4>Support</h4><p>Help ke liye contact option.</p></div>
     </div>
   </div>
 
@@ -1152,17 +1210,19 @@
     <div class="reviews">
       <div class="reviewCard">
         <div class="quote">“</div>
-        <p class="reviewText">Samagra Decor made my sister's wedding perfect. Decoration and catering quality bahut achhi thi.</p>
+        <p class="reviewText">Samagra Decor se shaadi ka decoration aur catering vendor dhoondhna bahut easy ho gaya.</p>
         <div class="reviewUser"><b>Neha Sharma<br><small>Delhi</small></b><span class="stars">★★★★★ 5.0</span></div>
       </div>
+
       <div class="reviewCard">
         <div class="quote">“</div>
-        <p class="reviewText">Amazing platform to find trusted vendors. Booking easy thi aur prices reasonable the.</p>
+        <p class="reviewText">Ek hi website par tent wale, DJ aur photographer ki details mil gayi. Bahut useful platform.</p>
         <div class="reviewUser"><b>Rohit Verma<br><small>Jaipur</small></b><span class="stars">★★★★★ 5.0</span></div>
       </div>
+
       <div class="reviewCard">
         <div class="quote">“</div>
-        <p class="reviewText">Corporate event ke liye photographer aur DJ best mile. Highly recommended.</p>
+        <p class="reviewText">Birthday party ke liye decoration aur cake vendor easily mil gaya. Good service idea.</p>
         <div class="reviewUser"><b>Ananya Kapoor<br><small>Mumbai</small></b><span class="stars">★★★★★ 5.0</span></div>
       </div>
     </div>
@@ -1172,7 +1232,7 @@
     <div class="footerInner">
       <div class="footerBrand">
         <h2>Samagra Decor</h2>
-        <p>India's event services marketplace. Find best vendors for every occasion.</p>
+        <p>All-in-One Event & Decoration Marketplace. Har function ki puri tayari ek jagah.</p>
         <div class="social"><span>f</span><span>i</span><span>▶</span><span>p</span><span>w</span></div>
       </div>
 
@@ -1188,12 +1248,12 @@
 
       <div class="footerCol">
         <h3>Popular Services</h3>
-        <a onclick="selectCategory('Tent House')">Tent House</a>
-        <a onclick="selectCategory('Decoration')">Decoration</a>
-        <a onclick="selectCategory('Catering')">Catering</a>
-        <a onclick="selectCategory('DJ Music')">DJ Music</a>
+        <a onclick="selectCategory('Tent House / Tent Wale')">Tent Wale</a>
+        <a onclick="selectCategory('Decoration / Sajawat')">Decoration</a>
+        <a onclick="selectCategory('Catering / Halwai')">Catering / Halwai</a>
+        <a onclick="selectCategory('DJ / Music')">DJ</a>
         <a onclick="selectCategory('Photography')">Photography</a>
-        <a onclick="selectCategory('Banquet Hall')">Banquet Hall</a>
+        <a onclick="selectCategory('Marriage Garden / Function Garden')">Marriage Garden</a>
       </div>
 
       <div class="footerCol">
@@ -1209,6 +1269,7 @@
         <p>📞 +91 99999 99999</p>
         <p>✉ info@samagradecor.com</p>
         <p>📍 India</p>
+
         <h3 style="margin-top:15px;">Newsletter</h3>
         <div class="newsletter">
           <input id="newsletterEmail" placeholder="Enter your email" />
@@ -1216,10 +1277,12 @@
         </div>
       </div>
     </div>
+
     <div class="bottom">
       © 2026 Samagra Decor. All Rights Reserved. |
       <span onclick="openModal('privacyModal')" style="cursor:pointer;">Privacy Policy</span> |
-      <span onclick="openModal('termsModal')" style="cursor:pointer;">Terms & Conditions</span>
+      <span onclick="openModal('termsModal')" style="cursor:pointer;">Terms & Conditions</span> |
+      <span onclick="openModal('refundModal')" style="cursor:pointer;">Refund Policy</span>
     </div>
   </footer>
 
@@ -1244,26 +1307,17 @@
       <div class="vendorFormTitle">Vendor Registration</div>
       <div class="vendorFormSub">Apna business Samagra Decor par list karein</div>
 
-      <input class="vendorInput" id="bizName" placeholder="Business Name" />
-      <input class="vendorInput" id="bizOwner" placeholder="Owner Name" />
-      <input class="vendorInput" id="bizPhone" placeholder="Mobile Number" />
-      <input class="vendorInput" id="bizCity" placeholder="City" />
+      <input class="vendorInput" id="bizName" placeholder="Business Name / Dukaan ka naam" />
+      <input class="vendorInput" id="bizOwner" placeholder="Owner Name / Malik ka naam" />
+      <input class="vendorInput" id="bizPhone" placeholder="Mobile Number / WhatsApp Number" />
+      <input class="vendorInput" id="bizCity" placeholder="City / Shehar / Gaon" />
 
       <select class="vendorSelect" id="bizCategory">
         <option value="">📋 Select Service Category</option>
-        <option>Tent House</option>
-        <option>Decoration</option>
-        <option>Catering</option>
-        <option>DJ Music</option>
-        <option>Photography</option>
-        <option>Lighting</option>
-        <option>Banquet Hall</option>
-        <option>Makeup</option>
-        <option>Marriage Garden</option>
       </select>
 
       <input class="vendorInput" id="bizPrice" type="number" placeholder="Starting Price जैसे ₹25000" />
-      <textarea class="vendorTextarea" id="bizDesc" placeholder="Business Description"></textarea>
+      <textarea class="vendorTextarea" id="bizDesc" placeholder="Business Description - Aap kya service dete ho?"></textarea>
 
       <div class="mediaTitle">Photos aur Video Upload</div>
 
@@ -1306,7 +1360,7 @@
   </div>
 
   <div class="modal" id="adminModal">
-    <div class="modalBox">
+    <div class="modalBox wideBox">
       <span class="close" onclick="closeModal('adminModal')">×</span>
 
       <h2 style="color:#061b3a;text-align:center;">Website Admin Panel</h2>
@@ -1324,6 +1378,15 @@
     <div class="modalBox">
       <span class="close" onclick="closeModal('detailsModal')">×</span>
       <div id="detailsContent"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="moreServicesModal">
+    <div class="modalBox wideBox">
+      <span class="close" onclick="closeModal('moreServicesModal')">×</span>
+      <h2>All Samagra Decor Services</h2>
+      <p>Yahan se koi bhi service select kar sakte ho.</p>
+      <div class="moreServicesGrid" id="moreServicesGrid"></div>
     </div>
   </div>
 
@@ -1362,6 +1425,7 @@
       <span class="close" onclick="closeModal('privacyModal')">×</span>
       <h2>Privacy Policy</h2>
       <p>Samagra Decor user details ko safe rakhne ka प्रयास karta hai. Contact details sirf service communication ke liye use ki jaati hain.</p>
+      <p>Vendor details approval ke baad public listing par show ho sakti hain.</p>
     </div>
   </div>
 
@@ -1370,6 +1434,16 @@
       <span class="close" onclick="closeModal('termsModal')">×</span>
       <h2>Terms & Conditions</h2>
       <p>Samagra Decor marketplace platform hai. Vendor aur customer ke beech final service, price aur booking ki zimmedari dono parties ki hogi.</p>
+      <p>Samagra Decor direct service provider nahi hai, ye vendors aur customers ko connect karne ka platform hai.</p>
+    </div>
+  </div>
+
+  <div class="modal" id="refundModal">
+    <div class="modalBox">
+      <span class="close" onclick="closeModal('refundModal')">×</span>
+      <h2>Refund Policy</h2>
+      <p>Vendor monthly plan fee normally non-refundable hogi. Payment ya duplicate payment issue hone par support team se contact karein.</p>
+      <p>Customer booking ka refund vendor aur customer ke agreement ke according hoga.</p>
     </div>
   </div>
 
@@ -1409,15 +1483,211 @@
     let currentUser = null;
     let isWebsiteAdmin = false;
 
+    const mainCategories = [
+      { name:"Tent Wale", value:"Tent House / Tent Wale", icon:"⛺" },
+      { name:"Decoration", value:"Decoration / Sajawat", icon:"🎊" },
+      { name:"Catering / Halwai", value:"Catering / Halwai", icon:"🍽️" },
+      { name:"DJ", value:"DJ / Music", icon:"🎧" },
+      { name:"Photography", value:"Photography", icon:"📷" },
+      { name:"Makeup", value:"Makeup Artist", icon:"💄" },
+      { name:"Marriage Garden", value:"Marriage Garden / Function Garden", icon:"🏡" },
+      { name:"Light / Sound", value:"Sound System / Lighting", icon:"💡" },
+      { name:"Pandit Ji", value:"Pandit Ji / Puja Service", icon:"🕉️" },
+      { name:"Car Rental", value:"Car Rental", icon:"🚗" },
+      { name:"Planner", value:"Wedding Planner / Event Planner", icon:"📋" },
+      { name:"More Services", value:"More Services", icon:"➕" }
+    ];
+
+    const serviceCategories = [
+      "Marriage Garden / Function Garden",
+      "Banquet Hall / Party Hall",
+      "Tent House / Tent Wale",
+      "Stage Decoration / Stage Sajawat",
+      "Flower Decoration / Phool Sajawat",
+      "Wedding Decoration / Shaadi Sajawat",
+      "Catering / Halwai",
+      "DJ / Music",
+      "Sound System",
+      "Disco Light / Lighting",
+      "Photography",
+      "Videography",
+      "Makeup Artist",
+      "Mehndi Artist",
+      "Hair Stylist",
+      "Wedding Planner",
+      "Event Planner",
+      "Restaurant / Birthday Party",
+      "Birthday Decoration / Birthday Sajawat",
+      "Balloon Decoration / Balloon Sajawat",
+      "Baby Shower Decoration",
+      "Anniversary Decoration",
+      "House Warming / Griha Pravesh",
+      "Pandit Ji / Puja Service",
+      "Anchor / Host",
+      "Live Band",
+      "Dhol Wale",
+      "Shehnai Wale",
+      "Dance Choreographer",
+      "Invitation Card",
+      "Digital Invitation / E-Card",
+      "Wedding Cake / Bakery",
+      "Return Gifts",
+      "Gift Packing",
+      "Car Rental",
+      "Luxury Car / Vintage Car",
+      "Guest Transport",
+      "Hotel / Guest House Booking",
+      "Bridal Dress Rental / Dulhan Dress",
+      "Groom Dress Rental / Dulha Dress",
+      "Jewellery Rental",
+      "Generator Rental / Power Backup",
+      "Chair / Table / Sofa Rental",
+      "Crockery / Utensils Rental",
+      "AC / Cooler Rental",
+      "Security Guard",
+      "Farm House Booking",
+      "Resort Booking",
+      "Hotel Hall / Hotel Banquet",
+      "Party Plot",
+      "Community Hall / Samaj Bhawan",
+      "School / College Event Setup",
+      "Exhibition Stall Setup",
+      "Product Launch Setup",
+      "Conference / Seminar Setup",
+      "Office Party Setup",
+      "Corporate Event / Seminar Setup",
+      "Brand Promotion Team",
+      "Event Staff / Helper",
+      "Waiter Service",
+      "Cook Service / Rasoia",
+      "Bartan / Crockery Service",
+      "Juice / Mocktail Counter",
+      "Ice Cream Counter",
+      "Chaat Counter",
+      "Coffee / Tea Counter",
+      "Pan Counter",
+      "Sweet / Mithai Counter",
+      "Live Food Counter",
+      "Fireworks / Cold Pyro",
+      "Entry Gate Decoration / Welcome Gate",
+      "Mandap Decoration",
+      "Jaimala Stage Decoration",
+      "Sofa / Lounge Setup",
+      "Carpet / Flooring",
+      "Photo Booth",
+      "360 Video Booth",
+      "Drone Photography",
+      "Pre-Wedding Shoot",
+      "Album Printing",
+      "LED Wall / LED Screen",
+      "Projector Setup",
+      "Mic / Speaker Rental",
+      "Cooler / Fan Rental",
+      "Portable Toilet",
+      "Water Tanker",
+      "Parking Management",
+      "Bouncer / Security",
+      "CCTV Setup",
+      "Cleaning Staff",
+      "Housekeeping / Cleaning",
+      "Flower Garland / Varmala",
+      "Bridal Entry Service",
+      "Groom Entry Service",
+      "Ghodi / Baggi",
+      "Band Baja",
+      "Dhol Tasha",
+      "Singer / Live Artist",
+      "Magician",
+      "Kids Entertainment",
+      "Tattoo Artist",
+      "Game Zone",
+      "Invitation Video",
+      "Digital RSVP",
+      "QR Entry Pass",
+      "Live Streaming",
+      "Event Website",
+      "Social Media Coverage",
+      "Reels / Short Video Maker",
+      "Return Gift Supplier",
+      "Gift Hamper",
+      "Trousseau Packing",
+      "Bridal Lehenga",
+      "Sherwani Rental",
+      "Bridal Jewellery",
+      "Makeup Salon",
+      "Live Streaming / Online Event"
+    ];
+
     const demoVendors = [];
+
     let vendors = [];
     let currentVendorList = [];
     let favorites = [];
     let selectedPhotos = [];
     let selectedVideo = null;
 
+    function escapeHtml(value){
+      return String(value || "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
     function safeText(value, fallback = ""){
       return value === null || value === undefined || value === "" ? fallback : String(value);
+    }
+
+    function fillServiceOptions(){
+      const categorySelect = document.getElementById("category");
+      const bizCategorySelect = document.getElementById("bizCategory");
+      const mainRow = document.getElementById("mainCategoryRow");
+      const moreGrid = document.getElementById("moreServicesGrid");
+
+      if(categorySelect){
+        serviceCategories.forEach(cat=>{
+          const option = document.createElement("option");
+          option.value = cat;
+          option.textContent = cat;
+          categorySelect.appendChild(option);
+        });
+      }
+
+      if(bizCategorySelect){
+        serviceCategories.forEach(cat=>{
+          const option = document.createElement("option");
+          option.value = cat;
+          option.textContent = cat;
+          bizCategorySelect.appendChild(option);
+        });
+      }
+
+      if(mainRow){
+        mainRow.innerHTML = mainCategories.map(cat=>{
+          if(cat.value === "More Services"){
+            return `
+              <div class="category" onclick="openModal('moreServicesModal')">
+                <div class="catIcon">${cat.icon}</div>
+                ${cat.name}
+              </div>
+            `;
+          }
+
+          return `
+            <div class="category" onclick="selectCategory('${cat.value.replaceAll("'","\\'")}')">
+              <div class="catIcon">${cat.icon}</div>
+              ${cat.name}
+            </div>
+          `;
+        }).join("");
+      }
+
+      if(moreGrid){
+        moreGrid.innerHTML = serviceCategories.map(cat=>{
+          return `<div class="moreServiceItem" onclick="selectCategory('${cat.replaceAll("'","\\'")}'); closeModal('moreServicesModal');">${cat}</div>`;
+        }).join("");
+      }
     }
 
     function normalizeVendor(v){
@@ -1539,23 +1809,25 @@
 
       list.forEach((v,index)=>{
         const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
+
         box.innerHTML += `
           <div class="vendorCard">
-            <div class="vendorImg" style="background-image:url('${v.img}')">
+            <div class="vendorImg">
+              <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name)}">
               <div class="badge">✅ Verified</div>
             </div>
             <div class="vendorBody">
-              <h3>${v.name}</h3>
+              <h3>${escapeHtml(v.name)}</h3>
               <div class="meta">
-                <span>⭐ ${v.rating} (${v.reviews})</span>
-                <span>📍 ${v.city}</span>
-                <span>▦ ${v.category}</span>
+                <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)})</span>
+                <span>📍 ${escapeHtml(v.city)}</span>
+                <span>▦ ${escapeHtml(v.category)}</span>
               </div>
               <div class="price">${priceText}</div>
               <div class="cardActions">
                 <button class="waBtn" onclick="vendorWhatsApp(${index})">☘</button>
                 <button class="detailBtn" onclick="viewDetails(${index})">View Details</button>
-                <button class="favBtn" onclick="addFavorite('${v.name.replace(/'/g, "\\'")}')">♡</button>
+                <button class="favBtn" onclick="addFavorite(${index})">♡</button>
               </div>
             </div>
           </div>
@@ -1564,14 +1836,26 @@
     }
 
     function searchVendors(){
-      const city = document.getElementById("city").value;
-      const category = document.getElementById("category").value;
-      const budget = document.getElementById("budget").value;
+      const city = document.getElementById("city").value.trim();
+      const category = document.getElementById("category").value.trim();
+      const budget = document.getElementById("budget").value.trim();
 
       const result = vendors.filter(v=>{
-        const cityOk = city === "" || v.city.toLowerCase() === city.toLowerCase();
-        const catOk = category === "" || v.category.toLowerCase() === category.toLowerCase();
-        const budgetOk = budget === "" || v.price <= Number(budget);
+        const cityOk =
+          city === "" ||
+          city.toLowerCase() === "all india" ||
+          v.city.toLowerCase() === city.toLowerCase();
+
+        const catOk =
+          category === "" ||
+          v.category.toLowerCase().includes(category.toLowerCase()) ||
+          category.toLowerCase().includes(v.category.toLowerCase());
+
+        const budgetOk =
+          budget === "" ||
+          v.price === 0 ||
+          v.price <= Number(budget);
+
         return cityOk && catOk && budgetOk;
       });
 
@@ -1580,7 +1864,8 @@
     }
 
     function selectCategory(cat){
-      document.getElementById("category").value = cat;
+      const categorySelect = document.getElementById("category");
+      categorySelect.value = cat;
       searchVendors();
     }
 
@@ -1598,26 +1883,26 @@
 
       const photoGallery = v.photos && v.photos.length > 0
         ? v.photos.map(url => `
-            <img src="${url}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />
+            <img src="${escapeHtml(url)}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />
           `).join("")
-        : `<img src="${v.img}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />`;
+        : `<img src="${escapeHtml(v.img)}" style="width:100%;border-radius:12px;margin:6px 0;max-height:220px;object-fit:cover;" />`;
 
       const videoBox = v.video_url
         ? `<video controls style="width:100%;border-radius:12px;margin:10px 0;max-height:260px;">
-             <source src="${v.video_url}">
+             <source src="${escapeHtml(v.video_url)}">
            </video>`
         : "";
 
       document.getElementById("detailsContent").innerHTML = `
-        <h2>${v.name}</h2>
+        <h2>${escapeHtml(v.name)}</h2>
         ${photoGallery}
         ${videoBox}
-        <p><b>Owner:</b> ${v.owner_name}</p>
-        <p><b>Category:</b> ${v.category}</p>
-        <p><b>City:</b> ${v.city}</p>
-        <p><b>Rating:</b> ⭐ ${v.rating} (${v.reviews} reviews)</p>
+        <p><b>Owner:</b> ${escapeHtml(v.owner_name)}</p>
+        <p><b>Category:</b> ${escapeHtml(v.category)}</p>
+        <p><b>City:</b> ${escapeHtml(v.city)}</p>
+        <p><b>Rating:</b> ⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)} reviews)</p>
         <p><b>Price:</b> ${priceText}</p>
-        <p>${v.desc}</p>
+        <p>${escapeHtml(v.desc)}</p>
         <button onclick="vendorWhatsApp(${index})">Contact on WhatsApp</button>
       `;
 
@@ -1631,12 +1916,14 @@
       window.open("https://wa.me/" + phone + "?text=" + text, "_blank");
     }
 
-    function addFavorite(name){
-      if(!favorites.includes(name)){
-        favorites.push(name);
-        alert(name + " favorites me add ho gaya.");
+    function addFavorite(index){
+      const v = currentVendorList[index];
+
+      if(!favorites.includes(v.name)){
+        favorites.push(v.name);
+        alert(v.name + " favorites me add ho gaya.");
       }else{
-        alert(name + " already favorites me hai.");
+        alert(v.name + " already favorites me hai.");
       }
     }
 
@@ -1682,7 +1969,7 @@
       const owner = document.getElementById("bizOwner").value.trim();
       const phone = document.getElementById("bizPhone").value.trim();
       const city = document.getElementById("bizCity").value.trim();
-      const cat = document.getElementById("bizCategory").value;
+      const cat = document.getElementById("bizCategory").value.trim();
       const price = document.getElementById("bizPrice").value.trim();
       const desc = document.getElementById("bizDesc").value.trim();
 
@@ -1694,6 +1981,11 @@
 
       if(!v.name || !v.owner || !v.phone || !v.city || !v.cat){
         alert("Business Name, Owner Name, Mobile Number, City aur Category zaruri hai.");
+        return;
+      }
+
+      if(v.phone.replace(/\D/g,"").length < 10){
+        alert("Mobile Number sahi se bharo.");
         return;
       }
 
@@ -1946,13 +2238,13 @@
 
         const gallery = v.photos && v.photos.length > 0
           ? v.photos.slice(0, 4).map(url => `
-              <img src="${url}" style="width:48%;height:95px;object-fit:cover;border-radius:10px;margin:4px;" />
+              <img src="${escapeHtml(url)}" style="width:48%;height:95px;object-fit:cover;border-radius:10px;margin:4px;" />
             `).join("")
-          : `<img src="${v.img}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />`;
+          : `<img src="${escapeHtml(v.img)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />`;
 
         const videoBox = v.video_url
           ? `<video controls style="width:100%;border-radius:12px;margin:8px 0;max-height:210px;">
-               <source src="${v.video_url}">
+               <source src="${escapeHtml(v.video_url)}">
              </video>`
           : `<p><b>Video:</b> Not uploaded</p>`;
 
@@ -1964,14 +2256,14 @@
 
             ${videoBox}
 
-            <h3 style="color:#043b2f;margin-bottom:6px;">${v.name}</h3>
-            <p><b>Owner:</b> ${v.owner_name}</p>
-            <p><b>City:</b> ${v.city}</p>
-            <p><b>Category:</b> ${v.category}</p>
-            <p><b>Phone:</b> ${v.phone}</p>
-            <p><b>Price:</b> ₹${v.price}</p>
-            <p><b>Status:</b> ${raw.status}</p>
-            <p><b>Description:</b> ${v.desc}</p>
+            <h3 style="color:#043b2f;margin-bottom:6px;">${escapeHtml(v.name)}</h3>
+            <p><b>Owner:</b> ${escapeHtml(v.owner_name)}</p>
+            <p><b>City:</b> ${escapeHtml(v.city)}</p>
+            <p><b>Category:</b> ${escapeHtml(v.category)}</p>
+            <p><b>Phone:</b> ${escapeHtml(v.phone)}</p>
+            <p><b>Price:</b> ₹${escapeHtml(v.price)}</p>
+            <p><b>Status:</b> ${escapeHtml(raw.status)}</p>
+            <p><b>Description:</b> ${escapeHtml(v.desc)}</p>
 
             <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">
               ✅ Approve Vendor
@@ -2055,11 +2347,12 @@
     function showAccountScreen(){
       const name = currentUser.displayName || "User";
       const email = currentUser.email || "";
+
       document.getElementById("authContent").innerHTML = `
         <div class="authIcon">✅</div>
         <div class="authTitle">Welcome</div>
-        <div class="authSub">${name}</div>
-        <p style="color:#555;margin:10px 0 18px;">${email}</p>
+        <div class="authSub">${escapeHtml(name)}</div>
+        <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
 
         <button class="authMainBtn" onclick="logoutUser()">LOGOUT</button>
         <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
@@ -2163,6 +2456,7 @@
 
     function subscribe(){
       const email = document.getElementById("newsletterEmail").value.trim();
+
       if(!email){
         alert("Email enter karo.");
       }else{
@@ -2172,19 +2466,30 @@
     }
 
     function openModal(id){
-      document.getElementById(id).style.display = "flex";
+      const el = document.getElementById(id);
+      if(el){
+        el.style.display = "flex";
+      }
     }
 
     function closeModal(id){
-      document.getElementById(id).style.display = "none";
+      const el = document.getElementById(id);
+      if(el){
+        el.style.display = "none";
+      }
     }
 
     function goTo(id){
       const section = document.getElementById(id);
+
       if(section){
         section.scrollIntoView({behavior:"smooth"});
       }
-      document.getElementById("menu").classList.remove("show");
+
+      const menu = document.getElementById("menu");
+      if(menu){
+        menu.classList.remove("show");
+      }
     }
 
     function toggleMenu(){
@@ -2216,6 +2521,7 @@
         });
     }
 
+    fillServiceOptions();
     loadVendors();
   </script>
 </body>
