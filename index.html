@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -200,8 +201,11 @@
     .planFeatures{text-align:left;margin:15px 0;color:#444;line-height:1.8}
     .planNote{background:#fff7df;border:1px solid #e7c45a;padding:12px;border-radius:12px;color:#5a4300;margin:12px 0}
 
-    .moreServicesGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
-    .moreServiceItem{background:#fffaf0;border:1px solid #f0dfb8;border-radius:10px;padding:10px;font-weight:bold;color:#043b2f;cursor:pointer;font-size:14px}
+    .moreServicesGrid{display:block;margin-top:12px}
+    .moreServiceGroup{background:#fffaf0;border:1px solid #f0dfb8;border-radius:14px;padding:12px;margin:12px 0}
+    .moreServiceGroupTitle{color:#043b2f;font-size:18px;font-weight:bold;margin-bottom:10px;border-bottom:1px solid #e7c45a;padding-bottom:7px}
+    .moreServiceGroupGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+    .moreServiceItem{background:white;border:1px solid #f0dfb8;border-radius:10px;padding:10px;font-weight:bold;color:#043b2f;cursor:pointer;font-size:14px;text-align:center}
     .moreServiceItem:hover{background:#fff1cc}
     .infoGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
     .infoCard{background:#fffaf0;border:1px solid #f0dfb8;border-radius:14px;padding:15px}
@@ -236,7 +240,7 @@
       .installBar{display:none}
       .authBox{border-radius:28px;padding:32px 22px}
       .authTitle{font-size:31px}
-      .moreServicesGrid,.infoGrid{grid-template-columns:1fr}
+      .moreServiceGroupGrid,.infoGrid{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -407,12 +411,12 @@
 
       <div class="footerCol">
         <h3>Popular Services</h3>
-        <a onclick="selectCategory('Tent House / Tent Wale')">Tent Wale</a>
-        <a onclick="selectCategory('Decoration / Sajawat')">Decoration</a>
-        <a onclick="selectCategory('Catering / Halwai')">Catering / Halwai</a>
-        <a onclick="selectCategory('DJ / Music')">DJ</a>
-        <a onclick="selectCategory('Photography')">Photography</a>
         <a onclick="selectCategory('Marriage Garden / Function Garden')">Marriage Garden</a>
+        <a onclick="selectCategory('Event Planner')">Event Planner</a>
+        <a onclick="selectCategory('Restaurant / Birthday Party')">Restaurant Party</a>
+        <a onclick="selectCategory('Decoration / Sajawat')">Decoration</a>
+        <a onclick="selectCategory('Tent House / Tent Wale')">Tent Wale</a>
+        <a onclick="selectCategory('Catering / Halwai')">Catering / Halwai</a>
       </div>
 
       <div class="footerCol">
@@ -534,8 +538,8 @@
   <div class="modal" id="moreServicesModal">
     <div class="modalBox wideBox">
       <span class="close" onclick="closeModal('moreServicesModal')">×</span>
-      <h2>All Samagra Decor Services</h2>
-      <p>Yahan se koi bhi service select kar sakte ho.</p>
+      <h2>More Services</h2>
+      <p>Yahan se category wise service select kar sakte ho.</p>
       <div class="moreServicesGrid" id="moreServicesGrid"></div>
     </div>
   </div>
@@ -585,89 +589,210 @@
     let isSubmittingVendor = false;
 
     const mainCategories = [
-      {name:"Tent Wale",value:"Tent House / Tent Wale",icon:"⛺"},
-      {name:"Decoration",value:"Decoration / Sajawat",icon:"🎊"},
-      {name:"Catering",value:"Catering / Halwai",icon:"🍽️"},
-      {name:"DJ",value:"DJ / Music",icon:"🎧"},
-      {name:"Photography",value:"Photography",icon:"📷"},
-      {name:"Makeup",value:"Makeup Artist",icon:"💄"},
       {name:"Marriage Garden",value:"Marriage Garden / Function Garden",icon:"🏡"},
-      {name:"Light / Sound",value:"Sound System / Lighting",icon:"💡"},
-      {name:"Pandit Ji",value:"Pandit Ji / Puja Service",icon:"🕉️"},
-      {name:"Car Rental",value:"Car Rental",icon:"🚗"},
-      {name:"Planner",value:"Wedding Planner / Event Planner",icon:"📋"},
+      {name:"Event Planner",value:"Event Planner",icon:"📋"},
+      {name:"Restaurant Party",value:"Restaurant / Birthday Party",icon:"🎂"},
+      {name:"Decoration",value:"Decoration / Sajawat",icon:"🎊"},
+      {name:"Tent Wale",value:"Tent House / Tent Wale",icon:"⛺"},
+      {name:"Catering/Halwai",value:"Catering / Halwai",icon:"🍽️"},
+      {name:"DJ Wale",value:"DJ / Music",icon:"🎧"},
+      {name:"Photografar",value:"Photography",icon:"📷"},
+      {name:"Makeup Wale",value:"Makeup Artist",icon:"💄"},
+      {name:"Lighting/Sound",value:"Sound System",icon:"💡"},
+      {name:"Mehndi Artist",value:"Mehndi Artist",icon:"🤲"},
       {name:"More Services",value:"More Services",icon:"➕"}
     ];
 
+    const moreServicesGroups = [
+      {
+        title:"Function ki Jagah / Venue",
+        services:[
+          "Shaadi Garden / Function Garden",
+          "Banquet Hall / Party Hall",
+          "Tent House / Tent Wale",
+          "Farm House Booking",
+          "Resort Booking",
+          "Hotel Hall / Hotel Banquet",
+          "Party Plot",
+          "Community Hall / Samaj Bhawan",
+          "Guest House / Hotel Room Booking"
+        ]
+      },
+      {
+        title:"Decoration / Sajawat",
+        services:[
+          "Stage Decoration / Stage Sajawat",
+          "Flower Decoration / Phool Sajawat",
+          "Wedding Decoration / Shaadi Sajawat",
+          "Birthday Decoration / Birthday Sajawat",
+          "Balloon Decoration / Balloon Sajawat",
+          "Baby Shower Decoration",
+          "Anniversary Decoration",
+          "Griha Pravesh Decoration",
+          "Entry Gate Decoration / Welcome Gate",
+          "Mandap Decoration",
+          "Jaimala Stage Decoration",
+          "Sofa / Lounge Setup",
+          "Carpet / Flooring",
+          "Photo Booth Decoration",
+          "360 Video Booth"
+        ]
+      },
+      {
+        title:"Khana-Peena Service",
+        services:[
+          "Catering / Halwai",
+          "Cook Service / Rasoia",
+          "Waiter Service",
+          "Bartan / Crockery Service",
+          "Juice / Mocktail Counter",
+          "Ice Cream Counter",
+          "Chaat Counter",
+          "Coffee / Tea Counter",
+          "Pan Counter",
+          "Sweet / Mithai Counter",
+          "Live Food Counter",
+          "Wedding Cake / Bakery"
+        ]
+      },
+      {
+        title:"Music / Light / Sound",
+        services:[
+          "DJ / Music",
+          "Sound System",
+          "Disco Light / Lighting",
+          "Mic / Speaker Rental",
+          "LED Wall / LED Screen",
+          "Projector Setup",
+          "Live Band",
+          "Dhol Wale",
+          "Shehnai Wale",
+          "Band Baja",
+          "Dhol Tasha",
+          "Singer / Live Artist"
+        ]
+      },
+      {
+        title:"Photo / Video Service",
+        services:[
+          "Photography",
+          "Videography",
+          "Drone Photography",
+          "Pre-Wedding Shoot",
+          "Album Printing",
+          "Live Streaming",
+          "Reels / Short Video Maker",
+          "Social Media Coverage",
+          "Invitation Video"
+        ]
+      },
+      {
+        title:"Beauty / Dress / Jewellery",
+        services:[
+          "Makeup Artist",
+          "Mehndi Artist",
+          "Hair Stylist",
+          "Bridal Dress Rental / Dulhan Dress",
+          "Groom Dress Rental / Dulha Dress",
+          "Bridal Lehenga",
+          "Sherwani Rental",
+          "Jewellery Rental",
+          "Bridal Jewellery",
+          "Makeup Salon"
+        ]
+      },
+      {
+        title:"Planning / Management",
+        services:[
+          "Wedding Planner",
+          "Event Planner",
+          "Anchor / Host",
+          "Dance Choreographer",
+          "Parking Management",
+          "Security Guard",
+          "Bouncer / Security",
+          "CCTV Setup",
+          "Cleaning Staff",
+          "Housekeeping / Cleaning",
+          "Event Staff / Helper"
+        ]
+      },
+      {
+        title:"Puja / Traditional Service",
+        services:[
+          "Pandit Ji",
+          "Pandit Ji / Puja Service",
+          "Flower Garland / Varmala",
+          "Bridal Entry Service",
+          "Groom Entry Service",
+          "Ghodi / Baggi",
+          "Fireworks / Cold Pyro"
+        ]
+      },
+      {
+        title:"Invitation / Gift",
+        services:[
+          "Invitation Card",
+          "Digital Invitation / E-Card",
+          "Digital RSVP",
+          "QR Entry Pass",
+          "Return Gifts",
+          "Gift Packing",
+          "Gift Hamper",
+          "Trousseau Packing"
+        ]
+      },
+      {
+        title:"Vehicle / Transport",
+        services:[
+          "Car Rental",
+          "Luxury Car / Vintage Car",
+          "Guest Transport"
+        ]
+      },
+      {
+        title:"Rental / Kiraye Ki Service",
+        services:[
+          "Generator Rental / Power Backup",
+          "Chair / Table / Sofa Rental",
+          "Crockery / Utensils Rental",
+          "AC / Cooler Rental",
+          "Cooler / Fan Rental",
+          "Portable Toilet",
+          "Water Tanker"
+        ]
+      },
+      {
+        title:"Party / Entertainment",
+        services:[
+          "Restaurant / Birthday Party",
+          "Magician",
+          "Kids Entertainment",
+          "Tattoo Artist",
+          "Game Zone"
+        ]
+      },
+      {
+        title:"Business / Corporate Event",
+        services:[
+          "School / College Event Setup",
+          "Exhibition Stall Setup",
+          "Product Launch Setup",
+          "Conference / Seminar Setup",
+          "Office Party Setup",
+          "Corporate Event / Seminar Setup",
+          "Brand Promotion Team",
+          "Event Website",
+          "Live Streaming / Online Event"
+        ]
+      }
+    ];
+
     const serviceCategories = [
-      "Marriage Garden / Function Garden",
-      "Banquet Hall / Party Hall",
-      "Tent House / Tent Wale",
-      "Stage Decoration / Stage Sajawat",
-      "Flower Decoration / Phool Sajawat",
-      "Wedding Decoration / Shaadi Sajawat",
-      "Catering / Halwai",
-      "DJ / Music",
-      "Sound System",
-      "Disco Light / Lighting",
-      "Photography",
-      "Videography",
-      "Makeup Artist",
-      "Mehndi Artist",
-      "Hair Stylist",
-      "Wedding Planner / Event Planner",
-      "Restaurant / Birthday Party",
-      "Birthday Decoration / Birthday Sajawat",
-      "Balloon Decoration / Balloon Sajawat",
-      "Baby Shower Decoration",
-      "Anniversary Decoration",
-      "House Warming / Griha Pravesh",
-      "Pandit Ji / Puja Service",
-      "Anchor / Host",
-      "Live Band",
-      "Dhol Wale",
-      "Shehnai Wale",
-      "Dance Choreographer",
-      "Invitation Card",
-      "Digital Invitation / E-Card",
-      "Wedding Cake / Bakery",
-      "Return Gifts",
-      "Gift Packing",
-      "Car Rental",
-      "Luxury Car / Vintage Car",
-      "Guest Transport",
-      "Hotel / Guest House Booking",
-      "Bridal Dress Rental / Dulhan Dress",
-      "Groom Dress Rental / Dulha Dress",
-      "Jewellery Rental",
-      "Generator Rental / Power Backup",
-      "Chair / Table / Sofa Rental",
-      "Crockery / Utensils Rental",
-      "AC / Cooler Rental",
-      "Security Guard",
-      "Farm House Booking",
-      "Resort Booking",
-      "Hotel Hall / Hotel Banquet",
-      "Entry Gate Decoration / Welcome Gate",
-      "Mandap Decoration",
-      "Jaimala Stage Decoration",
-      "Photo Booth",
-      "Drone Photography",
-      "Pre-Wedding Shoot",
-      "LED Wall / LED Screen",
-      "Projector Setup",
-      "Mic / Speaker Rental",
-      "Water Tanker",
-      "Parking Management",
-      "Cleaning Staff",
-      "Band Baja",
-      "Ghodi / Baggi",
-      "Singer / Live Artist",
-      "Kids Entertainment",
-      "Game Zone",
-      "Live Streaming",
-      "Event Website",
-      "Social Media Coverage"
+      ...new Set([
+        ...mainCategories.filter(function(cat){ return cat.value !== "More Services"; }).map(function(cat){ return cat.value; }),
+        ...moreServicesGroups.flatMap(function(group){ return group.services; })
+      ])
     ];
 
     function escapeHtml(value){
@@ -689,20 +814,25 @@
       const mainRow = document.getElementById("mainCategoryRow");
       const moreGrid = document.getElementById("moreServicesGrid");
 
-      serviceCategories.forEach(function(cat){
-        if(categorySelect){
-          const op = document.createElement("option");
-          op.value = cat;
-          op.textContent = cat;
-          categorySelect.appendChild(op);
-        }
+      if(categorySelect){
+        categorySelect.innerHTML = '<option value="">All Categories</option>';
+      }
 
-        if(bizCategorySelect){
-          const op2 = document.createElement("option");
-          op2.value = cat;
-          op2.textContent = cat;
-          bizCategorySelect.appendChild(op2);
-        }
+      if(bizCategorySelect){
+        bizCategorySelect.innerHTML = '<option value="">📋 Select Service Category</option>';
+      }
+
+      function addOption(selectBox, value){
+        if(!selectBox) return;
+        const op = document.createElement("option");
+        op.value = value;
+        op.textContent = value;
+        selectBox.appendChild(op);
+      }
+
+      serviceCategories.forEach(function(cat){
+        addOption(categorySelect, cat);
+        addOption(bizCategorySelect, cat);
       });
 
       if(mainRow){
@@ -724,15 +854,32 @@
 
       if(moreGrid){
         moreGrid.innerHTML = "";
-        serviceCategories.forEach(function(cat){
-          const div = document.createElement("div");
-          div.className = "moreServiceItem";
-          div.textContent = cat;
-          div.onclick = function(){
-            selectCategory(cat);
-            closeModal("moreServicesModal");
-          };
-          moreGrid.appendChild(div);
+
+        moreServicesGroups.forEach(function(group){
+          const groupBox = document.createElement("div");
+          groupBox.className = "moreServiceGroup";
+
+          const title = document.createElement("div");
+          title.className = "moreServiceGroupTitle";
+          title.textContent = group.title;
+
+          const grid = document.createElement("div");
+          grid.className = "moreServiceGroupGrid";
+
+          group.services.forEach(function(cat){
+            const div = document.createElement("div");
+            div.className = "moreServiceItem";
+            div.textContent = cat;
+            div.onclick = function(){
+              selectCategory(cat);
+              closeModal("moreServicesModal");
+            };
+            grid.appendChild(div);
+          });
+
+          groupBox.appendChild(title);
+          groupBox.appendChild(grid);
+          moreGrid.appendChild(groupBox);
         });
       }
     }
