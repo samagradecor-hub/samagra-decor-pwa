@@ -1,11 +1,27 @@
 {
   "name": "Samagra Decor",
-  "short_name": "Samagra",
-  "description": "Samagra Decor - Har Function Ki Puri Tayari",
-  "start_url": "./",
+  "short_name": "Samagra Decor",
+  "description": "Har Function Ki Puri Tayari",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#061b3a",
-  "theme_color": "#061b3a",
-  "orientation": "portrait",
-  "icons": []
+  "background_color": "#043b2f",
+  "theme_color": "#043b2f",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
