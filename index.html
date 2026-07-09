@@ -191,6 +191,12 @@
     .vendorInput,.vendorSelect,.vendorTextarea{width:100%;padding:14px 16px;margin:7px 0;border:1px solid #ddd;border-radius:12px;outline:none;font-size:16px;background:#fff}
     .vendorSelect{height:54px}
     .vendorTextarea{min-height:110px;resize:vertical}
+    .vendorCategoryBox{width:100%;margin:8px 0;border:1px solid #ddd;border-radius:12px;background:#fff;padding:12px}
+    .vendorCategoryTitle{font-size:16px;font-weight:bold;color:#061b3a;margin-bottom:8px}
+    .vendorCategoryChecklist{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:260px;overflow-y:auto;padding:4px}
+    .vendorCategoryOption{display:flex;align-items:center;gap:7px;border:1px solid #f0dfb8;background:#fffaf0;color:#043b2f;border-radius:10px;padding:9px 8px;font-size:13px;font-weight:bold;line-height:1.25;cursor:pointer}
+    .vendorCategoryOption input{width:auto!important;margin:0!important;flex:none;accent-color:#043b2f}
+    .categoryHint{font-size:13px;color:#6b4a00;background:#fff1cc;border:1px solid #e7c45a;border-radius:9px;padding:8px;margin-top:9px;font-weight:bold}
     .mediaTitle{text-align:center;color:var(--blue);font-size:26px;font-weight:bold;margin:18px 0 10px}
     .uploadBtn{width:100%;padding:15px;border:none!important;border-radius:14px!important;background:linear-gradient(135deg,#efc55a,#d9a42d)!important;color:#111!important;font-size:18px;font-weight:bold;margin:8px 0;box-shadow:0 8px 18px rgba(0,0,0,.15)}
     .mediaStatus{color:#666;font-size:15px;margin:5px 0 12px}
@@ -475,9 +481,12 @@
       <input class="vendorInput" id="bizPhone" placeholder="Mobile Number / WhatsApp Number" />
       <input class="vendorInput" id="bizCity" placeholder="City / Shehar / Gaon" />
 
-      <select class="vendorSelect" id="bizCategory">
-        <option value="">📋 Select Service Category</option>
-      </select>
+      <div class="vendorCategoryBox">
+        <div class="vendorCategoryTitle">📋 Select Service Category (Max 5)</div>
+        <div class="vendorCategoryChecklist" id="bizCategoryChecklist"></div>
+        <div class="categoryHint" id="bizCategoryHint">0/5 category select hui</div>
+      </div>
+      <input type="hidden" id="bizCategory" />
 
       <input class="vendorInput" id="bizPrice" type="number" placeholder="Starting Price जैसे ₹25000" />
       <textarea class="vendorTextarea" id="bizDesc" placeholder="Business Description - Aap kya service dete ho?"></textarea>
@@ -504,6 +513,7 @@
         <div class="planPrice">₹19 <span>/ month</span></div>
         <div class="planFeatures">
           ✅ Vendor listing website aur app dono ke liye<br>
+          ✅ Ek vendor max 5 category select kar sakta hai<br>
           ✅ Photos max 4 upload<br>
           ✅ Video max 1 upload<br>
           ✅ Customer WhatsApp inquiry<br>
@@ -810,7 +820,8 @@
 
     function fillServiceOptions(){
       const categorySelect = document.getElementById("category");
-      const bizCategorySelect = document.getElementById("bizCategory");
+      const bizCategoryHidden = document.getElementById("bizCategory");
+      const bizCategoryChecklist = document.getElementById("bizCategoryChecklist");
       const mainRow = document.getElementById("mainCategoryRow");
       const moreGrid = document.getElementById("moreServicesGrid");
 
@@ -818,8 +829,12 @@
         categorySelect.innerHTML = '<option value="">All Categories</option>';
       }
 
-      if(bizCategorySelect){
-        bizCategorySelect.innerHTML = '<option value="">📋 Select Service Category</option>';
+      if(bizCategoryHidden){
+        bizCategoryHidden.value = "";
+      }
+
+      if(bizCategoryChecklist){
+        bizCategoryChecklist.innerHTML = "";
       }
 
       function addOption(selectBox, value){
@@ -830,10 +845,33 @@
         selectBox.appendChild(op);
       }
 
+      function addVendorCategoryCheckbox(value){
+        if(!bizCategoryChecklist) return;
+
+        const label = document.createElement("label");
+        label.className = "vendorCategoryOption";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = value;
+        checkbox.onchange = function(){
+          handleVendorCategoryChange(checkbox);
+        };
+
+        const span = document.createElement("span");
+        span.textContent = value;
+
+        label.appendChild(checkbox);
+        label.appendChild(span);
+        bizCategoryChecklist.appendChild(label);
+      }
+
       serviceCategories.forEach(function(cat){
         addOption(categorySelect, cat);
-        addOption(bizCategorySelect, cat);
+        addVendorCategoryCheckbox(cat);
       });
+
+      updateVendorCategoryHiddenValue();
 
       if(mainRow){
         mainRow.innerHTML = "";
@@ -882,6 +920,49 @@
           moreGrid.appendChild(groupBox);
         });
       }
+    }
+
+    function getSelectedBusinessCategories(){
+      const checklist = document.getElementById("bizCategoryChecklist");
+
+      if(checklist){
+        return Array.from(checklist.querySelectorAll("input[type='checkbox']:checked"))
+          .map(function(input){ return input.value; })
+          .filter(Boolean);
+      }
+
+      const categoryInput = document.getElementById("bizCategory");
+
+      if(categoryInput && categoryInput.value){
+        return categoryInput.value.split(",").map(function(item){ return item.trim(); }).filter(Boolean);
+      }
+
+      return [];
+    }
+
+    function updateVendorCategoryHiddenValue(){
+      const selectedCategories = getSelectedBusinessCategories();
+      const categoryInput = document.getElementById("bizCategory");
+      const hint = document.getElementById("bizCategoryHint");
+
+      if(categoryInput){
+        categoryInput.value = selectedCategories.join(", ");
+      }
+
+      if(hint){
+        hint.innerText = selectedCategories.length + "/5 category select hui";
+      }
+    }
+
+    function handleVendorCategoryChange(changedInput){
+      const selectedCategories = getSelectedBusinessCategories();
+
+      if(selectedCategories.length > 5){
+        changedInput.checked = false;
+        alert("Max 5 category hi select kar sakte ho.");
+      }
+
+      updateVendorCategoryHiddenValue();
     }
 
     function normalizeVendor(v){
@@ -1145,12 +1226,15 @@
     }
 
     function getVendorFormData(){
+      const selectedCategories = getSelectedBusinessCategories();
+
       return {
         name: document.getElementById("bizName").value.trim(),
         owner: document.getElementById("bizOwner").value.trim(),
         phone: document.getElementById("bizPhone").value.trim(),
         city: document.getElementById("bizCity").value.trim(),
-        cat: document.getElementById("bizCategory").value.trim(),
+        cat: selectedCategories.join(", "),
+        categories: selectedCategories,
         price: document.getElementById("bizPrice").value.trim(),
         desc: document.getElementById("bizDesc").value.trim()
       };
@@ -1160,7 +1244,7 @@
       const v = getVendorFormData();
 
       if(!v.name || !v.owner || !v.phone || !v.city || !v.cat){
-        alert("Business Name, Owner Name, Mobile Number, City aur Category zaruri hai.");
+        alert("Business Name, Owner Name, Mobile Number, City aur kam se kam 1 Category zaruri hai. Max 5 category select kar sakte ho.");
         return;
       }
 
@@ -1251,7 +1335,7 @@
       const v = getVendorFormData();
 
       if(!v.name || !v.owner || !v.phone || !v.city || !v.cat){
-        alert("Form me required details bharo.");
+        alert("Form me required details bharo aur kam se kam 1 category select karo.");
         return;
       }
 
@@ -1383,6 +1467,11 @@
 
       const cat = document.getElementById("bizCategory");
       if(cat) cat.value = "";
+
+      document.querySelectorAll("#bizCategoryChecklist input[type='checkbox']").forEach(function(input){
+        input.checked = false;
+      });
+      updateVendorCategoryHiddenValue();
 
       selectedPhotos = [];
       selectedVideo = null;
