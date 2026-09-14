@@ -333,7 +333,17 @@
       .authTitle{font-size:31px}
       .vendorCategoryGroupGrid,.moreServiceGroupGrid,.infoGrid,.seoGrid{grid-template-columns:1fr}
     }
-  </style>
+  
+/* Advertisement App Card */
+.adSection{width:100%;max-width:1120px;margin:18px auto 24px;padding:0 18px;box-sizing:border-box}
+.adAppCard{overflow:hidden;border:2px solid #d5a52f;border-radius:24px;background:linear-gradient(145deg,#fff3b5,#f7cf62);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.adAppHeader{display:flex;align-items:center;gap:12px;padding:15px 18px;background:linear-gradient(135deg,#064c3d,#032d25);color:#fff}
+.adAppIcon{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#f2c84b;font-size:23px}
+.adAppTitle{font-size:18px;font-weight:800;color:#f5d477}.adAppSubtitle{font-size:12px;color:#fff5d5;margin-top:3px}.adLiveBadge{margin-left:auto;padding:5px 9px;border-radius:20px;background:#16a34a;color:white;font-size:11px;font-weight:800}
+.adTrack{display:flex;transition:transform .5s ease}.adSlide{min-width:100%;display:grid;grid-template-columns:22% 78%;align-items:center;gap:18px;padding:18px;box-sizing:border-box}.adSlide img{width:100%;height:205px;max-height:205px;object-fit:contain;border-radius:18px;border:2px solid #d5a52f;background:#fff}.adInfo{padding:5px 8px}.adInfo h3{margin:0 0 9px;color:#173f32;font-size:24px;font-weight:900}.adInfo p{margin:0 0 10px;color:#3e3822;font-size:15px;line-height:1.55}.adPrice{color:#9a5800;font-size:22px;font-weight:900}.adDiscount{display:inline-block;margin-top:9px;padding:6px 12px;border-radius:20px;background:#b91c1c;color:white;font-size:13px;font-weight:800}.adBottom{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:#064c3d;color:white;font-size:12px}.adDots{display:flex;justify-content:flex-end;gap:6px}.adDot{width:8px;height:8px;border-radius:50%;background:#a8b7b1}.adDot.active{background:#f5d477;transform:scale(1.25)}
+.adProfileBtn{margin-top:14px;padding:10px 18px;border:0;border-radius:10px;background:#064c3d;color:#fff;font-weight:800;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.15)}.adProfileBtn:hover{background:#032d25}
+@media(max-width:700px){.adSection{padding:0 12px}.adAppCard{border-radius:20px}.adSlide{grid-template-columns:1fr;gap:12px;padding:13px}.adSlide img{height:175px;max-height:175px;object-fit:contain;border-radius:15px}.adInfo{padding:0 4px 5px}.adInfo h3{font-size:21px}.adInfo p{font-size:14px}.adAppTitle{font-size:16px}}
+</style>
 </head>
 
 <body>
@@ -437,6 +447,19 @@
 
     <button class="searchBtn" onclick="searchVendors()">🔍 Search Vendors</button>
   </div>
+
+
+<section class="adSection" id="advertisementSection" style="display:none;">
+  <div class="adAppCard">
+    <div class="adAppHeader">
+      <span class="adAppIcon">📢</span>
+      <div><div class="adAppTitle">Samagra Decor Offers</div><div class="adAppSubtitle">Latest decoration deals & services</div></div>
+      <span class="adLiveBadge">LIVE</span>
+    </div>
+    <div class="adTrack" id="adTrack"></div>
+    <div class="adBottom"><span id="adCounter">Advertisement</span><div class="adDots" id="adDots"></div></div>
+  </div>
+</section>
 
   <section id="services">
     <h2 class="heading">Popular <span>Services</span></h2>
@@ -2231,7 +2254,80 @@
         });
     }
 
+
+    let websiteAdvertisements = [];
+    let currentAdIndex = 0;
+    let advertisementTimer = null;
+
+    async function loadAdvertisements(){
+      const section = document.getElementById("advertisementSection");
+      const track = document.getElementById("adTrack");
+      const dots = document.getElementById("adDots");
+      if(!section || !track || !dots || !supabaseClient) return;
+      try{
+        const { data, error } = await supabaseClient.from("advertisements").select("id,title,description,advertiser_name,vendor_id,start_date,end_date,image_url,price,discount,is_active").eq("is_active", true).order("start_date", {ascending:false}).limit(20);
+        if(error){ console.error("Advertisement loading error:", error); return; }
+        websiteAdvertisements = Array.isArray(data) ? data : [];
+        if(!websiteAdvertisements.length){ section.style.display="none"; return; }
+        track.innerHTML = websiteAdvertisements.map(function(ad,index){
+          const title = escapeHtml(ad.title || "Samagra Decor Advertisement");
+          const description = escapeHtml(ad.description || "");
+          const advertiser = escapeHtml(ad.advertiser_name || "");
+          const image = ad.image_url || "logo.png";
+          const price = ad.price ? "₹" + escapeHtml(ad.price) : "";
+          const discount = ad.discount ? escapeHtml(ad.discount) : "";
+          return `<div class="adSlide"><img src="${escapeHtml(image)}" alt="${title}"><div class="adInfo"><h3>${title}</h3><p>${description}</p>${advertiser ? `<p><b>Advertiser:</b> ${advertiser}</p>` : ""}${price ? `<div class="adPrice">${price}</div>` : ""}${discount ? `<span class="adDiscount">${discount}% OFF</span>` : ""}<button class="adProfileBtn" onclick="openAdvertisementProfile(${index})">View Profile</button></div></div>`;
+        }).join("");
+        dots.innerHTML = websiteAdvertisements.map(function(ad,index){ return `<span class="adDot ${index===0 ? "active" : ""}"></span>`; }).join("");
+        currentAdIndex=0; section.style.display="block"; updateAdvertisementSlider();
+        if(advertisementTimer) clearInterval(advertisementTimer);
+        if(websiteAdvertisements.length>1){ advertisementTimer=setInterval(function(){ currentAdIndex=(currentAdIndex+1)%websiteAdvertisements.length; updateAdvertisementSlider(); },5000); }
+      }catch(error){ console.error("Advertisement error:", error); }
+    }
+
+    function openAdvertisementProfile(adIndex){
+      const ad = websiteAdvertisements[adIndex];
+      if(!ad){
+        alert("Advertisement profile nahi mila.");
+        return;
+      }
+
+      let vendorIndex = -1;
+
+      if(ad.vendor_id){
+        vendorIndex = vendors.findIndex(function(v){
+          return String(v.id) === String(ad.vendor_id);
+        });
+      }
+
+      if(vendorIndex === -1 && ad.advertiser_name){
+        const advertiser = String(ad.advertiser_name).toLowerCase().trim();
+        vendorIndex = vendors.findIndex(function(v){
+          return String(v.name || "").toLowerCase().trim() === advertiser ||
+                 String(v.owner_name || "").toLowerCase().trim() === advertiser;
+        });
+      }
+
+      if(vendorIndex === -1){
+        alert("Is advertisement ke saath vendor profile link nahi hai. Supabase advertisements table me vendor_id add karein.");
+        return;
+      }
+
+      currentVendorList = vendors;
+      viewDetails(vendorIndex);
+    }
+
+    function updateAdvertisementSlider(){
+      const track=document.getElementById("adTrack");
+      const dots=document.querySelectorAll(".adDot");
+      const counter=document.getElementById("adCounter");
+      if(track) track.style.transform="translateX(-"+(currentAdIndex*100)+"%)";
+      dots.forEach(function(dot,index){ dot.classList.toggle("active",index===currentAdIndex); });
+      if(counter && websiteAdvertisements.length) counter.textContent="Ad "+(currentAdIndex+1)+" of "+websiteAdvertisements.length;
+    }
+
     fillServiceOptions();
+    loadAdvertisements();
     loadVendors();
   </script>
 </body>
