@@ -420,7 +420,7 @@
   <div class="quickButtons">
     <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
     <button class="quickBtn" id="authQuickBtn" onclick="openAuthModal()">Login / Create Account</button>
-    <button class="quickGoldBtn" onclick="openModal('businessModal')">List Your Business</button>
+    <button class="quickGoldBtn" id="listYourBusiness" onclick="openListingModal()">List Your Business</button>
     <button class="quickGoldBtn" onclick="downloadApp()" title="Download Samagra Decor Android APK">📱 Download App</button>
     <button class="quickBtn" id="adminQuickBtn" onclick="openAdminPanel()" style="display:none;">Admin Panel</button>
   </div>
@@ -615,7 +615,7 @@
 
       <div class="footerCol">
         <h3>For Businesses</h3>
-        <a onclick="openModal('businessModal')">List Your Business</a>
+        <a class="list-your-business" onclick="openListingModal()">List Your Business</a>
         <a onclick="downloadApp()">Download App</a>
         <a onclick="openAuthModal()">Vendor Login</a>
         <a onclick="showInfoPage('terms')">Terms & Conditions</a>
@@ -1948,7 +1948,7 @@
         <div class="authTitle">Welcome</div>
         <div class="authSub">${escapeHtml(name)}</div>
         <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
-        <button class="authMainBtn" onclick="openModal('businessModal'); closeModal('loginModal');">List Your Business</button>
+        <button class="authMainBtn" onclick="openListingModal(); closeModal('loginModal');">List Your Business</button>
         <button class="authOutlineBtn" onclick="logoutUser()">Logout</button>
         <button class="authOutlineBtn" onclick="closeModal('loginModal')">Close</button>
       `;
@@ -2358,41 +2358,68 @@
     loadVendors();
   </script>
 
-<div id="listingModal" class="listing-modal">
- <div class="listing-panel">
-  <button onclick="closeListingModal()">✕ Close</button>
-  <div id="planStep">
-   <h2>Choose Your Listing</h2>
-   <div class="plan-grid">
-    <div class="plan-card"><h3>🆓 Free Listing</h3><b>₹0</b><p>2 Categories<br>4 Photos<br>Call & WhatsApp</p><button onclick="openListingForm('free')">Create Free Listing</button></div>
-    <div class="plan-card"><h3>💎 Paid Listing</h3><b>₹29/Month या ₹199/Year</b><p>7 Categories<br>7 Photos<br>Video Link<br>Paid Badge</p><button onclick="openListingForm('paid')">Choose Paid</button></div>
-    <div class="plan-card"><h3>👑 Prime Pro</h3><b>₹149/Month या ₹999/Year</b><p>12 Categories<br>12 Photos<br>Featured Profile</p><button onclick="openListingForm('prime_pro')">Choose Prime Pro</button></div>
-   </div>
-  </div>
-  <form id="listingForm" class="listing-form" onsubmit="submitListing(event)">
-   <h2 id="listingFormTitle">Create Listing</h2>
-   <input id="listingPlan" type="hidden">
-   <label>Business Name<input id="businessName" required></label>
-   <label>Owner Name<input id="ownerName" required></label>
-   <label>Mobile Number<input id="mobile" type="tel" required></label>
-   <label>City<input id="city" required></label>
-   <label>Categories<input id="categories" placeholder="Decoration, DJ, Catering" required></label>
-   <label>Starting Price<input id="startingPrice" type="number"></label>
-   <label>Business Description<textarea id="description" rows="4"></textarea></label>
-   <label>Photo URLs, comma separated<input id="photos" placeholder="https://... , https://..."></label>
-   <label>Video Link<input id="videoLink" placeholder="YouTube / Instagram / Google Drive"></label>
-   <div class="listing-actions"><button type="submit">SUBMIT LISTING</button><button type="button" onclick="backToPlans()">← Back</button></div>
-   <p id="listingMessage"></p>
-  </form>
- </div>
+<style>
+/* App-style listing flow */
+.listing-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,20,16,.78);padding:18px;overflow:auto}
+.listing-shell{width:min(920px,100%);margin:18px auto;background:#fffdf3;border:2px solid #d6aa38;border-radius:28px;box-shadow:0 20px 70px rgba(0,0,0,.35);overflow:hidden;color:#123f33}
+.listing-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;background:#064c3d;color:#fff}
+.listing-top h2{margin:0;font-size:25px}.listing-top p{margin:4px 0 0;color:#dceee5;font-size:13px}
+.listing-close{background:#fff;color:#064c3d;border:0;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer}
+.listing-body{padding:22px}.listing-step{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.listing-step span{padding:8px 12px;border-radius:999px;background:#e9e5d5;color:#6c705f;font-size:12px;font-weight:800}.listing-step .active{background:#d7ad43;color:#173f32}
+.plan-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.plan-card{position:relative;background:#fff;border:2px solid #e1c16c;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:9px;min-width:0}.plan-card.popular{border-color:#08745c;box-shadow:0 0 0 3px rgba(8,116,92,.12)}.plan-card .popular-tag{position:absolute;top:-12px;right:14px;background:#08745c;color:#fff;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800}.plan-card h3{margin:0;font-size:20px}.plan-price{font-size:23px;font-weight:900;color:#064c3d}.plan-sub{font-size:12px;color:#6c705f}.plan-card ul{margin:4px 0 10px;padding-left:18px;line-height:1.8;font-size:13px;flex:1}.simple-plan h3{text-align:center;font-size:25px}.simple-plan .plan-price{text-align:center;font-size:28px}.simple-plan .plan-price span{font-size:17px;font-weight:500;color:#555}.year-price{text-align:center;font-size:21px;color:#555;margin-top:-5px}.feature-list{list-style:none;padding-left:0!important}.feature-list li:before{content:"✅ ";}.feature-list li.no:before{content:"❌ ";}.feature-list li.no{color:#555}.plan-note{font-size:15px;color:#555;line-height:1.5}.plan-card button,.listing-primary{background:#064c3d;color:#fff;border:0;border-radius:12px;padding:13px 15px;font-weight:800;cursor:pointer;width:100%}.plan-card button:hover,.listing-primary:hover{background:#08745c}
+.duration-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.duration-row button{background:#fff;border:1px solid #cdbb83;border-radius:999px;padding:9px 14px;cursor:pointer}.duration-row button.selected{background:#d7ad43;border-color:#d7ad43;color:#173f32;font-weight:800}
+.listing-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.listing-field{display:flex;flex-direction:column;gap:6px}.listing-field.full{grid-column:1/-1}.listing-field label{font-size:13px;font-weight:800}.listing-field input,.listing-field select,.listing-field textarea{width:100%;box-sizing:border-box;border:1px solid #cdbb83;border-radius:11px;background:#fff;padding:12px;font:inherit;color:#173f32}.listing-field textarea{resize:vertical}.listing-note{background:#f5efd9;border:1px solid #e1c16c;border-radius:12px;padding:12px;font-size:12px;margin:15px 0}.listing-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.listing-secondary{background:#fff;border:1px solid #bca66c;color:#173f32;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}.listing-message{font-weight:800;margin-top:14px}.listing-hidden{display:none!important}
+@media(max-width:720px){.plan-grid{grid-template-columns:1fr}.listing-form-grid{grid-template-columns:1fr}.listing-top h2{font-size:20px}.listing-body{padding:15px}.listing-modal{padding:8px}.listing-shell{margin:8px auto;border-radius:20px}}
+</style>
+
+<div id="listingModal" class="listing-modal" aria-hidden="true">
+  <section class="listing-shell" role="dialog" aria-modal="true" aria-labelledby="listingTitle">
+    <header class="listing-top">
+      <div><h2 id="listingTitle">List Your Business</h2><p>Samagra Decor par apna business register karein</p></div>
+      <button class="listing-close" type="button" onclick="closeListingModal()">✕ Close</button>
+    </header>
+    <div class="listing-body">
+      <div class="listing-step"><span id="step1" class="active">1. Plan Choose</span><span id="step2">2. Business Details</span><span id="step3">3. Submit</span></div>
+
+      <div id="planStep">
+        <h3 style="margin-top:0;text-align:center;font-size:28px">Choose Your Listing</h3>
+        <p style="color:#6c705f;text-align:center;font-size:16px">Apne business ke liye listing plan choose karein</p>
+        <div class="plan-grid">
+          <article class="plan-card simple-plan"><h3>🆓 FREE LISTING</h3><div class="plan-price">₹0 <span>• Always Free</span></div><ul class="feature-list"><li>Basic Vendor Profile</li><li>Maximum 2 Categories</li><li>Maximum 4 Business Photos</li><li>Mobile / Call button</li><li>WhatsApp button</li><li>Customer Rating & Reviews</li><li>Basic Search Listing</li><li class="no">Video Link</li><li class="no">Share Button</li><li class="no">Featured Listing</li></ul><button type="button" onclick="openListingForm('free')">CREATE FREE LISTING</button></article>
+          <article class="plan-card simple-plan popular"><h3>💎 PAID LISTING</h3><div class="plan-price" id="paidPrice">₹29 <span>/ Month</span></div><div class="year-price" id="paidYearText">₹199 / Year</div><ul class="feature-list"><li>Complete Vendor Profile</li><li>Maximum 7 Categories</li><li>Maximum 7 Business Photos</li><li>YouTube / Instagram / Drive Video Link</li><li>Call & WhatsApp</li><li>Customer Rating & Reviews</li><li>Better Search Visibility</li><li>Verified / PAID Vendor Badge</li><li>Vendor Profile Share Button</li><li>Active Subscription</li></ul><p class="plan-note">📌 Search mein FREE Listing se upar dikhegi.</p><button type="button" onclick="openListingForm('paid')">CHOOSE PAID LISTING</button></article>
+          <article class="plan-card simple-plan"><h3>👑 PRIME PRO</h3><div class="plan-price" id="primePrice">₹149 <span>/ Month</span></div><div class="year-price" id="primeYearText">₹999 / Year</div><ul class="feature-list"><li>Everything in Paid — ALL Features</li><li>Maximum 12 Categories</li><li>Maximum 12 Business / Portfolio Photos</li><li>Video Link</li><li>PRIME PRO Badge</li><li>Featured Business</li><li>Premium Vendor Profile</li><li>Better Customer Reach</li><li>Featured Section mein visibility</li><li>Profile Sharing</li><li>Priority Search Visibility</li></ul><p class="plan-note">📌 Search mein FREE aur PAID dono se upar dikhegi.</p><button type="button" onclick="openListingForm('prime_pro')">CHOOSE PRIME PRO</button></article>
+        </div>
+      </div>
+
+      <form id="listingForm" class="listing-hidden" onsubmit="submitListing(event)">
+        <h3 id="listingFormTitle" style="margin-top:0">Business Details</h3>
+        <div class="listing-note" id="selectedPlanNote">Selected plan: Free Listing</div>
+        <div class="listing-form-grid">
+          <div class="listing-field"><label for="businessName">Business / Shop Name *</label><input id="businessName" required placeholder="e.g. Sharma Decoration"></div>
+          <div class="listing-field"><label for="ownerName">Owner Name *</label><input id="ownerName" required placeholder="Your full name"></div>
+          <div class="listing-field"><label for="mobile">Mobile Number *</label><input id="mobile" type="tel" required pattern="[0-9]{10}" placeholder="10 digit mobile number"></div>
+          <div class="listing-field"><label for="city">City *</label><input id="city" required placeholder="e.g. Jabalpur"></div>
+          <div class="listing-field full"><label for="categories">Services / Categories * <span id="categoryLimit"></span></label><input id="categories" required placeholder="Decoration, DJ, Catering — comma se alag likhein"></div>
+          <div class="listing-field"><label for="startingPrice">Starting Price (₹)</label><input id="startingPrice" type="number" min="0" placeholder="e.g. 5000"></div>
+          <div class="listing-field"><label for="videoLink">Video / Instagram Link</label><input id="videoLink" type="url" placeholder="https://..."></div>
+          <div class="listing-field full"><label for="description">Business Description</label><textarea id="description" rows="4" placeholder="Apne business, services aur specialities ke baare mein likhein"></textarea></div>
+          <div class="listing-field full"><label for="photos">Photo URLs <span id="photoLimit"></span></label><textarea id="photos" rows="2" placeholder="Photo links comma se alag likhein"></textarea></div>
+        </div>
+        <div class="listing-actions"><button class="listing-primary" type="submit" style="width:auto">Submit Listing</button><button class="listing-secondary" type="button" onclick="backToPlans()">← Change Plan</button></div>
+        <p id="listingMessage" class="listing-message"></p>
+      </form>
+    </div>
+  </section>
 </div>
 <script>
-function openListingModal(){document.getElementById('listingModal').style.display='block';document.getElementById('planStep').style.display='block';document.getElementById('listingForm').style.display='none'}
-function closeListingModal(){document.getElementById('listingModal').style.display='none'}
-function openListingForm(plan){document.getElementById('planStep').style.display='none';document.getElementById('listingForm').style.display='block';document.getElementById('listingPlan').value=plan;document.getElementById('listingFormTitle').textContent=plan==='free'?'Free Listing':plan==='paid'?'Paid Listing':'Prime Pro Listing'}
-function backToPlans(){document.getElementById('planStep').style.display='block';document.getElementById('listingForm').style.display='none'}
-async function submitListing(e){e.preventDefault();const plan=document.getElementById('listingPlan').value;const max=plan==='free'?2:plan==='paid'?7:12;const cats=document.getElementById('categories').value.split(',').map(x=>x.trim()).filter(Boolean);const photos=document.getElementById('photos').value.split(',').map(x=>x.trim()).filter(Boolean);if(cats.length>max){alert('इस plan में अधिकतम '+max+' categories allowed हैं');return}if(photos.length>max){alert('इस plan में अधिकतम '+max+' photos allowed हैं');return}const row={business_name:document.getElementById('businessName').value,owner_name:document.getElementById('ownerName').value,mobile:document.getElementById('mobile').value,city:document.getElementById('city').value,categories:cats,starting_price:document.getElementById('startingPrice').value,description:document.getElementById('description').value,photos:photos,video_link:document.getElementById('videoLink').value,listing_plan:plan,payment_status:plan==='free'?'not_required':'pending',listing_status:'pending'};try{const {error}=await supabaseClient.from('vendors').insert([row]);if(error)throw error;document.getElementById('listingMessage').textContent='Listing submit हो गई। Admin approval के बाद live होगी।';document.getElementById('listingForm').reset()}catch(err){document.getElementById('listingMessage').textContent='Error: '+err.message}}
-document.addEventListener('click',function(e){if(e.target.closest('[data-list-business],#listYourBusiness,.list-your-business'))openListingModal()});
+let selectedListingPlan='free';
+let selectedPaidDuration='month';
+let selectedPrimeDuration='month';
+function openListingModal(){const m=document.getElementById('listingModal');m.style.display='block';m.setAttribute('aria-hidden','false');backToPlans();}
+function closeListingModal(){const m=document.getElementById('listingModal');m.style.display='none';m.setAttribute('aria-hidden','true');}
+function setDuration(plan,duration){if(plan==='paid')selectedPaidDuration=duration;else selectedPrimeDuration=duration;const isPaid=plan==='paid';document.getElementById(plan+'Month').classList.toggle('selected',duration==='month');document.getElementById(plan+'Year').classList.toggle('selected',duration==='year');document.getElementById(plan+'Price').textContent=isPaid?(duration==='month'?'₹29':'₹199'):(duration==='month'?'₹149':'₹999');}
+function openListingForm(plan){selectedListingPlan=plan;document.getElementById('planStep').classList.add('listing-hidden');document.getElementById('listingForm').classList.remove('listing-hidden');document.getElementById('step1').classList.remove('active');document.getElementById('step2').classList.add('active');document.getElementById('listingFormTitle').textContent=plan==='free'?'Free Listing Details':plan==='paid'?'Paid Listing Details':'Prime Pro Listing Details';const max=plan==='free'?2:plan==='paid'?7:12;document.getElementById('categoryLimit').textContent='(Maximum '+max+')';document.getElementById('photoLimit').textContent='(Maximum '+(plan==='free'?4:plan==='paid'?7:12)+')';document.getElementById('selectedPlanNote').textContent='Selected plan: '+(plan==='free'?'Free Listing ₹0':plan==='paid'?'Paid Listing '+(selectedPaidDuration==='month'?'₹29/Month':'₹199/Year'):'Prime Pro '+(selectedPrimeDuration==='month'?'₹149/Month':'₹999/Year'));}
+function backToPlans(){document.getElementById('planStep').classList.remove('listing-hidden');document.getElementById('listingForm').classList.add('listing-hidden');document.getElementById('step1').classList.add('active');document.getElementById('step2').classList.remove('active');document.getElementById('step3').classList.remove('active');}
+async function submitListing(e){e.preventDefault();const maxCats=selectedListingPlan==='free'?2:selectedListingPlan==='paid'?7:12;const maxPhotos=selectedListingPlan==='free'?4:selectedListingPlan==='paid'?7:12;const cats=document.getElementById('categories').value.split(',').map(x=>x.trim()).filter(Boolean);const photos=document.getElementById('photos').value.split(',').map(x=>x.trim()).filter(Boolean);if(cats.length>maxCats){alert('Is plan mein maximum '+maxCats+' categories allowed hain.');return;}if(photos.length>maxPhotos){alert('Is plan mein maximum '+maxPhotos+' photos allowed hain.');return;}const row={business_name:document.getElementById('businessName').value.trim(),owner_name:document.getElementById('ownerName').value.trim(),mobile:document.getElementById('mobile').value.trim(),city:document.getElementById('city').value.trim(),categories:cats,starting_price:document.getElementById('startingPrice').value||null,description:document.getElementById('description').value.trim(),photos:photos,video_link:document.getElementById('videoLink').value.trim(),listing_plan:selectedListingPlan,plan_duration:selectedListingPlan==='free'?'free':selectedListingPlan==='paid'?selectedPaidDuration:selectedPrimeDuration,payment_status:selectedListingPlan==='free'?'not_required':'pending',listing_status:'pending'};try{if(typeof supabaseClient==='undefined')throw new Error('Supabase connection not found');const result=await supabaseClient.from('vendors').insert([row]);if(result.error)throw result.error;document.getElementById('step2').classList.remove('active');document.getElementById('step3').classList.add('active');document.getElementById('listingMessage').textContent='✅ Listing submit ho gayi. Admin approval ke baad live hogi.';document.getElementById('listingForm').reset();}catch(err){document.getElementById('listingMessage').textContent='⚠️ '+err.message+' — Supabase vendors table ke column names check karein.';}}
+document.addEventListener('click',function(e){if(e.target.closest('[data-list-business],#listYourBusiness,.list-your-business'))openListingModal();});
 </script>
-</body>
-</html>
