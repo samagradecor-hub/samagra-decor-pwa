@@ -343,6 +343,30 @@
 .adTrack{display:flex;transition:transform .5s ease}.adSlide{min-width:100%;display:grid;grid-template-columns:22% 78%;align-items:center;gap:18px;padding:18px;box-sizing:border-box}.adSlide img{width:100%;height:205px;max-height:205px;object-fit:contain;border-radius:18px;border:2px solid #d5a52f;background:#fff}.adInfo{padding:5px 8px}.adInfo h3{margin:0 0 9px;color:#173f32;font-size:24px;font-weight:900}.adInfo p{margin:0 0 10px;color:#3e3822;font-size:15px;line-height:1.55}.adPrice{color:#9a5800;font-size:22px;font-weight:900}.adDiscount{display:inline-block;margin-top:9px;padding:6px 12px;border-radius:20px;background:#b91c1c;color:white;font-size:13px;font-weight:800}.adBottom{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:#064c3d;color:white;font-size:12px}.adDots{display:flex;justify-content:flex-end;gap:6px}.adDot{width:8px;height:8px;border-radius:50%;background:#a8b7b1}.adDot.active{background:#f5d477;transform:scale(1.25)}
 .adProfileBtn{margin-top:14px;padding:10px 18px;border:0;border-radius:10px;background:#064c3d;color:#fff;font-weight:800;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.15)}.adProfileBtn:hover{background:#032d25}
 @media(max-width:700px){.adSection{padding:0 12px}.adAppCard{border-radius:20px}.adSlide{grid-template-columns:1fr;gap:12px;padding:13px}.adSlide img{height:175px;max-height:175px;object-fit:contain;border-radius:15px}.adInfo{padding:0 4px 5px}.adInfo h3{font-size:21px}.adInfo p{font-size:14px}.adAppTitle{font-size:16px}}
+
+/* FINAL UI OVERRIDES */
+.hero{grid-template-columns:1fr;max-width:1220px;padding-bottom:52px}
+.heroText{max-width:850px}
+.heroImage{display:none!important}
+.adSlide{grid-template-columns:42% 58%;gap:18px;align-items:center}
+.adSlide img{width:100%;height:270px;max-height:270px;object-fit:contain;background:#fff}
+.adInfo{min-width:0;padding:4px 10px}
+.adInfo h3{font-size:clamp(20px,2.4vw,32px);line-height:1.15}
+.adInfo p{font-size:clamp(13px,1.4vw,17px)}
+.adPrice{font-size:clamp(22px,2.5vw,34px)}
+.adProfileBtn{font-size:16px;padding:12px 22px}
+@media(max-width:700px){
+  .hero{grid-template-columns:1fr;padding-bottom:28px}
+  .heroText h2{font-size:42px}
+  .adSlide{grid-template-columns:40% 60%;gap:8px;padding:10px}
+  .adSlide img{height:220px;max-height:220px;border-radius:14px}
+  .adInfo{padding:0 2px}
+  .adInfo h3{font-size:18px;line-height:1.15;margin-bottom:7px}
+  .adInfo p{font-size:12px;line-height:1.35;margin-bottom:7px}
+  .adPrice{font-size:22px}
+  .adDiscount{font-size:11px;padding:5px 8px;margin-top:5px}
+  .adProfileBtn{font-size:12px;padding:10px 12px;margin-top:9px;white-space:nowrap}
+}
 </style>
 </head>
 
@@ -386,7 +410,6 @@
           <span>🎧 Support</span>
         </div>
       </div>
-      <div class="heroImage"></div>
     </div>
   </div>
 
