@@ -368,6 +368,10 @@
   .adProfileBtn{font-size:12px;padding:10px 12px;margin-top:9px;white-space:nowrap}
 }
 </style>
+
+<style>
+.listing-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;overflow:auto;padding:20px}.listing-panel{max-width:760px;margin:30px auto;background:#fff8df;border:2px solid #d5a52f;border-radius:22px;padding:22px;color:#173f32}.listing-panel h2{margin-top:0}.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.plan-card{background:#fff;border:2px solid #d5a52f;border-radius:16px;padding:15px;cursor:pointer}.plan-card h3{margin:0 0 6px}.plan-card button,.listing-panel button{background:#064c3d;color:white;border:0;border-radius:10px;padding:11px 14px;cursor:pointer}.listing-form{display:none}.listing-form input,.listing-form textarea,.listing-form select{width:100%;box-sizing:border-box;margin:7px 0;padding:12px;border:1px solid #c9b778;border-radius:9px}.listing-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}@media(max-width:650px){.plan-grid{grid-template-columns:1fr}.listing-panel{padding:15px}}
+</style>
 </head>
 
 <body>
@@ -2353,5 +2357,42 @@
     loadAdvertisements();
     loadVendors();
   </script>
+
+<div id="listingModal" class="listing-modal">
+ <div class="listing-panel">
+  <button onclick="closeListingModal()">✕ Close</button>
+  <div id="planStep">
+   <h2>Choose Your Listing</h2>
+   <div class="plan-grid">
+    <div class="plan-card"><h3>🆓 Free Listing</h3><b>₹0</b><p>2 Categories<br>4 Photos<br>Call & WhatsApp</p><button onclick="openListingForm('free')">Create Free Listing</button></div>
+    <div class="plan-card"><h3>💎 Paid Listing</h3><b>₹29/Month या ₹199/Year</b><p>7 Categories<br>7 Photos<br>Video Link<br>Paid Badge</p><button onclick="openListingForm('paid')">Choose Paid</button></div>
+    <div class="plan-card"><h3>👑 Prime Pro</h3><b>₹149/Month या ₹999/Year</b><p>12 Categories<br>12 Photos<br>Featured Profile</p><button onclick="openListingForm('prime_pro')">Choose Prime Pro</button></div>
+   </div>
+  </div>
+  <form id="listingForm" class="listing-form" onsubmit="submitListing(event)">
+   <h2 id="listingFormTitle">Create Listing</h2>
+   <input id="listingPlan" type="hidden">
+   <label>Business Name<input id="businessName" required></label>
+   <label>Owner Name<input id="ownerName" required></label>
+   <label>Mobile Number<input id="mobile" type="tel" required></label>
+   <label>City<input id="city" required></label>
+   <label>Categories<input id="categories" placeholder="Decoration, DJ, Catering" required></label>
+   <label>Starting Price<input id="startingPrice" type="number"></label>
+   <label>Business Description<textarea id="description" rows="4"></textarea></label>
+   <label>Photo URLs, comma separated<input id="photos" placeholder="https://... , https://..."></label>
+   <label>Video Link<input id="videoLink" placeholder="YouTube / Instagram / Google Drive"></label>
+   <div class="listing-actions"><button type="submit">SUBMIT LISTING</button><button type="button" onclick="backToPlans()">← Back</button></div>
+   <p id="listingMessage"></p>
+  </form>
+ </div>
+</div>
+<script>
+function openListingModal(){document.getElementById('listingModal').style.display='block';document.getElementById('planStep').style.display='block';document.getElementById('listingForm').style.display='none'}
+function closeListingModal(){document.getElementById('listingModal').style.display='none'}
+function openListingForm(plan){document.getElementById('planStep').style.display='none';document.getElementById('listingForm').style.display='block';document.getElementById('listingPlan').value=plan;document.getElementById('listingFormTitle').textContent=plan==='free'?'Free Listing':plan==='paid'?'Paid Listing':'Prime Pro Listing'}
+function backToPlans(){document.getElementById('planStep').style.display='block';document.getElementById('listingForm').style.display='none'}
+async function submitListing(e){e.preventDefault();const plan=document.getElementById('listingPlan').value;const max=plan==='free'?2:plan==='paid'?7:12;const cats=document.getElementById('categories').value.split(',').map(x=>x.trim()).filter(Boolean);const photos=document.getElementById('photos').value.split(',').map(x=>x.trim()).filter(Boolean);if(cats.length>max){alert('इस plan में अधिकतम '+max+' categories allowed हैं');return}if(photos.length>max){alert('इस plan में अधिकतम '+max+' photos allowed हैं');return}const row={business_name:document.getElementById('businessName').value,owner_name:document.getElementById('ownerName').value,mobile:document.getElementById('mobile').value,city:document.getElementById('city').value,categories:cats,starting_price:document.getElementById('startingPrice').value,description:document.getElementById('description').value,photos:photos,video_link:document.getElementById('videoLink').value,listing_plan:plan,payment_status:plan==='free'?'not_required':'pending',listing_status:'pending'};try{const {error}=await supabaseClient.from('vendors').insert([row]);if(error)throw error;document.getElementById('listingMessage').textContent='Listing submit हो गई। Admin approval के बाद live होगी।';document.getElementById('listingForm').reset()}catch(err){document.getElementById('listingMessage').textContent='Error: '+err.message}}
+document.addEventListener('click',function(e){if(e.target.closest('[data-list-business],#listYourBusiness,.list-your-business'))openListingModal()});
+</script>
 </body>
 </html>
