@@ -420,7 +420,7 @@
   <div class="quickButtons">
     <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
     <button class="quickBtn" id="authQuickBtn" onclick="openAuthModal()">Login / Create Account</button>
-    <button class="quickGoldBtn" onclick="openModal('businessModal')">List Your Business</button>
+    <button class="quickGoldBtn" onclick="openListingModal()">List Your Business</button>
     <button class="quickGoldBtn" onclick="downloadApp()" title="Download Samagra Decor Android APK">📱 Download App</button>
     <button class="quickBtn" id="adminQuickBtn" onclick="openAdminPanel()" style="display:none;">Admin Panel</button>
   </div>
@@ -615,7 +615,7 @@
 
       <div class="footerCol">
         <h3>For Businesses</h3>
-        <a onclick="openModal('businessModal')">List Your Business</a>
+        <a onclick="openListingModal()">List Your Business</a>
         <a onclick="downloadApp()">Download App</a>
         <a onclick="openAuthModal()">Vendor Login</a>
         <a onclick="showInfoPage('terms')">Terms & Conditions</a>
@@ -661,37 +661,37 @@
   </div>
 
   <div class="modal" id="businessModal">
-    <div class="modalBox">
-      <span class="close" onclick="closeModal('businessModal')">×</span>
-      <div class="vendorFormTitle">Vendor Registration</div>
-      <div class="vendorFormSub">Apna business Samagra Decor par list karein</div>
-
-      <input class="vendorInput" id="bizName" placeholder="Business Name / Dukaan ka naam" />
-      <input class="vendorInput" id="bizOwner" placeholder="Owner Name / Malik ka naam" />
-      <input class="vendorInput" id="bizPhone" placeholder="Mobile Number / WhatsApp Number" />
-      <input class="vendorInput" id="bizCity" placeholder="City / Shehar / Gaon" />
-
-      <div class="vendorCategoryBox">
-        <div class="vendorCategoryTitle">📋 Select Service Category (Max 5)</div>
-        <div class="vendorCategoryChecklist" id="bizCategoryChecklist"></div>
-        <div class="categoryHint" id="bizCategoryHint">0/5 category select hui</div>
+    <div class="modalBox listingNewBox">
+      <span class="close" onclick="closeListingModal()">×</span>
+      <div id="listingPlansScreen">
+        <div class="vendorFormTitle">Choose Your Listing</div>
+        <div class="vendorFormSub">Apne business ke liye listing plan choose karein</div>
+        <div class="newPlanGrid">
+          <div class="newPlanCard"><h2>🆓 Free Listing</h2><div class="newPlanPrice">₹0 <span>• Always Free</span></div><p>✅ Basic Vendor Profile<br>✅ Maximum 2 Categories<br>✅ Maximum 4 Business Photos<br>✅ Mobile / Call button<br>✅ WhatsApp button<br>✅ Customer Rating & Reviews<br>✅ Basic Search Listing<br><br>❌ Video Link<br>❌ Share Button<br>❌ Featured Listing</p><button class="monthlyBtn" onclick="openPlanForm('free')">CREATE FREE LISTING</button></div>
+          <div class="newPlanCard"><h2>💎 Paid Listing</h2><div class="newPlanPrice">₹29 / Month<br>₹199 / Year</div><p>✅ Complete Vendor Profile<br>✅ Maximum 7 Categories<br>✅ Maximum 7 Business Photos<br>✅ YouTube / Instagram / Drive Video Link<br>✅ Call & WhatsApp<br>✅ Customer Rating & Reviews<br>✅ Better Search Visibility<br>✅ Verified / Paid Vendor Badge<br>✅ Vendor Profile Share Button<br>✅ Active Subscription</p><button class="monthlyBtn" onclick="openPlanForm('paid')">CHOOSE PAID LISTING</button></div>
+          <div class="newPlanCard"><h2>👑 Prime Pro</h2><div class="newPlanPrice">₹149 / Month<br>₹999 / Year</div><p>⭐ Everything in Paid — ALL Features<br>⭐ Maximum 12 Categories<br>⭐ Maximum 12 Business / Portfolio Photos<br>⭐ Video Link<br>⭐ PRIME PRO Badge<br>⭐ Featured Business<br>⭐ Premium Vendor Profile<br>⭐ Better Customer Reach<br>⭐ Featured Section Visibility<br>⭐ Profile Sharing<br>⭐ Priority Search Visibility</p><button class="monthlyBtn" onclick="openPlanForm('prime_pro')">CHOOSE PRIME PRO</button></div>
+        </div>
+        <button class="backBtn" onclick="closeListingModal()">← Back</button>
       </div>
-      <input type="hidden" id="bizCategory" />
-
-      <input class="vendorInput" id="bizPrice" type="number" placeholder="Starting Price जैसे ₹25000" />
-      <textarea class="vendorTextarea" id="bizDesc" placeholder="Business Description - Aap kya service dete ho?"></textarea>
-
-      <div class="mediaTitle">Photos aur Video Link</div>
-
-      <input id="vendorPhotos" type="file" accept="image/*" multiple style="display:none;" onchange="handlePhotoSelect(event)" />
-      <button class="uploadBtn" onclick="document.getElementById('vendorPhotos').click()">➕ Add Photos (Max 4)</button>
-      <div class="mediaStatus" id="photoStatus">Abhi koi photo select nahi hui</div>
-      <div class="mediaStatus">Photo upload se pehle automatic size kam hoga.</div>
-
-      <input class="vendorInput" id="bizVideoLink" placeholder="Video Link डालें जैसे YouTube / Instagram Reel / Google Drive link" />
-      <div class="mediaStatus">Video file upload nahi hogi, sirf link save hoga. Isse Supabase storage bachega.</div>
-
-      <button class="monthlyBtn" onclick="continueToMonthlyPlan()">Continue to Monthly Plan</button>
+      <div id="listingFormScreen" style="display:none;">
+        <div class="vendorFormTitle" id="newFormTitle">🆓 Free Listing</div>
+        <div class="vendorFormSub" id="newFormSub">Apne business ki basic listing banayein</div>
+        <input class="vendorInput" id="newBusinessName" placeholder="🏢 Business Name" required />
+        <input class="vendorInput" id="newOwnerName" placeholder="👤 Owner Name" required />
+        <input class="vendorInput" id="newMobile" placeholder="📞 Mobile Number" required />
+        <input class="vendorInput" id="newCity" placeholder="📍 City" required />
+        <div class="vendorCategoryBox"><div class="vendorCategoryTitle" id="newCategoryTitle">📋 Select Service Categories (Max 2)</div><div class="vendorCategoryChecklist" id="newCategoryChecklist"></div><div class="categoryHint" id="newCategoryHint">No Category Selected</div></div>
+        <input class="vendorInput" id="newStartingPrice" type="number" placeholder="💰 Starting Price" />
+        <textarea class="vendorTextarea" id="newDescription" placeholder="📝 Business Description"></textarea>
+        <div class="mediaTitle">📸 Business Photos</div>
+        <input id="newPhotos" type="file" accept="image/*" multiple style="display:none" onchange="handleNewPhotos(event)" />
+        <button class="uploadBtn" onclick="document.getElementById('newPhotos').click()" id="newPhotoButton">📸 Select Photos (Max 4)</button>
+        <div class="mediaStatus" id="newPhotoStatus">Abhi koi photo select nahi hui</div>
+        <div id="newVideoArea" style="display:none"><input class="vendorInput" id="newVideoLink" placeholder="🔗 YouTube / Instagram / Google Drive Video Link" /><div class="mediaStatus">Video file upload nahi hogi. Sirf video link save hoga.</div></div>
+        <button class="monthlyBtn" onclick="submitNewListing()" id="newSubmitButton">🆓 CREATE FREE LISTING</button>
+        <button class="backBtn" onclick="backToListingPlans()">← Back to Listing Plans</button>
+        <div class="categoryHint" id="newListingMessage"></div>
+      </div>
     </div>
   </div>
 
@@ -1948,7 +1948,7 @@
         <div class="authTitle">Welcome</div>
         <div class="authSub">${escapeHtml(name)}</div>
         <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
-        <button class="authMainBtn" onclick="openModal('businessModal'); closeModal('loginModal');">List Your Business</button>
+        <button class="authMainBtn" onclick="openListingModal(); closeModal('loginModal');">List Your Business</button>
         <button class="authOutlineBtn" onclick="logoutUser()">Logout</button>
         <button class="authOutlineBtn" onclick="closeModal('loginModal')">Close</button>
       `;
@@ -2358,41 +2358,50 @@
     loadVendors();
   </script>
 
-<div id="listingModal" class="listing-modal">
- <div class="listing-panel">
-  <button onclick="closeListingModal()">✕ Close</button>
-  <div id="planStep">
-   <h2>Choose Your Listing</h2>
-   <div class="plan-grid">
-    <div class="plan-card"><h3>🆓 Free Listing</h3><b>₹0</b><p>2 Categories<br>4 Photos<br>Call & WhatsApp</p><button onclick="openListingForm('free')">Create Free Listing</button></div>
-    <div class="plan-card"><h3>💎 Paid Listing</h3><b>₹29/Month या ₹199/Year</b><p>7 Categories<br>7 Photos<br>Video Link<br>Paid Badge</p><button onclick="openListingForm('paid')">Choose Paid</button></div>
-    <div class="plan-card"><h3>👑 Prime Pro</h3><b>₹149/Month या ₹999/Year</b><p>12 Categories<br>12 Photos<br>Featured Profile</p><button onclick="openListingForm('prime_pro')">Choose Prime Pro</button></div>
-   </div>
-  </div>
-  <form id="listingForm" class="listing-form" onsubmit="submitListing(event)">
-   <h2 id="listingFormTitle">Create Listing</h2>
-   <input id="listingPlan" type="hidden">
-   <label>Business Name<input id="businessName" required></label>
-   <label>Owner Name<input id="ownerName" required></label>
-   <label>Mobile Number<input id="mobile" type="tel" required></label>
-   <label>City<input id="city" required></label>
-   <label>Categories<input id="categories" placeholder="Decoration, DJ, Catering" required></label>
-   <label>Starting Price<input id="startingPrice" type="number"></label>
-   <label>Business Description<textarea id="description" rows="4"></textarea></label>
-   <input id="photos" type="hidden" value="">
-   <input id="videoLink" type="hidden" value="">
-   <div class="listing-actions"><button type="submit">SUBMIT LISTING</button><button type="button" onclick="backToPlans()">← Back</button></div>
-   <p id="listingMessage"></p>
-  </form>
- </div>
-</div>
 <script>
-function openListingModal(){document.getElementById('listingModal').style.display='block';document.getElementById('planStep').style.display='block';document.getElementById('listingForm').style.display='none'}
-function closeListingModal(){document.getElementById('listingModal').style.display='none'}
-function openListingForm(plan){document.getElementById('planStep').style.display='none';document.getElementById('listingForm').style.display='block';document.getElementById('listingPlan').value=plan;document.getElementById('listingFormTitle').textContent=plan==='free'?'Free Listing':plan==='paid'?'Paid Listing':'Prime Pro Listing'}
-function backToPlans(){document.getElementById('planStep').style.display='block';document.getElementById('listingForm').style.display='none'}
-async function submitListing(e){e.preventDefault();const plan=document.getElementById('listingPlan').value;const max=plan==='free'?2:plan==='paid'?7:12;const cats=document.getElementById('categories').value.split(',').map(x=>x.trim()).filter(Boolean);const photos=document.getElementById('photos').value.split(',').map(x=>x.trim()).filter(Boolean);if(cats.length>max){alert('इस plan में अधिकतम '+max+' categories allowed हैं');return}if(photos.length>max){alert('इस plan में अधिकतम '+max+' photos allowed हैं');return}const businessName=document.getElementById('businessName').value.trim();const ownerName=document.getElementById('ownerName').value.trim();const mobile=document.getElementById('mobile').value.trim();const city=document.getElementById('city').value.trim();const priceValue=document.getElementById('startingPrice').value;const row={name:businessName,owner_name:ownerName,phone:mobile,city:city,category:cats.join(', '),price:priceValue?Number(priceValue):null,description:document.getElementById('description').value.trim(),status:'pending'};try{const {error}=await supabaseClient.from('vendors').insert([row]);if(error)throw error;document.getElementById('listingMessage').textContent='Listing submit हो गई। Admin approval के बाद live होगी।';document.getElementById('listingForm').reset()}catch(err){document.getElementById('listingMessage').textContent='Error: '+err.message}}
-document.addEventListener('click',function(e){if(e.target.closest('[data-list-business],#listYourBusiness,.list-your-business'))openListingModal()});
+let newListingPlan='free';
+let newSelectedPhotos=[];
+let newSelectedCategories=[];
+function openListingModal(){
+  document.getElementById('businessModal').style.display='flex';
+  backToListingPlans();
+}
+function closeListingModal(){document.getElementById('businessModal').style.display='none';}
+function allWebsiteCategories(){
+  const values=[];
+  if(Array.isArray(serviceCategories)) values.push(...serviceCategories);
+  if(Array.isArray(mainCategories)) values.push(...mainCategories.map(x=>typeof x==='string'?x:x.value));
+  if(Array.isArray(moreServicesGroups)) moreServicesGroups.forEach(g=>{if(Array.isArray(g.services)) values.push(...g.services);});
+  return [...new Set(values.filter(x=>x && x!=='More Services'))];
+}
+function openPlanForm(plan){
+  newListingPlan=plan;
+  newSelectedCategories=[];newSelectedPhotos=[];
+  document.getElementById('listingPlansScreen').style.display='none';
+  document.getElementById('listingFormScreen').style.display='block';
+  const max=plan==='free'?2:plan==='paid'?7:12;
+  const photoMax=plan==='free'?4:plan==='paid'?7:12;
+  document.getElementById('newFormTitle').textContent=plan==='free'?'🆓 Free Listing':plan==='paid'?'💎 Paid Listing':'👑 Prime Pro Listing';
+  document.getElementById('newFormSub').textContent=plan==='free'?'Apne business ki basic listing banayein':plan==='paid'?'Paid Listing ke liye apna complete business profile banayein':'Prime Pro ke liye apna premium business profile banayein';
+  document.getElementById('newCategoryTitle').textContent='📋 Select Service Categories (Max '+max+')';
+  document.getElementById('newPhotoButton').textContent='📸 '+(plan==='free'?'Select Photos':'Add Photos')+' (Max '+photoMax+')';
+  document.getElementById('newSubmitButton').textContent=plan==='free'?'🆓 CREATE FREE LISTING':plan==='paid'?'💎 CONTINUE TO PAID PLAN':'👑 CONTINUE TO PRIME PRO';
+  document.getElementById('newVideoArea').style.display=plan==='free'?'none':'block';
+  const box=document.getElementById('newCategoryChecklist');box.innerHTML='';
+  allWebsiteCategories().forEach(cat=>{const label=document.createElement('label');label.className='vendorCategoryOption';const cb=document.createElement('input');cb.type='checkbox';cb.value=cat;cb.onchange=()=>{const checked=[...box.querySelectorAll('input:checked')];if(checked.length>max){cb.checked=false;alert('Is plan mein maximum '+max+' categories select kar sakte hain.');return;}newSelectedCategories=checked.map(x=>x.value);document.getElementById('newCategoryHint').textContent=newSelectedCategories.length+' category selected: '+newSelectedCategories.join(', ');};const span=document.createElement('span');span.textContent=cat;label.append(cb,span);box.appendChild(label);});
+  document.getElementById('newCategoryHint').textContent='No Category Selected';
+  document.getElementById('newPhotoStatus').textContent='Abhi koi photo select nahi hui';
+  document.getElementById('newListingMessage').textContent='';
+}
+function backToListingPlans(){document.getElementById('listingPlansScreen').style.display='block';document.getElementById('listingFormScreen').style.display='none';}
+function handleNewPhotos(e){const max=newListingPlan==='free'?4:newListingPlan==='paid'?7:12;const files=[...(e.target.files||[])];if(files.length>max){alert('Maximum '+max+' photos select kar sakte hain.');e.target.value='';newSelectedPhotos=[];return;}newSelectedPhotos=files;document.getElementById('newPhotoStatus').textContent=files.length+' photo select hui';}
+async function submitNewListing(){
+  const name=document.getElementById('newBusinessName').value.trim(),owner=document.getElementById('newOwnerName').value.trim(),phone=document.getElementById('newMobile').value.trim(),city=document.getElementById('newCity').value.trim();
+  if(!name||!owner||!phone||!city||!newSelectedCategories.length){alert('Business Name, Owner Name, Mobile, City aur kam se kam 1 category zaruri hai.');return;}
+  if(phone.replace(/\D/g,'').length<10){alert('Mobile Number sahi se bharo.');return;}
+  const row={name,owner_name:owner,phone,city,category:newSelectedCategories.join(', '),price:document.getElementById('newStartingPrice').value?Number(document.getElementById('newStartingPrice').value):null,description:document.getElementById('newDescription').value.trim(),status:'pending'};
+  if(newListingPlan!=='free') row.video_link=document.getElementById('newVideoLink').value.trim();
+  try{const {error}=await supabaseClient.from('vendors').insert([row]);if(error)throw error;document.getElementById('newListingMessage').textContent='Listing submit ho gayi. Admin approval ke baad live hogi.';document.getElementById('newSubmitButton').disabled=true;}catch(err){document.getElementById('newListingMessage').textContent='Error: '+err.message;}}
 </script>
 </body>
 </html>
