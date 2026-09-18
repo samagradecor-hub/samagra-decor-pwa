@@ -2403,5 +2403,627 @@ async function submitNewListing(){
   if(newListingPlan!=='free') row.video_link=document.getElementById('newVideoLink').value.trim();
   try{const {error}=await supabaseClient.from('vendors').insert([row]);if(error)throw error;document.getElementById('newListingMessage').textContent='Listing submit ho gayi. Admin approval ke baad live hogi.';document.getElementById('newSubmitButton').disabled=true;}catch(err){document.getElementById('newListingMessage').textContent='Error: '+err.message;}}
 </script>
+
+<script>
+/*
+ * SAMAGRA DECOR — APP/SUPABASE SYNC PATCH
+ * UI is intentionally untouched.
+ * Vendor save flow follows the Android app:
+ * FREE  -> vendors table directly (status=pending)
+ * PAID/PRIME -> pending_vendor_registrations -> create-subscription
+ * Payment verified -> check-payment-status -> vendor created -> media patch
+ */
+(function () {
+  "use strict";
+
+  let webPaymentRef = "";
+  let webPendingVendorData = null;
+  let webPaymentActive = false;
+  let webPaymentTimer = null;
+  let webMediaFiles = [];
+
+  const APP_MAX_DB_PHOTOS = 4;
+
+  function cleanPhoneNumber(v) {
+    return String(v || "").replace(/\D/g, "");
+  }
+
+  function safePriceString(v) {
+    let x = String(v == null ? "" : v).trim()
+      .replace(/₹/g, "")
+      .replace(/,/g, "")
+      .trim();
+    return x || "0";
+  }
+
+  function getCurrentFirebaseUser() {
+    try {
+      return (typeof firebaseAuth !== "undefined" && firebaseAuth)
+        ? firebaseAuth.currentUser
+        : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function appListingType(plan) {
+    if (plan === "paid") return "paid";
+    if (plan === "prime_pro") return "prime_pro";
+    return "free";
+  }
+
+  function planMaxCategories(plan) {
+    return plan === "free" ? 2 : plan === "paid" ? 7 : 12;
+  }
+
+  function planMaxPhotos(plan) {
+    return plan === "free" ? 4 : plan === "paid" ? 7 : 12;
+  }
+
+  function buildAppVendorData() {
+    const user = getCurrentFirebaseUser();
+
+    const businessName = document.getElementById("newBusinessName").value.trim();
+    const ownerName = document.getElementById("newOwnerName").value.trim();
+    const mobile = cleanPhoneNumber(document.getElementById("newMobile").value);
+    const city = document.getElementById("newCity").value.trim();
+    const category = newSelectedCategories.join(", ");
+    const price = safePriceString(document.getElementById("newStartingPrice").value);
+    const description = document.getElementById("newDescription").value.trim();
+    const videoLink = newListingPlan === "free"
+      ? ""
+      : document.getElementById("newVideoLink").value.trim();
+
+    return {
+      business_name: businessName,
+      name: businessName,
+      owner_name: ownerName,
+
+      image_url_1: "",
+      image_url_2: "",
+      image_url_3: "",
+      image_url_4: "",
+
+      video_url: videoLink,
+      video: videoLink,
+      videoUrl: videoLink,
+
+      email: user && user.email ? user.email : "",
+      mobile: mobile,
+      phone: mobile,
+      city: city,
+      category: category,
+      price: price,
+      description: description,
+
+      firebase_uid: user && user.uid ? user.uid : "",
+      status: "pending",
+      listing_type: appListingType(newListingPlan),
+      rating: 0,
+      review_count: 0
+    };
+  }
+
+  async function appUploadImage(file, vendorId, index) {
+    if (!supabaseClient) throw new Error("Supabase connect nahi hai.");
+
+    const compressed = await compressImage(file, 1000, 0.75);
+    const path = "vendors/" + vendorId + "/photo_" + (index + 1) + "_" +
+      (crypto.randomUUID ? crypto.randomUUID() : Date.now() + "_" + Math.random().toString(36).slice(2)) +
+      ".jpg";
+
+    const { error } = await supabaseClient.storage
+      .from("vendor-media")
+      .upload(path, compressed, {
+        cacheControl: "3600",
+        upsert: true,
+        contentType: "image/jpeg"
+      });
+
+    if (error) throw new Error(error.message);
+
+    return SUPABASE_URL + "/storage/v1/object/public/vendor-media/" + path;
+  }
+
+  async function appPatchVendorMedia(vendorId, files, videoUrl) {
+    if (!vendorId) return;
+
+    const urls = ["", "", "", ""];
+    const count = Math.min(files.length, APP_MAX_DB_PHOTOS);
+
+    for (let i = 0; i < count; i++) {
+      urls[i] = await appUploadImage(files[i], vendorId, i);
+    }
+
+    const payload = {
+      image_url_1: urls[0],
+      image_url_2: urls[1],
+      image_url_3: urls[2],
+      image_url_4: urls[3],
+      video_url: videoUrl || "",
+      video: videoUrl || ""
+    };
+
+    const { error } = await supabaseClient
+      .from("vendors")
+      .update(payload)
+      .eq("id", vendorId);
+
+    if (error) throw new Error(error.message);
+  }
+
+  async function saveFreeVendor(vendorData) {
+    const { data, error } = await supabaseClient
+      .from("vendors")
+      .insert([vendorData])
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  async function savePendingVendor(vendorData, paymentRef) {
+    const pending = {
+      payment_ref: paymentRef,
+      firebase_uid: vendorData.firebase_uid || "",
+      business_name: vendorData.business_name || "",
+      name: vendorData.name || "",
+      owner_name: vendorData.owner_name || "",
+      email: vendorData.email || "",
+      mobile: vendorData.mobile || "",
+      phone: vendorData.phone || "",
+      city: vendorData.city || "",
+      category: vendorData.category || "",
+      price: vendorData.price || "0",
+      description: vendorData.description || "",
+      video_url: vendorData.video_url || "",
+      video: vendorData.video || "",
+      listing_type: vendorData.listing_type || newListingPlan,
+      razorpay_subscription_id: "",
+      payment_status: "pending"
+    };
+
+    const { error } = await supabaseClient
+      .from("pending_vendor_registrations")
+      .insert([pending]);
+
+    if (error) throw new Error(error.message);
+  }
+
+  async function createAppSubscription(paymentRef, vendorData) {
+    const listingType = vendorData.listing_type;
+
+    let plan = "";
+    if (listingType === "paid") plan = "monthly";
+    else if (listingType === "paid_yearly") plan = "yearly";
+    else if (listingType === "prime_pro") plan = "prime_pro";
+    else if (listingType === "prime_pro_yearly") plan = "prime_pro_yearly";
+    else throw new Error("Invalid listing plan");
+
+    const notes = {
+      payment_ref: paymentRef,
+      listing_type: listingType,
+      plan: plan
+    };
+
+    const body = {
+      customer_notify: true,
+      payment_ref: paymentRef,
+      vendor_data: vendorData,
+      listing_type: listingType,
+      notes: notes
+    };
+
+    const response = await fetch(SUPABASE_URL + "/functions/v1/create-subscription", {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    const result = await response.text();
+    let data = {};
+    try { data = JSON.parse(result); } catch (e) {}
+
+    if (!response.ok) {
+      throw new Error(result || "Subscription create failed");
+    }
+
+    if (!data.success) {
+      throw new Error(data.error || "Subscription create nahi hui");
+    }
+
+    if (!data.subscription_id) {
+      throw new Error("Subscription ID missing");
+    }
+
+    if (!data.short_url) {
+      throw new Error("Payment link unavailable");
+    }
+
+    return data;
+  }
+
+  async function checkAppPaymentStatus() {
+    if (!webPaymentActive || !webPaymentRef) return;
+
+    try {
+      const response = await fetch(SUPABASE_URL + "/functions/v1/check-payment-status", {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ payment_ref: webPaymentRef })
+      });
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+      if (!data.success) return;
+
+      const paymentStatus = String(data.payment_status || "").toLowerCase();
+      const vendorId = data.vendor_id || "";
+
+      if (paymentStatus === "paid" && vendorId) {
+        webPaymentActive = false;
+        if (webPaymentTimer) clearInterval(webPaymentTimer);
+        webPaymentTimer = null;
+
+        try {
+          const videoUrl = webPendingVendorData
+            ? (webPendingVendorData.video_url || "")
+            : "";
+
+          await appPatchVendorMedia(vendorId, webMediaFiles, videoUrl);
+
+          const msg = document.getElementById("newListingMessage");
+          if (msg) msg.textContent = "Payment successful ✅ Listing save ho gayi. Admin approval ke baad live hogi.";
+
+          alert("Payment successful ✅\nListing save ho gayi. Admin approval ke baad website aur app dono me dikhegi.");
+
+          webPendingVendorData = null;
+          webMediaFiles = [];
+          await loadVendors();
+
+          setTimeout(function () {
+            closeListingModal();
+          }, 700);
+        } catch (mediaError) {
+          const msg = document.getElementById("newListingMessage");
+          if (msg) msg.textContent =
+            "Payment successful, lekin photo save error: " + mediaError.message;
+          alert("Payment successful hai, lekin photo save nahi ho paayi. Vendor record save ho chuka hai.");
+        }
+        return;
+      }
+
+      if (paymentStatus === "cancelled" ||
+          paymentStatus === "failed" ||
+          paymentStatus === "subscription_failed") {
+        webPaymentActive = false;
+        if (webPaymentTimer) clearInterval(webPaymentTimer);
+        webPaymentTimer = null;
+
+        const msg = document.getElementById("newListingMessage");
+        if (msg) msg.textContent = "Payment successful nahi hua.";
+        alert("Payment successful nahi hua.");
+        return;
+      }
+
+      // App flow: pending/authenticated -> check again after 3 seconds.
+    } catch (e) {
+      // Network errors are retried by the existing timer.
+    }
+  }
+
+  function startPaymentPolling() {
+    if (webPaymentTimer) clearInterval(webPaymentTimer);
+    webPaymentTimer = setInterval(checkAppPaymentStatus, 3000);
+    checkAppPaymentStatus();
+  }
+
+  // Keep the existing plan UI exactly as it is, but make its behavior match the app.
+  window.openPlanForm = function (plan) {
+    newListingPlan = plan;
+    newSelectedCategories = [];
+    newSelectedPhotos = [];
+    webMediaFiles = [];
+
+    const plans = document.getElementById("listingPlansScreen");
+    const form = document.getElementById("listingFormScreen");
+    if (plans) plans.style.display = "none";
+    if (form) form.style.display = "block";
+
+    const max = planMaxCategories(plan);
+    const photoMax = planMaxPhotos(plan);
+
+    document.getElementById("newFormTitle").textContent =
+      plan === "free" ? "🆓 Free Listing" :
+      plan === "paid" ? "💎 Paid Listing" :
+      "👑 Prime Pro Listing";
+
+    document.getElementById("newFormSub").textContent =
+      plan === "free" ? "Apne business ki basic listing banayein" :
+      plan === "paid" ? "Paid Listing ke liye apna complete business profile banayein" :
+      "Prime Pro ke liye apna premium business profile banayein";
+
+    document.getElementById("newCategoryTitle").textContent =
+      "📋 Select Service Categories (Max " + max + ")";
+
+    document.getElementById("newPhotoButton").textContent =
+      "📸 " + (plan === "free" ? "Select Photos" : "Add Photos") +
+      " (Max " + photoMax + ")";
+
+    document.getElementById("newSubmitButton").textContent =
+      plan === "free" ? "🆓 CREATE FREE LISTING" :
+      plan === "paid" ? "💎 CONTINUE TO PAID PLAN" :
+      "👑 CONTINUE TO PRIME PRO";
+
+    document.getElementById("newVideoArea").style.display =
+      plan === "free" ? "none" : "block";
+
+    const box = document.getElementById("newCategoryChecklist");
+    box.innerHTML = "";
+
+    allWebsiteCategories().forEach(function (cat) {
+      const label = document.createElement("label");
+      label.className = "vendorCategoryOption";
+
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.value = cat;
+
+      cb.onchange = function () {
+        const checked = Array.from(box.querySelectorAll("input:checked"));
+        if (checked.length > max) {
+          cb.checked = false;
+          alert("Is plan mein maximum " + max + " categories select kar sakte hain.");
+          return;
+        }
+
+        newSelectedCategories = checked.map(function (x) { return x.value; });
+
+        document.getElementById("newCategoryHint").textContent =
+          newSelectedCategories.length +
+          " category selected: " +
+          newSelectedCategories.join(", ");
+      };
+
+      const span = document.createElement("span");
+      span.textContent = cat;
+
+      label.appendChild(cb);
+      label.appendChild(span);
+      box.appendChild(label);
+    });
+
+    document.getElementById("newCategoryHint").textContent = "No Category Selected";
+    document.getElementById("newPhotoStatus").textContent = "Abhi koi photo select nahi hui";
+    document.getElementById("newListingMessage").textContent = "";
+    document.getElementById("newSubmitButton").disabled = false;
+  };
+
+  window.handleNewPhotos = function (e) {
+    const max = planMaxPhotos(newListingPlan);
+    const files = Array.from(e.target.files || []);
+
+    if (files.length > max) {
+      alert("Maximum " + max + " photos select kar sakte hain.");
+      e.target.value = "";
+      newSelectedPhotos = [];
+      webMediaFiles = [];
+      document.getElementById("newPhotoStatus").textContent = "Abhi koi photo select nahi hui";
+      return;
+    }
+
+    newSelectedPhotos = files;
+    webMediaFiles = files;
+
+    document.getElementById("newPhotoStatus").textContent =
+      files.length + " photo select hui";
+  };
+
+  window.submitNewListing = async function () {
+    if (!supabaseClient) {
+      alert("Supabase connect nahi hai.");
+      return;
+    }
+
+    if (webPaymentActive) {
+      alert("Payment already processing hai.");
+      return;
+    }
+
+    // Same app rule: real work requires login.
+    const user = getCurrentFirebaseUser();
+    if (!user) {
+      alert("Vendor listing ke liye pehle Login kijiye.");
+      const loginModal = document.getElementById("loginModal");
+      if (loginModal) openModal("loginModal");
+      return;
+    }
+
+    const name = document.getElementById("newBusinessName").value.trim();
+    const owner = document.getElementById("newOwnerName").value.trim();
+    const phone = cleanPhoneNumber(document.getElementById("newMobile").value);
+    const city = document.getElementById("newCity").value.trim();
+    const price = document.getElementById("newStartingPrice").value.trim();
+    const desc = document.getElementById("newDescription").value.trim();
+
+    if (!name || !owner || !phone || !city || !newSelectedCategories.length) {
+      alert("Business Name, Owner Name, Mobile, City aur kam se kam 1 category zaruri hai.");
+      return;
+    }
+
+    if (phone.length < 10) {
+      alert("Mobile Number sahi se bharo.");
+      return;
+    }
+
+    if (!price) {
+      alert("Starting Price dalo.");
+      return;
+    }
+
+    if (!desc) {
+      alert("Business Description dalo.");
+      return;
+    }
+
+    if (newSelectedCategories.length > planMaxCategories(newListingPlan)) {
+      alert("Maximum " + planMaxCategories(newListingPlan) + " categories allowed hain.");
+      return;
+    }
+
+    if (newSelectedPhotos.length > planMaxPhotos(newListingPlan)) {
+      alert("Maximum " + planMaxPhotos(newListingPlan) + " photos allowed hain.");
+      return;
+    }
+
+    const videoEl = document.getElementById("newVideoLink");
+    const videoLink = newListingPlan === "free"
+      ? ""
+      : (videoEl ? videoEl.value.trim() : "");
+
+    if (videoLink &&
+        !videoLink.startsWith("http://") &&
+        !videoLink.startsWith("https://")) {
+      alert("Valid https:// video link dalo.");
+      return;
+    }
+
+    const btn = document.getElementById("newSubmitButton");
+    const msg = document.getElementById("newListingMessage");
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Please wait...";
+    }
+    if (msg) msg.textContent = "Details save process start ho raha hai...";
+
+    try {
+      const vendorData = buildAppVendorData();
+      webPendingVendorData = vendorData;
+
+      // FREE: Android app directly inserts into vendors first, then uploads/patches photos.
+      if (vendorData.listing_type === "free") {
+        const vendor = await saveFreeVendor(vendorData);
+
+        if (!vendor || !vendor.id) {
+          throw new Error("Vendor saved but vendor ID nahi mili.");
+        }
+
+        if (msg) msg.textContent = "Listing saved. Photos upload ho rahi hain...";
+
+        await appPatchVendorMedia(
+          vendor.id,
+          newSelectedPhotos,
+          vendorData.video_url || ""
+        );
+
+        if (msg) msg.textContent =
+          "Listing submit ho gayi ✅ Admin approval ke baad live hogi.";
+
+        alert("Free listing save ho gayi ✅\nAdmin approval ke baad app aur website dono me dikhegi.");
+
+        webPendingVendorData = null;
+        webMediaFiles = [];
+        await loadVendors();
+
+        setTimeout(function () {
+          closeListingModal();
+        }, 700);
+
+        return;
+      }
+
+      // PAID / PRIME PRO:
+      // Android app does NOT save directly into vendors before payment.
+      // It creates a payment_ref, stores temporary data in
+      // pending_vendor_registrations, then calls create-subscription.
+      webPaymentRef = (crypto.randomUUID
+        ? crypto.randomUUID()
+        : Date.now() + "-" + Math.random().toString(36).slice(2));
+
+      await savePendingVendor(vendorData, webPaymentRef);
+
+      if (msg) msg.textContent =
+        "Details save ho gayi ✅ Ab payment page open ho rahi hai...";
+
+      const subscription = await createAppSubscription(
+        webPaymentRef,
+        vendorData
+      );
+
+      webPaymentActive = true;
+
+      const paymentWindow = window.open(
+        subscription.short_url,
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+      if (!paymentWindow) {
+        // Popup blocker: open in same tab as fallback.
+        window.location.href = subscription.short_url;
+        return;
+      }
+
+      if (msg) msg.textContent =
+        "Payment page open ho gayi. Payment complete karke isi page par wapas aayein.";
+
+      startPaymentPolling();
+
+    } catch (err) {
+      webPaymentActive = false;
+      if (webPaymentTimer) clearInterval(webPaymentTimer);
+      webPaymentTimer = null;
+
+      if (msg) msg.textContent = "Error: " + (err.message || err);
+      alert("Save/Payment error: " + (err.message || err));
+
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent =
+          newListingPlan === "free"
+            ? "🆓 CREATE FREE LISTING"
+            : newListingPlan === "paid"
+              ? "💎 CONTINUE TO PAID PLAN"
+              : "👑 CONTINUE TO PRIME PRO";
+      }
+    }
+  };
+
+  // App checks payment again when the user returns to the app.
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && webPaymentActive) {
+      checkAppPaymentStatus();
+    }
+  });
+
+  window.addEventListener("focus", function () {
+    if (webPaymentActive) checkAppPaymentStatus();
+  });
+
+  // Make the old legacy business flow point to the current 3-plan UI,
+  // without changing the visible design.
+  window.continueToMonthlyPlan = function () {
+    if (typeof openListingModal === "function") {
+      openListingModal();
+    } else {
+      const m = document.getElementById("businessModal");
+      if (m) m.style.display = "flex";
+    }
+  };
+
+})();
+</script>
+
 </body>
 </html>
