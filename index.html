@@ -668,8 +668,8 @@
         <div class="vendorFormSub">Apne business ke liye listing plan choose karein</div>
         <div class="newPlanGrid">
           <div class="newPlanCard"><h2>🆓 Free Listing</h2><div class="newPlanPrice">₹0 <span>• Always Free</span></div><p>✅ Basic Vendor Profile<br>✅ Maximum 2 Categories<br>✅ Maximum 4 Business Photos<br>✅ Mobile / Call button<br>✅ WhatsApp button<br>✅ Customer Rating & Reviews<br>✅ Basic Search Listing<br><br>❌ Video Link<br>❌ Share Button<br>❌ Featured Listing</p><button class="monthlyBtn" onclick="openPlanForm('free')">CREATE FREE LISTING</button></div>
-          <div class="newPlanCard"><h2>💎 Paid Listing</h2><div class="newPlanPrice">₹29 / Month<br>₹199 / Year</div><p>✅ Complete Vendor Profile<br>✅ Maximum 7 Categories<br>✅ Maximum 7 Business Photos<br>✅ YouTube / Instagram / Drive Video Link<br>✅ Call & WhatsApp<br>✅ Customer Rating & Reviews<br>✅ Better Search Visibility<br>✅ Verified / Paid Vendor Badge<br>✅ Vendor Profile Share Button<br>✅ Active Subscription</p><button class="monthlyBtn" onclick="openPlanForm('paid')">CHOOSE PAID LISTING</button></div>
-          <div class="newPlanCard"><h2>👑 Prime Pro</h2><div class="newPlanPrice">₹149 / Month<br>₹999 / Year</div><p>⭐ Everything in Paid — ALL Features<br>⭐ Maximum 12 Categories<br>⭐ Maximum 12 Business / Portfolio Photos<br>⭐ Video Link<br>⭐ PRIME PRO Badge<br>⭐ Featured Business<br>⭐ Premium Vendor Profile<br>⭐ Better Customer Reach<br>⭐ Featured Section Visibility<br>⭐ Profile Sharing<br>⭐ Priority Search Visibility</p><button class="monthlyBtn" onclick="openPlanForm('prime_pro')">CHOOSE PRIME PRO</button></div>
+          <div class="newPlanCard"><h2>💎 Paid Listing</h2><div class="newPlanPrice">₹29 / Month<br>₹199 / Year</div><p>✅ Complete Vendor Profile<br>✅ Maximum 7 Categories<br>✅ Maximum 7 Business Photos<br>✅ YouTube / Instagram / Drive Video Link<br>✅ Call & WhatsApp<br>✅ Customer Rating & Reviews<br>✅ Better Search Visibility<br>✅ Verified / Paid Vendor Badge<br>✅ Vendor Profile Share Button<br>✅ Active Subscription</p><button class="monthlyBtn" onclick="chooseListingPlan('paid')">CHOOSE PAID LISTING</button></div>
+          <div class="newPlanCard"><h2>👑 Prime Pro</h2><div class="newPlanPrice">₹149 / Month<br>₹999 / Year</div><p>⭐ Everything in Paid — ALL Features<br>⭐ Maximum 12 Categories<br>⭐ Maximum 12 Business / Portfolio Photos<br>⭐ Video Link<br>⭐ PRIME PRO Badge<br>⭐ Featured Business<br>⭐ Premium Vendor Profile<br>⭐ Better Customer Reach<br>⭐ Featured Section Visibility<br>⭐ Profile Sharing<br>⭐ Priority Search Visibility</p><button class="monthlyBtn" onclick="chooseListingPlan('prime_pro')">CHOOSE PRIME PRO</button></div>
         </div>
         <button class="backBtn" onclick="closeListingModal()">← Back</button>
       </div>
@@ -762,8 +762,6 @@
     let vendors = [];
     let currentVendorList = [];
     let favorites = [];
-    let selectedPhotos = [];
-    let isSubmittingVendor = false;
 
     const mainCategories = [
       {name:"Marriage Garden",value:"Marriage Garden / Function Garden",icon:"🏡"},
@@ -1830,7 +1828,7 @@
           </div>
           <div class="faqItem">
             <h3>4. Vendor listing paid hai?</h3>
-            <p>Vendor listing ke liye monthly plan ₹19/month rakha gaya hai.</p>
+            <p>Vendor listing ke liye Free, Paid aur Prime Pro plans available hain. Paid aur Prime Pro me monthly aur yearly options available hain.</p>
           </div>
           <div class="faqItem">
             <h3>5. Samagra Decor direct service deta hai?</h3>
@@ -2088,18 +2086,63 @@
     );
   }
 
+  function baseListingPlan(plan) {
+    if (plan === "paid_yearly") return "paid";
+    if (plan === "prime_pro_yearly") return "prime_pro";
+    return plan;
+  }
+
   function planMaxCategories(plan) {
-    return plan === "free" ? 2 : plan === "paid" ? 7 : 12;
+    const base = baseListingPlan(plan);
+    return base === "free" ? 2 : base === "paid" ? 7 : 12;
   }
 
   function planMaxPhotos(plan) {
-    return plan === "free" ? 4 : plan === "paid" ? 7 : 12;
+    const base = baseListingPlan(plan);
+    return base === "free" ? 4 : base === "paid" ? 7 : 12;
   }
 
   function appListingType(plan) {
-    if (plan === "paid") return "paid";
-    if (plan === "prime_pro") return "prime_pro";
+    if (plan === "paid" || plan === "paid_yearly") return plan;
+    if (plan === "prime_pro" || plan === "prime_pro_yearly") return plan;
     return "free";
+  }
+
+  function chooseListingPlan(plan) {
+    if (plan === "free") {
+      openPlanForm("free");
+      return;
+    }
+
+    const label = plan === "paid" ? "Paid Listing" : "Prime Pro";
+    const monthly =
+      plan === "paid"
+        ? "₹29 / Month"
+        : "₹149 / Month";
+    const yearly =
+      plan === "paid"
+        ? "₹199 / Year"
+        : "₹999 / Year";
+
+    const choice = window.prompt(
+      label +
+        "\n\n1 = " + monthly +
+        "\n2 = " + yearly +
+        "\n\n1 ya 2 enter karein:",
+      "1"
+    );
+
+    if (choice === null) return;
+
+    const value = String(choice).trim().toLowerCase();
+
+    if (value === "2" || value === "yearly" || value === "year") {
+      openPlanForm(plan + "_yearly");
+    } else if (value === "1" || value === "monthly" || value === "month") {
+      openPlanForm(plan);
+    } else {
+      alert("Please 1 (Monthly) ya 2 (Yearly) select karein.");
+    }
   }
 
   function cryptoId() {
@@ -2158,22 +2201,25 @@
     const message = document.getElementById("newListingMessage");
     const submitButton = document.getElementById("newSubmitButton");
 
+    const basePlan = baseListingPlan(plan);
+    const isYearly = plan === "paid_yearly" || plan === "prime_pro_yearly";
+
     if (title) {
       title.textContent =
-        plan === "free"
+        basePlan === "free"
           ? "🆓 Free Listing"
-          : plan === "paid"
+          : basePlan === "paid"
             ? "💎 Paid Listing"
             : "👑 Prime Pro Listing";
     }
 
     if (sub) {
       sub.textContent =
-        plan === "free"
+        basePlan === "free"
           ? "Apne business ki basic listing banayein"
-          : plan === "paid"
-            ? "Paid Listing ke liye apna complete business profile banayein"
-            : "Prime Pro ke liye apna premium business profile banayein";
+          : basePlan === "paid"
+            ? "Paid Listing — " + (isYearly ? "Yearly Plan" : "Monthly Plan")
+            : "Prime Pro — " + (isYearly ? "Yearly Plan" : "Monthly Plan");
     }
 
     if (categoryTitle) {
@@ -2201,7 +2247,7 @@
     }
 
     if (videoArea) {
-      videoArea.style.display = plan === "free" ? "none" : "block";
+      videoArea.style.display = basePlan === "free" ? "none" : "block";
     }
 
     if (categoryBox) {
@@ -2367,7 +2413,7 @@
 
     const videoElement = document.getElementById("newVideoLink");
     const videoLink =
-      newListingPlan === "free"
+      baseListingPlan(newListingPlan) === "free"
         ? ""
         : videoElement
           ? videoElement.value.trim()
@@ -2512,8 +2558,12 @@
 
     if (vendorData.listing_type === "paid") {
       plan = "monthly";
+    } else if (vendorData.listing_type === "paid_yearly") {
+      plan = "yearly";
     } else if (vendorData.listing_type === "prime_pro") {
       plan = "prime_pro";
+    } else if (vendorData.listing_type === "prime_pro_yearly") {
+      plan = "prime_pro_yearly";
     } else {
       throw new Error("Invalid listing plan.");
     }
@@ -2764,7 +2814,7 @@
 
     const videoElement = document.getElementById("newVideoLink");
     const videoLink =
-      newListingPlan === "free"
+      baseListingPlan(newListingPlan) === "free"
         ? ""
         : videoElement
           ? videoElement.value.trim()
@@ -2886,9 +2936,9 @@
       if (button) {
         button.disabled = false;
         button.textContent =
-          newListingPlan === "free"
+          baseListingPlan(newListingPlan) === "free"
             ? "🆓 CREATE FREE LISTING"
-            : newListingPlan === "paid"
+            : baseListingPlan(newListingPlan) === "paid"
               ? "💎 CONTINUE TO PAID PLAN"
               : "👑 CONTINUE TO PRIME PRO";
       }
@@ -2899,6 +2949,7 @@
   window.closeListingModal = closeListingModal;
   window.backToListingPlans = backToListingPlans;
   window.openPlanForm = openPlanForm;
+  window.chooseListingPlan = chooseListingPlan;
   window.handleNewPhotos = handleNewPhotos;
   window.submitNewListing = submitNewListing;
 
