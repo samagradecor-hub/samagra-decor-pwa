@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Samagra Decor | Tent Wale, Decoration, Catering, DJ, Marriage Garden & Event Services India</title>
-  <meta name="title" content="Samagra Decor | Tent Wale, Decoration, Catering, DJ, Marriage Garden & Event Services India" />
-  <meta name="description" content="Samagra Decor par Marriage Garden, Tent Wale, Decoration, Catering/Halwai, DJ, Photographer, Makeup Artist, Mehndi Artist, Lighting/Sound, Event Planner aur sabhi event services India me ek jagah milti hain." />
+  <title>Samagra Decor | Event & Decoration Services, Vendors & Wedding Services India</title>
+  <meta name="title" content="Samagra Decor | Event & Decoration Services, Vendors & Wedding Services India" />
+  <meta name="description" content="Samagra Decor par Wedding Decoration, Tent Wale, Catering, DJ, Photography, Makeup, Marriage Garden aur event services ke trusted vendors ek jagah dhoondhein." />
   <meta name="keywords" content="Samagra Decor, tent wale, decoration, wedding decoration, catering halwai, DJ wale, photographer, makeup artist, mehndi artist, marriage garden, banquet hall, event planner, wedding planner, lighting sound, birthday decoration, event services India" />
   <meta name="author" content="Samagra Decor" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -166,7 +166,12 @@
     .heroText .mini{color:#f6d889;font-weight:bold;margin-bottom:14px;letter-spacing:.4px}
     .heroText h2{font-family:Georgia,serif;font-size:58px;line-height:.98;color:#fff;margin-bottom:18px}
     .heroText h2 span{color:var(--gold)}
-    .heroText p{color:#fff5dc;font-size:17px;line-height:1.55;max-width:540px;margin-bottom:18px}
+    .heroText p{color:#fff5dc;font-size:17px;line-height:1.55;max-width:700px;margin-bottom:18px}
+    .heroActions{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0 4px}
+    .heroMainBtn,.heroRequirementBtn{border:none;border-radius:11px;padding:14px 20px;font-size:15px;font-weight:800;cursor:pointer;transition:.2s;box-shadow:0 7px 18px rgba(0,0,0,.16)}
+    .heroMainBtn{background:linear-gradient(135deg,#efc55a,#d9a42d);color:#111;border:2px solid #d6a53a}
+    .heroRequirementBtn{background:#fff;color:#043b2f;border:2px solid #d6a53a}
+    .heroMainBtn:hover,.heroRequirementBtn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.22)}
     .trust{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
     .trust span{background:rgba(255,255,255,.09);border:1px solid rgba(214,165,58,.45);color:#fff8df;padding:9px 12px;border-radius:30px;font-size:13px;font-weight:bold}
     .heroImage{min-height:360px;border-radius:260px 0 0 260px;background:linear-gradient(90deg,rgba(4,59,47,.1),rgba(4,59,47,.35)),url("https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80");background-size:cover;background-position:center;border-left:4px solid var(--gold);box-shadow:0 20px 60px rgba(0,0,0,.35)}
@@ -319,6 +324,8 @@
       .navLogo{border-radius:12px}
       .hero{grid-template-columns:1fr;padding-top:25px;padding-bottom:42px}
       .heroText h2{font-size:43px}
+      .heroActions{flex-direction:column}
+      .heroMainBtn,.heroRequirementBtn{width:100%}
       .heroImage{min-height:245px;border-radius:30px;border-left:none;border:3px solid var(--gold)}
       .quickButtons{grid-template-columns:1fr;margin:15px 18px 12px;padding:0}
       .quickBtn,.quickGoldBtn{padding:17px;font-size:16px}
@@ -367,6 +374,298 @@
   .adDiscount{font-size:11px;padding:5px 8px;margin-top:5px}
   .adProfileBtn{font-size:12px;padding:10px 12px;margin-top:9px;white-space:nowrap}
 }
+
+    /* PREMIUM POPULAR SERVICES - STEP 2 */
+    .premiumCategoryRow{grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
+    .premiumCategoryRow .category{position:relative;min-height:122px;padding:16px 15px;align-items:flex-start;justify-content:flex-start;text-align:left;border:1px solid rgba(214,165,58,.35);border-radius:17px;background:linear-gradient(145deg,#fff,#fff9e9);box-shadow:0 7px 22px rgba(0,0,0,.06);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+    .premiumCategoryRow .category:hover{transform:translateY(-4px);border-color:var(--gold);box-shadow:0 13px 30px rgba(0,0,0,.12)}
+    .premiumCategoryRow .catIcon{width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#f7ead0;font-size:27px;margin-bottom:9px}
+    .premiumCategoryRow .category::after{content:"→";position:absolute;right:15px;bottom:14px;color:#b18422;font-size:19px;font-weight:900;transition:.2s}
+    .premiumCategoryRow .category:hover::after{transform:translateX(4px)}
+    .premiumCategoryRow .category{color:#043b2f;font-size:14px;font-weight:800}
+    .servicesCta{margin-top:18px;padding:16px 18px;border:1px solid #e7c45a;border-radius:15px;background:#fffdf5;display:flex;align-items:center;justify-content:space-between;gap:15px}
+    .servicesCta b{display:block;color:#043b2f;font-size:15px;margin-bottom:4px}
+    .servicesCta span{color:#666;font-size:13px}
+    .servicesCta button{flex:none;border:1px solid #d6a53a;background:#043b2f;color:#f7d77d;border-radius:10px;padding:11px 17px;font-weight:800;cursor:pointer;transition:.2s}
+    .servicesCta button:hover{background:#02251f;transform:translateY(-2px)}
+    @media(max-width:950px){.premiumCategoryRow{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:650px){
+      .premiumCategoryRow{grid-template-columns:repeat(2,1fr);gap:11px}
+      .premiumCategoryRow .category{min-height:105px;padding:13px 12px;font-size:13px}
+      .premiumCategoryRow .catIcon{width:45px;height:45px;font-size:24px}
+      .servicesCta{align-items:stretch;flex-direction:column}
+      .servicesCta button{width:100%}
+    }
+
+
+/* ================================
+   FINAL MARKETPLACE POLISH
+================================ */
+
+.sectionTopBar{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:6px;
+}
+.sectionTopBar .heading{margin-bottom:4px}
+.sectionViewBtn{
+  border:1px solid #d6a53a;
+  background:#fff;
+  color:#043b2f;
+  border-radius:10px;
+  padding:10px 15px;
+  font-weight:800;
+  cursor:pointer;
+}
+.sectionViewBtn:hover{
+  background:#fff8e8;
+  transform:translateY(-2px);
+}
+
+.postRequirementSection{
+  margin:25px 0 30px;
+  padding:0 18px;
+}
+.postReqContent{
+  max-width:1120px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:18px;
+  padding:22px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#043b2f,#075443);
+  color:#fff;
+  box-shadow:0 12px 32px rgba(4,59,47,.18);
+}
+.postReqIcon{
+  width:58px;height:58px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:16px;
+  background:#f7d77d;
+  color:#043b2f;
+  font-size:28px;
+}
+.postReqContent h2{
+  margin:0 0 6px;
+  font-size:22px;
+}
+.postReqContent p{
+  margin:0;
+  color:rgba(255,255,255,.84);
+  line-height:1.5;
+  font-size:14px;
+}
+.postReqPoints{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px 16px;
+  margin-top:10px;
+  font-size:12px;
+  color:#f7d77d;
+  font-weight:700;
+}
+.postReqBtn{
+  border:1px solid #f7d77d;
+  background:#f7d77d;
+  color:#043b2f;
+  border-radius:11px;
+  padding:13px 18px;
+  font-weight:900;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.postReqBtn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+}
+
+.modalIntro{
+  margin:-4px 0 15px;
+  color:#666;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.finalTrustStrip{
+  max-width:1120px;
+  margin:25px auto 0;
+  padding:0 18px 25px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.finalTrustStrip > div{
+  padding:16px;
+  border:1px solid rgba(214,165,58,.28);
+  border-radius:14px;
+  background:#fffdf7;
+}
+.finalTrustStrip b{
+  display:block;
+  color:#043b2f;
+  font-size:14px;
+  margin-bottom:5px;
+}
+.finalTrustStrip span{
+  display:block;
+  color:#6c6c6c;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.mobileRequirementFab{
+  display:none !important;
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:14px;
+  z-index:9999;
+}
+
+@media(max-width:700px){
+  .sectionTopBar{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .sectionViewBtn{
+    width:100%;
+  }
+  .postRequirementSection{
+    padding:0 12px;
+  }
+  .postReqContent{
+    grid-template-columns:1fr;
+    text-align:left;
+    padding:18px;
+  }
+  .postReqIcon{
+    width:50px;height:50px;
+  }
+  .postReqBtn{
+    width:100%;
+  }
+  .finalTrustStrip{
+    grid-template-columns:1fr;
+    padding-left:12px;
+    padding-right:12px;
+  }
+  .mobileRequirementFab{
+    display:block !important;
+    position:fixed;
+    left:12px;
+    right:12px;
+    bottom:14px;
+    z-index:9999;
+    border:1px solid #d6a53a;
+    border-radius:12px;
+    padding:12px 16px;
+    background:#043b2f;
+    color:#f7d77d;
+    font-weight:900;
+    box-shadow:0 8px 24px rgba(0,0,0,.22);
+  }
+}
+
+/* SEO CONTENT — BOLDER, CLEANER, MORE PREMIUM */
+.seoContentPremium{
+  position:relative;
+  overflow:hidden;
+  padding-top:34px;
+  padding-bottom:34px;
+}
+.seoContentPremium::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:0;
+  transform:translateX(-50%);
+  width:110px;
+  height:4px;
+  border-radius:99px;
+  background:linear-gradient(90deg,#043b2f,#d6a53a);
+}
+.seoTitleRow{
+  text-align:center;
+  margin-bottom:18px;
+}
+.seoTitleBadge{
+  display:inline-flex;
+  align-items:center;
+  padding:6px 12px;
+  margin-bottom:10px;
+  border:1px solid rgba(214,165,58,.35);
+  border-radius:999px;
+  background:#fff9e9;
+  color:#8b681b;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+.seoContentPremium h2{
+  margin:0;
+  color:#043b2f;
+  font-size:clamp(27px,3vw,40px);
+  line-height:1.15;
+  font-weight:900;
+  letter-spacing:-.4px;
+}
+.seoContentPremium h2 span{
+  color:#c89527;
+  font-weight:900;
+}
+.seoContentPremium .seoLead{
+  max-width:1000px;
+  margin:13px auto 0;
+  color:#34423d;
+  font-size:15px;
+  line-height:1.8;
+  font-weight:500;
+}
+.seoContentPremium .seoLead strong{
+  color:#123f34;
+  font-weight:800;
+}
+.seoContentPremium .seoGrid{
+  margin-top:22px;
+}
+.seoContentPremium .seoCard{
+  border-radius:16px;
+  border:1px solid rgba(214,165,58,.24);
+  box-shadow:0 7px 22px rgba(0,0,0,.05);
+  transition:.2s ease;
+}
+.seoContentPremium .seoCard:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(0,0,0,.09);
+}
+.seoContentPremium .seoCard h3{
+  color:#043b2f;
+  font-weight:900;
+}
+.seoContentPremium .seoKeywords span{
+  font-weight:700;
+  border-color:rgba(214,165,58,.3);
+}
+@media(max-width:650px){
+  .seoContentPremium{
+    padding-top:28px;
+    padding-bottom:28px;
+  }
+  .seoContentPremium h2{
+    font-size:26px;
+  }
+  .seoContentPremium .seoLead{
+    font-size:13px;
+    line-height:1.7;
+  }
+  .seoTitleBadge{
+    font-size:9px;
+  }
+}
 </style>
 
 <style>
@@ -404,13 +703,19 @@
 
     <div class="hero">
       <div class="heroText">
-        <div class="mini">India's All-in-One Event & Decoration Marketplace</div>
+        <div class="mini">🇮🇳 India's Event & Decoration Marketplace</div>
         <h2>Har Function<br><span>Ki Puri Tayari</span></h2>
-        <p>Samagra Decor par aap Tent Wale, Decoration, Catering, DJ, Photographer, Makeup, Marriage Garden aur event ki sabhi services ek jagah dhoondh sakte ho.</p>
+        <p>Wedding, Birthday, Decoration, Catering, DJ, Photography, Marriage Garden aur event ki har service — trusted vendors ke saath ek hi jagah.</p>
+
+        <div class="heroActions">
+          <button class="heroMainBtn" onclick="goTo('vendors')">🔍 Find Vendors</button>
+          <button class="heroRequirementBtn" onclick="openRequirementWhatsApp()">📢 Post Your Requirement</button>
+        </div>
+
         <div class="trust">
           <span>✅ Verified Vendors</span>
-          <span>💰 Best Price</span>
-          <span>🔒 Secure Contact</span>
+          <span>💰 Compare Prices</span>
+          <span>📞 Direct Contact</span>
           <span>🎧 Support</span>
         </div>
       </div>
@@ -490,8 +795,35 @@
 
   <section id="services">
     <h2 class="heading">Popular <span>Services</span></h2>
-    <p class="sectionSub">Gaon se lekar metro city tak, har function ki service ek jagah.</p>
-    <div class="categoryRow" id="mainCategoryRow"></div>
+    <p class="sectionSub">Wedding, Birthday, Party aur har function ki trusted event services ek hi jagah.</p>
+    <div class="categoryRow premiumCategoryRow" id="mainCategoryRow"></div>
+    <div class="servicesCta">
+      <div>
+        <b>Apni service yahan nahi mili?</b>
+        <span>100+ event services category-wise dekhein.</span>
+      </div>
+      <button type="button" onclick="openModal('moreServicesModal')">View All Services →</button>
+    </div>
+  </section>
+
+
+  <section id="postRequirement" class="postRequirementSection">
+    <div class="postReqContent">
+      <div class="postReqIcon">📢</div>
+      <div>
+        <h2>Apni Event Requirement Post Karein</h2>
+        <p>Event date, city, service aur budget batayein. Samagra Decor par vendors se directly enquiry karein.</p>
+        <div class="postReqPoints">
+          <span>✓ City & Service</span>
+          <span>✓ Event Date</span>
+          <span>✓ Budget</span>
+          <span>✓ Direct WhatsApp Enquiry</span>
+        </div>
+      </div>
+      <button class="postReqBtn" type="button" onclick="openRequirementWhatsApp()">
+        Post Your Requirement →
+      </button>
+    </div>
   </section>
 
   <section id="vendors">
@@ -513,10 +845,13 @@
     </div>
   </div>
 
-  <section class="seoContent" id="seo-services">
-    <h2>Samagra Decor <span>Event Services India</span></h2>
-    <p>Samagra Decor ek all-in-one event aur decoration marketplace hai, jahan customer wedding, birthday, corporate event, griha pravesh, baby shower, anniversary aur party ke liye trusted vendors dhoondh sakte hain.</p>
-    <p>Yahan Marriage Garden, Tent Wale, Decoration, Catering/Halwai, DJ Wale, Photographer, Makeup Wale, Lighting/Sound, Mehndi Artist, Event Planner aur bahut sari event services ek jagah milti hain.</p>
+  <section class="seoContent seoContentPremium" id="seo-services">
+    <div class="seoTitleRow">
+      <div class="seoTitleBadge">🇮🇳 INDIA'S EVENT MARKETPLACE</div>
+      <h2>Samagra Decor <span>Event Services India</span></h2>
+    </div>
+    <p class="seoLead">Samagra Decor ek <strong>all-in-one event aur decoration marketplace</strong> hai, jahan customer <strong>wedding, birthday, corporate event, griha pravesh, baby shower, anniversary</strong> aur party ke liye trusted vendors dhoondh sakte hain.</p>
+    <p class="seoLead">Yahan <strong>Marriage Garden, Tent Wale, Decoration, Catering/Halwai, DJ Wale, Photographer, Makeup Wale, Lighting/Sound, Mehndi Artist</strong>, Event Planner aur bahut sari event services ek jagah milti hain.</p>
 
     <div class="seoGrid">
       <div class="seoCard">
@@ -547,8 +882,8 @@
 
     <div class="seoKeywords" aria-label="Popular service keywords">
       <span>Tent Wale</span>
-      <span>Restaurants all Party Celebration</span>
-      <span>Celebration Pack Party</span>
+      <span>Birthday Party</span>
+      <span>Party Venue</span>
       <span>Marriage Garden</span>
       <span>Wedding Decoration</span>
       <span>Catering Halwai</span>
@@ -583,6 +918,13 @@
         <div class="reviewUser"><b>Ananya Kapoor<br><small>Mumbai</small></b><span class="stars">★★★★★ 5.0</span></div>
       </div>
     </div>
+  </section>
+
+
+  <section class="finalTrustStrip">
+    <div><b>🛡️ Trusted Vendors</b><span>Business details are shown from vendor listings.</span></div>
+    <div><b>📞 Direct Contact</b><span>Call or WhatsApp vendors directly.</span></div>
+    <div><b>📱 Easy Discovery</b><span>Find event services by city and category.</span></div>
   </section>
 
   <footer>
@@ -771,7 +1113,7 @@
       {name:"Tent Wale",value:"Tent House / Tent Wale",icon:"⛺"},
       {name:"Catering/Halwai",value:"Catering / Halwai",icon:"🍽️"},
       {name:"DJ Wale",value:"DJ / Music",icon:"🎧"},
-      {name:"Photografar",value:"Photography",icon:"📷"},
+      {name:"Photographer",value:"Photography",icon:"📷"},
       {name:"Makeup Wale",value:"Makeup Artist",icon:"💄"},
       {name:"Lighting/Sound",value:"Sound System",icon:"💡"},
       {name:"Mehndi Artist",value:"Mehndi Artist",icon:"🤲"},
@@ -2945,6 +3287,14 @@
     }
   }
 
+  function openRequirementWhatsApp(){
+    const message = encodeURIComponent(
+      "Hello Samagra Decor, mujhe event service ke liye vendor chahiye.\n\nCity: \nService: \nEvent Date: \nBudget: \nGuest Count: \nRequirement: "
+    );
+    window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + message, "_blank", "noopener,noreferrer");
+  }
+
+  window.openRequirementWhatsApp = openRequirementWhatsApp;
   window.openListingModal = openListingModal;
   window.closeListingModal = closeListingModal;
   window.backToListingPlans = backToListingPlans;
@@ -2966,6 +3316,11 @@
   });
 })();
 </script>
+
+
+  <button class="mobileRequirementFab" type="button" onclick="openRequirementWhatsApp()" aria-label="Post Your Requirement">
+    📢 Post Requirement
+  </button>
 
 </body>
 </html>
