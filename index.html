@@ -666,6 +666,84 @@
     font-size:9px;
   }
 }
+
+/* FINAL MOBILE HOME LAYOUT */
+.heroActions{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+  max-width:560px;
+  margin:0 auto;
+}
+.heroListBtn,
+.heroMainBtn,
+.heroRequirementBtn{
+  width:100%;
+  min-height:54px;
+  border-radius:13px;
+  font-size:17px;
+  font-weight:900;
+  letter-spacing:.1px;
+}
+.heroListBtn{
+  border:2px solid #043b2f;
+  background:linear-gradient(135deg,#f4cc62,#dca82f);
+  color:#10241f;
+  box-shadow:0 8px 20px rgba(0,0,0,.16);
+}
+.heroListBtn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 24px rgba(0,0,0,.20);
+}
+.heroActions .heroMainBtn,
+.heroActions .heroRequirementBtn{
+  margin:0;
+}
+.quickButtons{
+  grid-template-columns:repeat(3,1fr);
+}
+.quickButtons .quickBtn,
+.quickButtons .quickGoldBtn{
+  min-height:54px;
+}
+.field input#city{
+  width:100%;
+  border:none;
+  outline:none;
+  background:transparent;
+  color:#555;
+  font-size:14px;
+  font-family:inherit;
+  padding:0;
+}
+.field input#city::placeholder{
+  color:#777;
+  opacity:1;
+}
+@media(max-width:700px){
+  .quickButtons{
+    grid-template-columns:1fr;
+    margin:15px 18px 12px;
+    padding:0;
+    gap:10px;
+  }
+  .quickButtons .quickBtn,
+  .quickButtons .quickGoldBtn{
+    width:100%;
+    min-height:58px;
+    padding:16px;
+    font-size:17px;
+  }
+  .heroActions{
+    gap:10px;
+  }
+  .heroListBtn,
+  .heroMainBtn,
+  .heroRequirementBtn{
+    min-height:56px;
+    font-size:17px;
+  }
+}
 </style>
 
 <style>
@@ -708,6 +786,7 @@
         <p>Wedding, Birthday, Decoration, Catering, DJ, Photography, Marriage Garden aur event ki har service — trusted vendors ke saath ek hi jagah.</p>
 
         <div class="heroActions">
+          <button class="heroListBtn" onclick="openListingModal()">🏪 List Your Business</button>
           <button class="heroMainBtn" onclick="goTo('vendors')">🔍 Find Vendors</button>
           <button class="heroRequirementBtn" onclick="openRequirementWhatsApp()">📢 Post Your Requirement</button>
         </div>
@@ -723,10 +802,9 @@
   </div>
 
   <div class="quickButtons">
-    <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
     <button class="quickBtn" id="authQuickBtn" onclick="openAuthModal()">Login / Create Account</button>
-    <button class="quickGoldBtn" onclick="openListingModal()">List Your Business</button>
     <button class="quickGoldBtn" onclick="downloadApp()" title="Download Samagra Decor Android APK">📱 Download App</button>
+    <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
     <button class="quickBtn" id="adminQuickBtn" onclick="openAdminPanel()" style="display:none;">Admin Panel</button>
   </div>
 
@@ -735,20 +813,20 @@
       <div class="fieldIcon">📍</div>
       <div style="width:100%;">
         <label>City</label>
-        <select id="city">
-          <option value="">Select your city</option>
-          <option>Bhopal</option>
-          <option>Indore</option>
-          <option>Delhi</option>
-          <option>Mumbai</option>
-          <option>Jaipur</option>
-          <option>Lucknow</option>
-          <option>Noida</option>
-          <option>Jabalpur</option>
-          <option>Gwalior</option>
-          <option>Ujjain</option>
-          <option>All India</option>
-        </select>
+        <input id="city" type="text" list="cityList" placeholder="Type your city" autocomplete="address-level2">
+        <datalist id="cityList">
+          <option value="Bhopal"></option>
+          <option value="Indore"></option>
+          <option value="Delhi"></option>
+          <option value="Mumbai"></option>
+          <option value="Jaipur"></option>
+          <option value="Lucknow"></option>
+          <option value="Noida"></option>
+          <option value="Jabalpur"></option>
+          <option value="Gwalior"></option>
+          <option value="Ujjain"></option>
+          <option value="All India"></option>
+        </datalist>
       </div>
     </div>
 
@@ -3317,10 +3395,6 @@
 })();
 </script>
 
-
-  <button class="mobileRequirementFab" type="button" onclick="openRequirementWhatsApp()" aria-label="Post Your Requirement">
-    📢 Post Requirement
-  </button>
 
 </body>
 </html>
