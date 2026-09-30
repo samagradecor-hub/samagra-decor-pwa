@@ -2433,26 +2433,134 @@
 
     function openModal(id){
       const el = document.getElementById(id);
-      if(el) el.style.display = "flex";
+      if(!el) return;
+
+      el.style.display = "flex";
+
+      if(!restoringHistoryState){
+        const current = history.state;
+        if(!current || current.sdModal !== id){
+          history.pushState(
+            {
+              sdInternal:true,
+              sdModal:id,
+              sdSection:(current && current.sdSection) ? current.sdSection : "home"
+            },
+            "",
+            location.pathname + location.search + location.hash
+          );
+        }
+      }
     }
 
     function closeModal(id){
       const el = document.getElementById(id);
       if(el) el.style.display = "none";
+
+      /* If this modal was opened through the site's internal
+         history, remove that history entry too. */
+      if(!restoringHistoryState && history.state && history.state.sdModal === id){
+        history.back();
+      }
     }
 
-    function goTo(id){
-      const section = document.getElementById(id);
-      if(section) section.scrollIntoView({behavior:"smooth"});
+    /* ================================
+       INTERNAL PAGE BACK-BUTTON FIX
+       Browser/Android Back now moves back
+       inside the website instead of leaving
+       immediately when the user is navigating
+       between Samagra Decor sections.
+       ================================ */
+
+    let restoringHistoryState = false;
+
+    function closeAllOpenModals(){
+      document.querySelectorAll(".modal").forEach(function(el){
+        el.style.display = "none";
+      });
+
+      const listingModal = document.getElementById("listingModal");
+      if(listingModal) listingModal.style.display = "none";
 
       const menu = document.getElementById("menu");
       if(menu) menu.classList.remove("show");
+
       const menuBtn = document.querySelector(".mobileMenuBtn");
       if(menuBtn){
         menuBtn.setAttribute("aria-expanded","false");
         menuBtn.setAttribute("aria-label","Open menu");
         menuBtn.textContent = "☰";
       }
+    }
+
+    function scrollToSection(id, smooth){
+      const section = document.getElementById(id);
+      if(section){
+        section.scrollIntoView({behavior: smooth ? "smooth" : "auto", block:"start"});
+      }
+
+      const menu = document.getElementById("menu");
+      if(menu) menu.classList.remove("show");
+
+      const menuBtn = document.querySelector(".mobileMenuBtn");
+      if(menuBtn){
+        menuBtn.setAttribute("aria-expanded","false");
+        menuBtn.setAttribute("aria-label","Open menu");
+        menuBtn.textContent = "☰";
+      }
+    }
+
+    function goTo(id){
+      if(!id) return;
+
+      /* Add an internal browser-history entry.
+         Back button will return to the previous
+         Samagra Decor section first. */
+      if(!restoringHistoryState){
+        const current = history.state;
+
+        if(!current || current.sdSection !== id){
+          history.pushState(
+            {sdInternal:true, sdSection:id},
+            "",
+            "#" + id
+          );
+        }
+      }
+
+      scrollToSection(id, true);
+    }
+
+    function handleSamagraBackState(event){
+      restoringHistoryState = true;
+
+      closeAllOpenModals();
+
+      if(event.state && event.state.sdInternal && event.state.sdSection){
+        scrollToSection(event.state.sdSection, false);
+      }else{
+        /* Initial/home state */
+        const home = document.getElementById("home");
+        if(home) home.scrollIntoView({behavior:"auto", block:"start"});
+      }
+
+      setTimeout(function(){
+        restoringHistoryState = false;
+      }, 0);
+    }
+
+    window.addEventListener("popstate", handleSamagraBackState);
+
+    /* Give the current page a stable starting history state.
+       We do not prevent leaving the website from the real
+       home state; Back works normally after reaching the
+       beginning of the site's internal navigation. */
+    if(!history.state || !history.state.sdInternal){
+      history.replaceState(
+        {sdInternal:true, sdSection:"home"},
+        "",
+        location.pathname + location.search + "#home"
+      );
     }
 
     function toggleMenu(){
@@ -3542,5 +3650,15 @@
 </script>
 
 
+<script>
+/* Safety net: any future button using data-sd-back will navigate
+   back inside the website rather than forcing an external URL. */
+document.addEventListener("click", function(e){
+  const btn = e.target.closest("[data-sd-back]");
+  if(!btn) return;
+  e.preventDefault();
+  if(history.length > 1) history.back();
+});
+</script>
 </body>
 </html>
