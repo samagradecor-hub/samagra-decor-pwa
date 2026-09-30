@@ -745,6 +745,134 @@
 <style>
 .listing-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;overflow:auto;padding:20px}.listing-panel{max-width:760px;margin:30px auto;background:#fff8df;border:2px solid #d5a52f;border-radius:22px;padding:22px;color:#173f32}.listing-panel h2{margin-top:0}.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.plan-card{background:#fff;border:2px solid #d5a52f;border-radius:16px;padding:15px;cursor:pointer}.plan-card h3{margin:0 0 6px}.plan-card button,.listing-panel button{background:#064c3d;color:white;border:0;border-radius:10px;padding:11px 14px;cursor:pointer}.listing-form{display:none}.listing-form input,.listing-form textarea,.listing-form select{width:100%;box-sizing:border-box;margin:7px 0;padding:12px;border:1px solid #c9b778;border-radius:9px}.listing-actions{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}@media(max-width:650px){.plan-grid{grid-template-columns:1fr}.listing-panel{padding:15px}}
 </style>
+
+<style>
+/* ===== SAMAGRA DECOR FINAL MOBILE/UI POLISH ===== */
+.quickButtons{max-width:720px;margin:-42px auto 14px;padding:0 18px;grid-template-columns:1fr 1fr;gap:10px}
+.quickBtn,.quickGoldBtn{min-height:48px;padding:10px 12px;font-size:14px;border-radius:11px}
+.heroActions{margin:16px 0 2px}.heroListBtn{min-height:48px;padding:11px 16px;font-size:15px}.heroMainBtn,.heroRequirementBtn{display:none!important}
+.adSection{margin:16px auto 10px}.searchBox{margin:0 auto 22px}
+.vendorCard{border-radius:15px}
+.floatWhatsApp{width:50px;height:50px;right:12px;bottom:12px;font-size:24px}
+.trust{grid-template-columns:repeat(3,1fr);gap:8px}.trust span{text-align:center;padding:8px 9px}
+.downloadAppSection{max-width:1120px;margin:8px auto 24px;padding:0 18px}
+.downloadAppCard{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px;border:1px solid rgba(214,165,58,.55);border-radius:18px;background:linear-gradient(135deg,#fff4c8,#fffdf5);box-shadow:0 8px 24px rgba(0,0,0,.07)}
+.downloadAppKicker{font-size:11px;font-weight:900;letter-spacing:1px;color:#a77713;margin-bottom:4px}.downloadAppCard h2{color:#043b2f;font-size:21px;margin:0 0 5px}.downloadAppCard p{color:#666;font-size:13px;line-height:1.4;margin:0}
+.downloadAppCard button{flex:none;border:1px solid #d6a53a;border-radius:11px;padding:12px 18px;background:#043b2f;color:#f7d77d;font-weight:900;cursor:pointer}.downloadAppCard button:hover{background:#02251f;transform:translateY(-1px)}
+@media(max-width:700px){
+.quickButtons{max-width:none;margin:12px 12px 10px;padding:0;grid-template-columns:1fr 1fr;gap:8px}
+.quickBtn,.quickGoldBtn{min-height:48px;padding:10px 8px;font-size:13px;line-height:1.15}
+.adSection{margin:12px auto 8px;padding:0 12px}.searchBox{margin:0 12px 18px}.trust{grid-template-columns:1fr 1fr}
+.downloadAppSection{padding:0 12px;margin:6px auto 20px}.downloadAppCard{flex-direction:column;align-items:stretch;padding:16px}.downloadAppCard h2{font-size:19px}.downloadAppCard button{width:100%;min-height:46px}
+.floatWhatsApp{width:48px;height:48px;right:10px;bottom:10px;font-size:22px}
+}
+</style>
+
+<style>
+/* ===== FINAL REQUESTED UI CHANGES ===== */
+.heroActions{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  margin:16px 0 4px;
+}
+.heroLoginBtn,
+.heroListBtn{
+  width:100%;
+  min-height:48px;
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+}
+.heroLoginBtn{
+  border:2px solid #043b2f;
+  background:#fffdf7;
+  color:#043b2f;
+  box-shadow:0 7px 18px rgba(0,0,0,.13);
+}
+.heroListBtn{
+  border:2px solid #043b2f;
+  background:linear-gradient(135deg,#f4cc62,#dca82f);
+  color:#10241f;
+  box-shadow:0 7px 18px rgba(0,0,0,.15);
+}
+.heroLoginBtn:hover,
+.heroListBtn:hover{transform:translateY(-2px)}
+
+.quickButtons{display:none!important}
+
+/* Advertisement stays directly above search. */
+.adSection{margin:10px auto 12px}
+.searchBox{margin:0 auto 20px}
+
+/* Mobile: City / Category / Budget in one horizontal row. */
+@media(max-width:700px){
+  .heroActions{margin:13px 0 3px;gap:8px}
+  .heroLoginBtn,.heroListBtn{min-height:46px;padding:9px 12px;font-size:14px}
+
+  .searchBox{
+    margin:0 12px 18px;
+    padding:10px;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+  .searchBox .field{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:4px;
+    border:1px solid #eee;
+    border-radius:10px;
+    padding:8px 6px;
+    background:#fff;
+  }
+  .searchBox .fieldIcon{
+    width:28px;
+    height:28px;
+    font-size:15px;
+    border-radius:50%;
+    align-self:flex-start;
+  }
+  .searchBox .field label{
+    font-size:11px;
+    margin:0;
+  }
+  .searchBox .field input,
+  .searchBox .field select{
+    width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    font-size:11px;
+    padding:3px 0;
+    border:none;
+    outline:none;
+    background:#fff;
+  }
+  .searchBox .searchBtn{
+    grid-column:1/-1;
+    min-height:44px;
+    padding:9px 12px;
+    font-size:14px;
+  }
+
+  .vendorTop{align-items:flex-end}
+  .vendorTop .heading{
+    text-align:left;
+    font-size:29px;
+    margin-bottom:0;
+  }
+  .vendorTop .viewAll{
+    white-space:nowrap;
+    font-size:13px;
+    padding-bottom:4px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -781,9 +909,8 @@
         <p>Wedding, Birthday, Decoration, Catering, DJ, Photography, Marriage Garden aur event ki har service — trusted vendors ke saath ek hi jagah.</p>
 
         <div class="heroActions">
+          <button class="heroLoginBtn" id="authHeroBtn" onclick="openAuthModal()">Login / Create Account</button>
           <button class="heroListBtn" onclick="openListingModal()">🏪 List Your Business</button>
-          <button class="heroMainBtn" onclick="goTo('vendors')">🔍 Find Vendors</button>
-          <button class="heroRequirementBtn" onclick="openRequirementWhatsApp()">📢 Post Your Requirement</button>
         </div>
 
         <div class="trust">
@@ -796,12 +923,17 @@
     </div>
   </div>
 
-  <div class="quickButtons">
-    <button class="quickBtn" id="authQuickBtn" onclick="openAuthModal()">Login / Create Account</button>
-    <button class="quickGoldBtn" onclick="downloadApp()" title="Download Samagra Decor Android APK">📱 Download App</button>
-    <button class="quickBtn" onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</button>
-    <button class="quickBtn" id="adminQuickBtn" onclick="openAdminPanel()" style="display:none;">Admin Panel</button>
+<section class="adSection" id="advertisementSection" style="display:none;">
+  <div class="adAppCard">
+    <div class="adAppHeader">
+      <span class="adAppIcon">📢</span>
+      <div><div class="adAppTitle">Samagra Decor Offers</div><div class="adAppSubtitle">Latest decoration deals & services</div></div>
+      <span class="adLiveBadge">LIVE</span>
+    </div>
+    <div class="adTrack" id="adTrack"></div>
+    <div class="adBottom"><span id="adCounter">Advertisement</span><div class="adDots" id="adDots"></div></div>
   </div>
+</section>
 
   <div class="searchBox">
     <div class="field">
@@ -854,17 +986,15 @@
   </div>
 
 
-<section class="adSection" id="advertisementSection" style="display:none;">
-  <div class="adAppCard">
-    <div class="adAppHeader">
-      <span class="adAppIcon">📢</span>
-      <div><div class="adAppTitle">Samagra Decor Offers</div><div class="adAppSubtitle">Latest decoration deals & services</div></div>
-      <span class="adLiveBadge">LIVE</span>
+
+
+  <section id="vendors">
+    <div class="vendorTop">
+      <h2 class="heading">Featured <span>Vendors</span></h2>
+      <div class="viewAll" onclick="showAllVendors()">View All Vendors →</div>
     </div>
-    <div class="adTrack" id="adTrack"></div>
-    <div class="adBottom"><span id="adCounter">Advertisement</span><div class="adDots" id="adDots"></div></div>
-  </div>
-</section>
+    <div class="vendors" id="vendorList"></div>
+  </section>
 
   <section id="services">
     <h2 class="heading">Popular <span>Services</span></h2>
@@ -877,34 +1007,6 @@
       </div>
       <button type="button" onclick="openModal('moreServicesModal')">View All Services →</button>
     </div>
-  </section>
-
-
-  <section id="postRequirement" class="postRequirementSection">
-    <div class="postReqContent">
-      <div class="postReqIcon">📢</div>
-      <div>
-        <h2>Apni Event Requirement Post Karein</h2>
-        <p>Event date, city, service aur budget batayein. Samagra Decor par vendors se directly enquiry karein.</p>
-        <div class="postReqPoints">
-          <span>✓ City & Service</span>
-          <span>✓ Event Date</span>
-          <span>✓ Budget</span>
-          <span>✓ Direct WhatsApp Enquiry</span>
-        </div>
-      </div>
-      <button class="postReqBtn" type="button" onclick="openRequirementWhatsApp()">
-        Post Your Requirement →
-      </button>
-    </div>
-  </section>
-
-  <section id="vendors">
-    <div class="vendorTop">
-      <h2 class="heading">Featured <span>Vendors</span></h2>
-      <div class="viewAll" onclick="showAllVendors()">View All Vendors →</div>
-    </div>
-    <div class="vendors" id="vendorList"></div>
   </section>
 
   <div class="why">
@@ -1001,6 +1103,18 @@
   </section>
 
   
+
+  <section class="downloadAppSection" aria-label="Download Samagra Decor App">
+    <div class="downloadAppCard">
+      <div>
+        <div class="downloadAppKicker">📱 SAMAGRA DECOR APP</div>
+        <h2>Download the Samagra Decor App</h2>
+        <p>Vendors aur event services ko mobile par aur easily access karein.</p>
+      </div>
+      <button type="button" onclick="downloadApp()">📱 Download App</button>
+    </div>
+  </section>
+
 <footer class="sd-footer">
   <div class="sd-footer-inner">
     <div class="sd-footer-brand">
@@ -1699,10 +1813,10 @@
         .map(normalizeVendor);
 
       currentVendorList = [...vendors];
-      renderVendors(currentVendorList);
+      renderVendors(currentVendorList, true);
     }
 
-    function renderVendors(list){
+    function renderVendors(list, featuredOnly){
       const box = document.getElementById("vendorList");
       currentVendorList = list;
       if(list.length === 0){
@@ -1710,7 +1824,8 @@
         return;
       }
 
-      const html = list.map(function(v,index){
+      const displayList = featuredOnly ? list.slice(0, 3) : list;
+      const html = displayList.map(function(v,index){
         const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
 
         return `
