@@ -884,6 +884,36 @@
 @media(max-width:800px){.sd-footer-inner{grid-template-columns:1fr 1fr;gap:32px 24px;padding:40px 20px 30px}.sd-footer-brand{grid-column:1/-1;padding-right:0}.sd-footer-newsletter{margin:0;padding:22px 20px;flex-direction:column;align-items:stretch}.sd-newsletter-form{width:100%}.sd-footer-bottom{padding:18px 20px;flex-direction:column;align-items:flex-start}}
 @media(max-width:520px){.sd-footer-inner{grid-template-columns:1fr;gap:27px}.sd-footer-brand{grid-column:auto}.sd-footer-logo{width:185px}.sd-newsletter-form{flex-direction:column}.sd-newsletter-form button{min-height:44px}.sd-footer-bottom{font-size:12px}}
 
+
+/* Advertisement text layout fix - mobile friendly */
+.adInfo{min-width:0;padding:6px 10px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;overflow:hidden;box-sizing:border-box}
+.adDescription{display:flex!important;flex-direction:column;gap:5px;width:100%;margin:0 0 8px!important}
+.adDescItem{display:flex;align-items:flex-start;gap:6px;width:100%;line-height:1.38}
+.adDescCheck{flex:0 0 auto;font-size:0.95em;line-height:1.35}
+.adDescText{min-width:0;overflow-wrap:anywhere}
+
+.adInfo h3{width:100%;margin:0 0 8px;color:#173f32;font-size:clamp(20px,2.4vw,32px);line-height:1.18;font-weight:900;overflow-wrap:anywhere;word-break:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.adInfo p{width:100%;margin:0 0 8px;color:#3e3822;font-size:clamp(13px,1.4vw,17px);line-height:1.45;overflow-wrap:anywhere;word-break:normal}
+.adInfo .adDescription{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;overflow:hidden}
+.adInfo .adAdvertiser{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden;white-space:normal}
+.adPrice{line-height:1.1;margin-top:2px}
+.adActions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;margin-top:7px}
+.adDiscount{margin-top:0;white-space:nowrap}
+.adProfileBtn{margin-top:0;padding:10px 16px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:700px){
+  .adSlide{grid-template-columns:38% 62%;gap:8px;padding:10px;align-items:center}
+  .adSlide img{height:220px;max-height:220px}
+  .adInfo{padding:2px 3px;min-width:0}
+  .adInfo h3{font-size:17px;line-height:1.16;margin-bottom:6px;-webkit-line-clamp:2}
+  .adInfo p{font-size:11.5px;line-height:1.34;margin-bottom:6px}
+  .adInfo .adDescription{display:flex!important;flex-direction:column;gap:4px;overflow:hidden}
+  .adDescItem{gap:5px;line-height:1.32}
+  .adPrice{font-size:21px}
+  .adActions{gap:6px;margin-top:4px}
+  .adDiscount{font-size:10px;padding:5px 7px}
+  .adProfileBtn{font-size:11px;padding:8px 10px;margin-top:0}
+}
+
 </style>
 </head>
 
@@ -2606,11 +2636,20 @@
         track.innerHTML = websiteAdvertisements.map(function(ad,index){
           const title = escapeHtml(ad.title || "Samagra Decor Advertisement");
           const description = escapeHtml(ad.description || "");
+          const descriptionItems = description
+            .split(/(?=✅|✔️|☑️)/)
+            .map(function(item){ return item.trim(); })
+            .filter(Boolean)
+            .map(function(item){
+              const cleanItem = item.replace(/^(?:✅|✔️|☑️)\s*/, "");
+              return `<div class="adDescItem"><span class="adDescCheck">✅</span><span class="adDescText">${cleanItem}</span></div>`;
+            }).join("");
+          const descriptionHtml = descriptionItems || `<div class="adDescItem"><span class="adDescText">${description}</span></div>`;
           const advertiser = escapeHtml(ad.advertiser_name || "");
           const image = ad.image_url || "logo.png";
           const price = ad.price ? "₹" + escapeHtml(ad.price) : "";
           const discount = ad.discount ? escapeHtml(ad.discount) : "";
-          return `<div class="adSlide"><img src="${escapeHtml(image)}" alt="${title}" loading="lazy" decoding="async"><div class="adInfo"><h3>${title}</h3><p>${description}</p>${advertiser ? `<p><b>Advertiser:</b> ${advertiser}</p>` : ""}${price ? `<div class="adPrice">${price}</div>` : ""}${discount ? `<span class="adDiscount">${discount}% OFF</span>` : ""}<button class="adProfileBtn" onclick="openAdvertisementProfile(${index})">View Profile</button></div></div>`;
+          return `<div class="adSlide"><img src="${escapeHtml(image)}" alt="${title}" loading="lazy" decoding="async"><div class="adInfo"><h3>${title}</h3><div class="adDescription">${descriptionHtml}</div>${advertiser ? `<p class="adAdvertiser"><b>Advertiser:</b> ${advertiser}</p>` : ""}${price ? `<div class="adPrice">${price}</div>` : ""}<div class="adActions">${discount ? `<span class="adDiscount">${discount}% OFF</span>` : ""}<button class="adProfileBtn" onclick="openAdvertisementProfile(${index})">View Profile</button></div></div></div>`;
         }).join("");
         dots.innerHTML = websiteAdvertisements.map(function(ad,index){ return `<span class="adDot ${index===0 ? "active" : ""}"></span>`; }).join("");
         currentAdIndex=0; section.style.display="block"; updateAdvertisementSlider();
