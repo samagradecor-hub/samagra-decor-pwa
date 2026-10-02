@@ -1721,6 +1721,25 @@
       updateVendorCategoryHiddenValue();
     }
 
+    function getVendorPlan(v){
+      const raw = String(v && (v.plan || v.listing_type || v.listingType || v.subscription_plan || v.subscription_type || "free")).toLowerCase().trim();
+      const end = v && (v.subscription_end || v.plan_end || v.expires_at || v.subscription_expires_at);
+      if(end && new Date(end).getTime() < Date.now()) return "free";
+      if(raw.includes("prime")) return "prime_pro";
+      if(raw.includes("paid") || raw.includes("monthly") || raw.includes("yearly")) return "paid";
+      return "free";
+    }
+
+    function isVendorFeatured(v){
+      const plan = getVendorPlan(v);
+      return plan === "prime_pro" || plan === "paid" || v.featured === true || String(v.featured || v.is_featured || "").toLowerCase() === "true";
+    }
+
+    function vendorPlanPriority(v){
+      const p = v && v.plan ? v.plan : getVendorPlan(v && v.raw ? v.raw : v);
+      return p === "prime_pro" ? 3 : p === "paid" ? 2 : 1;
+    }
+
     function normalizeVendor(v){
       let photos = [];
 
@@ -1769,7 +1788,9 @@
         img: mainImage,
         photos: photos,
         video_url: safeText(v.video_url || v.video || v.video_link || v.videoUrl || ""),
-        desc: safeText(v.description || v.business_description || v.desc || "Samagra Decor verified event service vendor.")
+        desc: safeText(v.description || v.business_description || v.desc || "Samagra Decor verified event service vendor."),
+        plan: getVendorPlan(v),
+        featured: isVendorFeatured(v)
       };
     }
 
@@ -1833,37 +1854,66 @@
 
     function renderVendors(list, featuredOnly){
       const box = document.getElementById("vendorList");
-      currentVendorList = list;
-      if(list.length === 0){
-        box.innerHTML = "<p style='grid-column:1/-1;text-align:center;font-weight:bold;'>Abhi koi approved vendor live nahi hai.</p>";
+      if(!box) return;
+
+      const source = Array.isArray(list) ? list.slice() : [];
+      source.sort(function(a,b){
+        const priorityDiff = vendorPlanPriority(b) - vendorPlanPriority(a);
+        if(priorityDiff !== 0) return priorityDiff;
+        const bf = (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+        if(bf !== 0) return bf;
+        return String(a.name || "").localeCompare(String(b.name || ""));
+      });
+
+      const displayList = featuredOnly ? source.slice(0, 6) : source;
+      currentVendorList = displayList;
+
+      if(displayList.length === 0){
+        box.innerHTML = "<div class='sdEmptyFeatured'><b>Featured Vendors</b><span>Paid aur Prime Pro vendors yahan featured honge. Abhi approved Free vendors bhi yahan dikh sakte hain.</span></div>";
         return;
       }
 
-      const displayList = featuredOnly ? list.slice(0, 3) : list;
       const html = displayList.map(function(v,index){
-        const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
+        const priceText = v.price > 0 ? "₹" + v.price.toLocaleString("en-IN") : "Price on request";
+        const plan = v.plan || getVendorPlan(v.raw || v);
+        const isPaidOrPrime = plan === "paid" || plan === "prime_pro";
+        const planLabel = plan === "prime_pro" ? "👑 PRIME PRO" : plan === "paid" ? "💎 PAID" : "FREE";
+        const imageCount = Array.isArray(v.photos) ? v.photos.length : 0;
+        const reviewText = Number(v.reviews || 0) > 0 ? "⭐ " + escapeHtml(v.rating) + " (" + escapeHtml(v.reviews) + ")" : "⭐ New Vendor";
+        const shareBtn = isPaidOrPrime ? `<button class="sdVBtn sdShare" onclick="shareVendor(${index})" title="Share Profile">↗ Share</button>` : "";
 
         return `
-          <div class="vendorCard">
-            <div class="vendorImg">
-              <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name)}" loading="lazy" decoding="async">
-              <div class="badge">✅ Verified</div>
+          <article class="vendorCard sdFeaturedCard sdPlan-${plan}">
+            <div class="vendorImg sdFeaturedImage">
+              <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name + ' ' + v.category + ' ' + v.city)}" loading="lazy" decoding="async">
+              <div class="sdPlanBadge ${plan}">${planLabel}</div>
+              <div class="badge">✓ Verified</div>
+              ${v.city ? `<div class="sdImageCity">📍 ${escapeHtml(v.city)}</div>` : ""}
+              ${imageCount ? `<div class="sdPhotoCount">▧ ${imageCount}+ Photos</div>` : ""}
             </div>
-            <div class="vendorBody">
-              <h3>${escapeHtml(v.name)}</h3>
-              <div class="meta">
-                <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)})</span>
-                <span>📍 ${escapeHtml(v.city)}</span>
-                <span>▦ ${escapeHtml(v.category)}</span>
+            <div class="vendorBody sdFeaturedBody">
+              <div class="sdVendorNameRow">
+                <div>
+                  <h3>${escapeHtml(v.name)}</h3>
+                  <div class="sdRating">${reviewText}</div>
+                </div>
+                <button class="favBtn sdFav" onclick="addFavorite(${index})" title="Favorite">♡</button>
               </div>
-              <div class="price">${priceText}</div>
-              <div class="cardActions">
-                <button class="waBtn" onclick="vendorWhatsApp(${index})">☘</button>
-                <button class="detailBtn" onclick="viewDetails(${index})">View Details</button>
-                <button class="favBtn" onclick="addFavorite(${index})">♡</button>
+              <div class="sdInfoLine"><b>📍 ${escapeHtml(v.city)}</b></div>
+              <div class="sdCategoryLine">${escapeHtml(v.category)}</div>
+              <div class="sdInfoTags">
+                <span>✓ Verified</span>
+                ${plan === "prime_pro" ? "<span>Priority Visibility</span>" : plan === "paid" ? "<span>Better Visibility</span>" : "<span>Basic Listing</span>"}
+              </div>
+              <div class="sdPriceRow"><span>STARTS FROM</span><strong>${priceText}</strong></div>
+              <div class="cardActions sdActionGrid">
+                <button class="sdVBtn sdCall" onclick="vendorCall(${index})">📞 Call</button>
+                <button class="sdVBtn sdWhats" onclick="vendorWhatsApp(${index})">☘ WhatsApp</button>
+                <button class="sdVBtn sdProfile" onclick="viewDetails(${index})">View Profile →</button>
+                ${shareBtn}
               </div>
             </div>
-          </div>`;
+          </article>`;
       }).join("");
 
       box.innerHTML = html;
@@ -1900,6 +1950,7 @@
 
     function viewDetails(index){
       const v = currentVendorList[index];
+      if (v) { openVendorProfile(v, true); return; }
       const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
 
       const photoGallery = v.photos && v.photos.length > 0
@@ -1930,11 +1981,41 @@
       openModal("detailsModal");
     }
 
+    function vendorCall(index){
+      const v = currentVendorList[index];
+      if(!v) return;
+      if(!requireLogin()) return;
+      const phone = v.phone && v.phone.length >= 10 ? v.phone : "";
+      if(!phone){ alert("Is vendor ka contact number available nahi hai."); return; }
+      window.location.href = "tel:+" + phone;
+    }
+
+    async function shareVendor(index){
+      const v = currentVendorList[index];
+      if(!v) return;
+      const slug = String(v.name + "-" + v.city).toLowerCase().trim().replace(/[^a-z0-9\\s-]/g,"").replace(/\\s+/g,"-").replace(/-+/g,"-");
+      const url = location.origin + "/vendor/" + slug + "/";
+      const text = v.name + " - " + v.category + " in " + v.city + " | Samagra Decor";
+      try{
+        if(navigator.share){
+          await navigator.share({title:v.name + " | Samagra Decor", text:text, url:url});
+        }else if(navigator.clipboard){
+          await navigator.clipboard.writeText(url);
+          alert("Vendor profile link copy ho gaya ✅");
+        }else{
+          prompt("Vendor profile link:", url);
+        }
+      }catch(e){
+        if(e && e.name !== "AbortError") alert("Share nahi ho paya. Link: " + url);
+      }
+    }
+
     function vendorWhatsApp(index){
       const v = currentVendorList[index];
+      if (!requireLogin()) return;
       const phone = v.phone && v.phone.length >= 10 ? v.phone : WHATSAPP_NUMBER;
       const text = encodeURIComponent("Hello Samagra Decor, mujhe " + v.name + " vendor ki details chahiye.");
-      window.open("https://wa.me/" + phone + "?text=" + text, "_blank");
+      window.open("https://wa.me/" + phone + "?text=" + text, "_blank", "noopener,noreferrer");
     }
 
     function addFavorite(index){
@@ -2852,9 +2933,15 @@
   }
 
   function openListingModal() {
+    let user = null;
+    try { user = firebase.auth().currentUser; } catch (e) {}
+    if (!user) {
+      alert("List Your Business karne ke liye pehle Login / Create Account kijiye.");
+      if (typeof openAuthModal === "function") openAuthModal();
+      return;
+    }
     const modal = document.getElementById("businessModal");
     if (!modal) return;
-
     modal.style.display = "flex";
     backToListingPlans();
   }
@@ -3681,5 +3768,299 @@ document.addEventListener("click", function(e){
   if(history.length > 1) history.back();
 });
 </script>
+<style id="sd-final-marketplace-layer">
+/* ===== SAMAGRA DECOR FINAL VENDOR PROFILE + PLAN LAYER ===== */
+.sdVendorPage{display:none;max-width:1120px;margin:0 auto;padding:28px 18px 55px;background:#fffaf0;min-height:60vh}
+.sdVendorPage.active{display:block}
+.sdVendorBack{display:inline-flex;align-items:center;gap:7px;border:1px solid #d6a53a;background:#fff;color:#043b2f;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-bottom:15px}
+.sdVendorHero{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;background:#fff;border:1px solid #f0dfb8;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.sdVendorHeroImg{min-height:330px;background:#eee}.sdVendorHeroImg img{width:100%;height:100%;min-height:330px;object-fit:cover;display:block}
+.sdVendorHeroBody{padding:25px}.sdVendorKicker{color:#a67400;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1px}.sdVendorTitle{font-family:Georgia,serif;color:#043b2f;font-size:clamp(30px,4vw,44px);line-height:1.05;margin:7px 0 10px}.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}.sdVendorDesc{color:#555;line-height:1.7;margin:12px 0}.sdVendorActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.sdVendorActions button{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.sdVendorContact{background:#0dbb59;color:#fff}.sdVendorEdit{background:#043b2f;color:#f7d77d}.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid #f0dfb8;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:1px solid #f0dfb8}.sdRelated{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sdRelated a{display:block;text-decoration:none;color:#043b2f;background:#fffaf0;border:1px solid #f0dfb8;border-radius:12px;padding:12px;font-weight:800}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}
+@media(max-width:800px){.sdVendorHero,.sdVendorGrid{grid-template-columns:1fr}.sdVendorHeroImg,.sdVendorHeroImg img{min-height:250px}.sdRelated{grid-template-columns:1fr}.sdGallery{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== FEATURED VENDOR PREMIUM UI — DESKTOP + MOBILE ===== */
+.vendorTop{margin-bottom:18px}
+.vendorTop .heading{margin-bottom:2px}
+.vendors.sdFeaturedGrid{display:grid}
+.sdFeaturedCard{
+  display:grid!important;
+  grid-template-columns:minmax(210px,42%) minmax(0,58%);
+  min-height:250px;
+  border-radius:20px!important;
+  overflow:hidden;
+  border:1px solid #ead7a6!important;
+  background:#fffdf7!important;
+  box-shadow:0 10px 28px rgba(23,63,50,.10)!important;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.sdFeaturedCard:hover{transform:translateY(-4px);box-shadow:0 16px 35px rgba(23,63,50,.16)!important;border-color:#d6a53a!important}
+.sdFeaturedCard.sdPlan-prime_pro{border:2px solid #d6a53a!important;box-shadow:0 12px 32px rgba(181,128,22,.16)!important}
+.sdFeaturedCard.sdPlan-paid{border:1.5px solid #b89a3e!important}
+.sdFeaturedImage{height:100%!important;min-height:250px!important;position:relative!important}
+.sdFeaturedImage img{height:100%!important;width:100%!important;object-fit:cover!important}
+.sdPlanBadge{position:absolute;top:13px;left:13px;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:1000;letter-spacing:.35px;z-index:3;box-shadow:0 5px 15px rgba(0,0,0,.16)}
+.sdPlanBadge.prime_pro{background:linear-gradient(135deg,#f5d16b,#dca82f);color:#10241f}
+.sdPlanBadge.paid{background:#6334e8;color:#fff}
+.sdPlanBadge.free{background:#f7f7f4;color:#173f32;border:1px solid #ddd}
+.sdFeaturedImage .badge{top:52px;left:13px;padding:7px 11px;background:#043b2f;color:#fff;font-weight:900}
+.sdImageCity,.sdPhotoCount{position:absolute;bottom:12px;background:rgba(0,0,0,.70);color:#fff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:900;z-index:3}
+.sdImageCity{left:12px}.sdPhotoCount{right:12px}
+.sdFeaturedBody{padding:18px 18px 15px!important;display:flex;flex-direction:column;min-width:0}
+.sdVendorNameRow{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.sdVendorNameRow h3{font-size:23px!important;line-height:1.08!important;font-weight:1000!important;margin:0 0 6px!important;color:#073b2f!important;overflow-wrap:anywhere}
+.sdRating{font-weight:800;color:#544c39;font-size:13px}
+.sdFav{width:40px;height:40px;padding:0!important;border-radius:50%!important;background:#fff!important;border:1px solid #e0c57c!important;color:#a67400!important;font-size:23px!important;flex:none}
+.sdInfoLine{font-size:13px;color:#173f32;margin-top:11px}.sdInfoLine b{font-weight:900}
+.sdCategoryLine{font-size:14px;font-weight:800;color:#514d42;margin-top:7px;line-height:1.35}
+.sdInfoTags{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0 10px}
+.sdInfoTags span{font-size:11px;font-weight:900;background:#f7f3e7;color:#365047;padding:6px 9px;border-radius:999px}
+.sdPriceRow{border-top:1px solid #eee3c8;border-bottom:1px solid #eee3c8;padding:10px 0;margin:2px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sdPriceRow span{font-size:10px;font-weight:1000;color:#756f61;letter-spacing:.8px}.sdPriceRow strong{font-size:21px;color:#006044;font-weight:1000}
+.sdActionGrid{display:grid!important;grid-template-columns:auto auto 1fr auto;gap:7px!important;margin-top:auto!important}
+.sdVBtn{min-height:42px;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:1000;cursor:pointer;white-space:nowrap;transition:.18s;border:1px solid #d8d1bf}
+.sdVBtn:hover{transform:translateY(-1px)}
+.sdCall{background:#064c3d;color:#fff;border-color:#064c3d}.sdWhats{background:#0dbb59;color:#fff;border-color:#0dbb59}.sdProfile{background:#043b2f;color:#fff;border-color:#043b2f}.sdShare{background:#fff;color:#064c3d;border-color:#8aa99e}.sdActionGrid .sdFav{height:42px}
+.sdEmptyFeatured{grid-column:1/-1;min-height:150px;border:1px dashed #d6a53a;border-radius:20px;background:#fffdf7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;color:#173f32;padding:20px}.sdEmptyFeatured span{font-size:14px;color:#706a5b}
+@media(min-width:701px){#vendorList{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:700px){
+  #vendorList{grid-template-columns:1fr!important;gap:13px!important}
+  .sdFeaturedCard{grid-template-columns:42% 58%;min-height:225px}
+  .sdFeaturedImage{min-height:225px!important}
+  .sdFeaturedBody{padding:13px 11px 11px!important}
+  .sdVendorNameRow h3{font-size:17px!important;line-height:1.04!important}
+  .sdRating{font-size:11px}.sdInfoLine{font-size:11px;margin-top:7px}.sdCategoryLine{font-size:11px;margin-top:5px;line-height:1.25}
+  .sdInfoTags{gap:4px;margin:7px 0}.sdInfoTags span{font-size:9px;padding:4px 6px}
+  .sdPriceRow{padding:7px 0;margin-bottom:8px}.sdPriceRow span{font-size:8px}.sdPriceRow strong{font-size:16px}
+  .sdPlanBadge{top:9px;left:9px;padding:5px 7px;font-size:9px}.sdFeaturedImage .badge{top:38px;left:9px;padding:5px 7px;font-size:9px}.sdImageCity,.sdPhotoCount{bottom:8px;padding:4px 6px;font-size:8px}
+  .sdActionGrid{grid-template-columns:1fr 1fr!important;gap:5px!important}
+  .sdVBtn{min-height:34px;padding:6px 5px;font-size:9px;border-radius:7px}
+  .sdProfile{grid-column:1/-1}.sdActionGrid .sdShare{grid-column:1/2}.sdActionGrid .sdFav{grid-column:2/3;width:auto;height:34px;font-size:19px!important}
+}
+@media(max-width:380px){.sdFeaturedCard{grid-template-columns:40% 60%}.sdFeaturedBody{padding:10px 8px 9px!important}.sdVendorNameRow h3{font-size:15px!important}.sdPriceRow strong{font-size:14px}.sdVBtn{font-size:8px;padding:5px 3px}}
+</style>
+
+<div id="sdVendorPage" class="sdVendorPage" aria-live="polite"></div>
+
+<script>
+/* ================================================================
+   SAMAGRA DECOR FINAL INTEGRATION LAYER
+   UI remains unchanged. Adds crawlable vendor profiles, login-gated
+   contact, auto SEO, profile edit request support and plan rules.
+   ================================================================ */
+(function(){
+  const SD_SUPABASE_URL = "https://uomxewgvhbqjoamxfnnm.supabase.co";
+  const SD_SUPABASE_KEY = "sb_publishable_JizxCNPAlEeHRL1RaIGJXQ_Q8HeqzCq";
+  const sdDb = (window.supabase && SD_SUPABASE_URL && SD_SUPABASE_KEY)
+    ? window.supabase.createClient(SD_SUPABASE_URL, SD_SUPABASE_KEY) : null;
+
+  const SD_PLANS = {
+    free:{name:"Free Listing",categories:2,photos:4,seo:false,advancedSeo:false},
+    paid:{name:"Paid Listing",categories:7,photos:7,seo:true,advancedSeo:false},
+    prime_pro:{name:"Prime Pro",categories:12,photos:12,seo:true,advancedSeo:true}
+  };
+
+  function esc(v){
+    return String(v == null ? "" : v).replace(/[&<>"']/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c];});
+  }
+  function slugify(v){
+    return String(v||"").toLowerCase().trim().replace(/[^a-z0-9\s-]/g,"").replace(/\s+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"");
+  }
+  function vendorSlug(v){
+    return v.slug || v.seo_slug || slugify((v.business_name||v.name||"vendor") + "-" + (v.city||"india"));
+  }
+  function basePlan(v){
+    const p=String(v.plan||v.listing_type||"free").toLowerCase();
+    if(p.includes("prime")) return "prime_pro";
+    if(p.includes("paid") || p.includes("monthly") || p.includes("yearly")) return "paid";
+    return "free";
+  }
+  function isExpired(v){
+    const end=v.subscription_end || v.plan_end || v.expires_at || v.subscription_expires_at;
+    return !!end && new Date(end).getTime() < Date.now();
+  }
+  function effectivePlan(v){ return isExpired(v) ? "free" : basePlan(v); }
+  function vendorName(v){return v.business_name||v.name||v.vendor_name||"Vendor";}
+  function vendorCity(v){return v.city||v.location||"India";}
+  function vendorCategory(v){return v.category||v.service_category||"Event Service";}
+  function vendorDescription(v){return v.description||v.business_description||"Samagra Decor listed event service vendor.";}
+  function vendorPhone(v){return String(v.phone||v.mobile||v.mobile_number||v.whatsapp||"").replace(/\D/g,"");}
+  function vendorImages(v){
+    let a=[];
+    [v.image_url,v.image_url_1,v.image_url_2,v.image_url_3,v.image_url_4,v.image1,v.image2,v.image3,v.image4].forEach(function(x){if(x&&x!=="EMPTY"&&x!=="NULL"&&x!=="null")a.push(x);});
+    if(Array.isArray(v.vendor_images)) v.vendor_images.forEach(function(x){if(x&&x.image_url)a.push(x.image_url);});
+    return [...new Set(a)];
+  }
+
+  function ensureMeta(name,content){
+    let el=document.querySelector('meta[name="'+name+'"]');
+    if(!el){el=document.createElement("meta");el.setAttribute("name",name);document.head.appendChild(el);}
+    el.setAttribute("content",content||"");
+  }
+  function setCanonical(url){
+    let el=document.querySelector('link[rel="canonical"]');
+    if(!el){el=document.createElement("link");el.rel="canonical";document.head.appendChild(el);}
+    el.href=url;
+  }
+  function setVendorSeo(v){
+    const name=vendorName(v), city=vendorCity(v), cat=vendorCategory(v);
+    const title=(v.seo_title||name+" – "+cat+" in "+city+" | Samagra Decor").slice(0,65);
+    const desc=(v.seo_description||name+" in "+city+". "+cat+" services, photos, pricing and business details on Samagra Decor.").slice(0,160);
+    const url=location.origin+"/vendor/"+vendorSlug(v)+"/";
+    document.title=title; ensureMeta("title",title); ensureMeta("description",desc); ensureMeta("robots","index, follow, max-image-preview:large"); setCanonical(url);
+    let ld=document.getElementById("sdVendorSchema"); if(!ld){ld=document.createElement("script");ld.type="application/ld+json";ld.id="sdVendorSchema";document.head.appendChild(ld);}
+    const imgs=vendorImages(v); const data={"@context":"https://schema.org","@type":"LocalBusiness",name:name,url:url,description:vendorDescription(v),image:imgs.slice(0,8),telephone:vendorPhone(v)||undefined};
+    if(city) data.address={"@type":"PostalAddress",addressLocality:city,addressCountry:"IN"};
+    if(v.price||v.starting_price) data.priceRange="₹₹";
+    ld.textContent=JSON.stringify(data);
+  }
+  function restoreHomeSeo(){
+    document.title="Samagra Decor"; ensureMeta("title","Samagra Decor"); ensureMeta("description","Samagra Decor par Wedding Decoration, Tent Wale, Catering, DJ, Photography, Makeup, Marriage Garden aur event services ke trusted vendors ek jagah dhoondhein."); setCanonical(location.origin+"/");
+    const ld=document.getElementById("sdVendorSchema"); if(ld) ld.remove();
+  }
+
+  async function fetchVendorBySlug(slug){
+    if(!sdDb) return null;
+    let {data}=await sdDb.from("vendors").select("*").eq("slug",slug).maybeSingle();
+    if(data) return data;
+    const {data:all}=await sdDb.from("vendors").select("*").in("status",["approved","active","live"]);
+    return (all||[]).find(function(v){return vendorSlug(v)===slug;})||null;
+  }
+  async function fetchVendorById(id){
+    if(!sdDb||!id) return null;
+    const {data}=await sdDb.from("vendors").select("*").eq("id",id).maybeSingle();
+    return data||null;
+  }
+
+  function requireLogin(action){
+    let user=null; try{user=firebase.auth().currentUser;}catch(e){}
+    if(user) return true;
+    alert("Vendor se contact karne ke liye pehle Login / Create Account kijiye.");
+    if(typeof window.openAuthModal==="function") window.openAuthModal();
+    else { const el=document.getElementById("loginModal"); if(el) el.style.display="flex"; }
+    return false;
+  }
+
+  function contactVendor(v){
+    if(!requireLogin()) return;
+    const phone=vendorPhone(v); if(!phone){alert("Is vendor ka contact number available nahi hai.");return;}
+    const msg=encodeURIComponent("Hello Samagra Decor, mujhe "+vendorName(v)+" vendor ki details chahiye.");
+    window.open("https://wa.me/"+phone+"?text="+msg,"_blank","noopener,noreferrer");
+  }
+
+  function profileHtml(v){
+    const name=vendorName(v),city=vendorCity(v),cat=vendorCategory(v),imgs=vendorImages(v),plan=effectivePlan(v),cfg=SD_PLANS[plan]||SD_PLANS.free;
+    const rating=Number(v.rating||0), reviews=Number(v.review_count||v.reviews||0);
+    const price=Number(v.price||v.starting_price||0)>0 ? "Starts from ₹"+Number(v.price||v.starting_price).toLocaleString("en-IN") : "Price on request";
+    const main=imgs[0]||"https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80";
+    const gallery=(imgs.length?imgs:[main]).slice(0,cfg.photos).map(function(x){return '<img src="'+esc(x)+'" alt="'+esc(name+' '+cat+' '+city)+'" loading="lazy">';}).join("");
+    const owner=v.owner_name||v.owner||"";
+    return '<button class="sdVendorBack" onclick="window.sdBackToHome()">← Back to Vendors</button>'+
+      '<article class="sdVendorHero">'+
+      '<div class="sdVendorHeroImg"><img src="'+esc(main)+'" alt="'+esc(name+' - '+cat+' in '+city)+'"></div>'+ 
+      '<div class="sdVendorHeroBody"><div class="sdVendorKicker">'+(plan==="prime_pro"?'👑 Prime Pro':plan==="paid"?'💎 Paid Vendor':'✓ Samagra Decor Vendor')+'</div>'+ 
+      '<h1 class="sdVendorTitle">'+esc(name)+'</h1>'+
+      '<div class="sdVendorMeta"><span>📍 '+esc(city)+'</span><span>▦ '+esc(cat)+'</span><span>⭐ '+(reviews?rating.toFixed(1):'New Vendor')+(reviews?' ('+reviews+' reviews)':' · No reviews yet')+'</span><span>💰 '+esc(price)+'</span></div>'+ 
+      '<p class="sdVendorDesc">'+esc(vendorDescription(v))+'</p>'+
+      '<div class="sdVendorActions"><button class="sdVendorContact" onclick="window.sdContactCurrent()">🔒 Contact Vendor</button>'+ (plan!=="free"?'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>':'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>')+'</div>'+ 
+      '<div class="sdPlanNote" style="margin-top:14px">'+esc(cfg.name)+' · '+cfg.categories+' categories / '+cfg.photos+' photos allowed. '+(cfg.seo?'Advanced profile SEO controls enabled for this plan.':'SEO title & description are generated automatically.')+'</div>'+ 
+      '</div></article>'+ 
+      '<div class="sdVendorGrid"><section class="sdVendorPanel"><h2>Business Photos</h2><div class="sdGallery">'+gallery+'</div></section>'+ 
+      '<section class="sdVendorPanel"><h2>Business Details</h2><p><b>Owner:</b> '+esc(owner||'Not provided')+'</p><p><b>Category:</b> '+esc(cat)+'</p><p><b>City:</b> '+esc(city)+'</p><p><b>Price:</b> '+esc(price)+'</p><p><b>Status:</b> Approved / Live</p></section></div>'+ 
+      '<section class="sdVendorPanel" style="margin-top:18px"><h2>About '+esc(name)+'</h2><p style="color:#555;line-height:1.7">'+esc(v.seo_content||vendorDescription(v))+'</p></section>';
+  }
+
+  let sdCurrentVendor=null;
+  async function openVendorProfile(vOrId,push){
+    const v=typeof vOrId==='object'?vOrId:await fetchVendorById(vOrId); if(!v){alert("Vendor profile nahi mili.");return;}
+    const status=String(v.status||"").toLowerCase(); if(!["approved","active","live"].includes(status)){alert("Ye vendor profile abhi live nahi hai.");return;}
+    sdCurrentVendor=v;
+    const page=document.getElementById("sdVendorPage"); if(!page)return;
+    if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/vendor/"+vendorSlug(v)+"/");}
+    page.innerHTML=profileHtml(v); page.classList.add("active");
+    document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
+    setVendorSeo(v); window.scrollTo(0,0);
+  }
+  function backHome(){
+    if(history.state&&history.state.sdVendor){history.back();return;}
+    const page=document.getElementById("sdVendorPage"); if(page)page.classList.remove("active");
+    document.querySelectorAll("[data-sd-hidden]").forEach(function(el){el.style.display=el.dataset.sdHidden;delete el.dataset.sdHidden;}); restoreHomeSeo();
+  }
+
+  window.sdBackToHome=backHome;
+  window.sdContactCurrent=function(){if(sdCurrentVendor)contactVendor(sdCurrentVendor);};
+
+  window.sdOpenEditCurrent=async function(){
+    if(!sdCurrentVendor)return;
+    let user=null;try{user=firebase.auth().currentUser;}catch(e){}
+    if(!user){requireLogin();return;}
+    const ownerUid=sdCurrentVendor.firebase_uid||sdCurrentVendor.owner_user_id||sdCurrentVendor.user_id||"";
+    if(ownerUid && ownerUid!==user.uid){alert("Sirf apni vendor profile edit kar sakte hain.");return;}
+    const p=effectivePlan(sdCurrentVendor), cfg=SD_PLANS[p]||SD_PLANS.free;
+    const box=document.createElement("div");box.className="modal";box.style.display="flex";box.id="sdEditModal";
+    box.innerHTML='<div class="modalBox wideBox"><span class="close" onclick="document.getElementById(\'sdEditModal\').remove()">×</span><h2>✏️ Edit Vendor Profile</h2><p class="modalIntro">Changes direct live nahi hongi. Admin approval ke baad profile update hogi.</p><div class="sdEditForm"><input id="sdEditName" value="'+esc(vendorName(sdCurrentVendor))+'" placeholder="Business Name"><input id="sdEditOwner" value="'+esc(sdCurrentVendor.owner_name||"")+'" placeholder="Owner Name"><input id="sdEditCity" value="'+esc(vendorCity(sdCurrentVendor))+'" placeholder="City"><input id="sdEditCategory" value="'+esc(vendorCategory(sdCurrentVendor))+'" placeholder="Category"><input id="sdEditPrice" value="'+esc(sdCurrentVendor.price||sdCurrentVendor.starting_price||"")+'" placeholder="Starting Price"><textarea id="sdEditDesc" placeholder="Business Description">'+esc(vendorDescription(sdCurrentVendor))+'</textarea>'+ (cfg.seo?'<input id="sdEditSeoTitle" value="'+esc(sdCurrentVendor.seo_title||"")+'" placeholder="SEO Title"><textarea id="sdEditSeoDesc" placeholder="Meta Description">'+esc(sdCurrentVendor.seo_description||"")+'</textarea>':'<div class="sdPlanNote">Free plan: SEO Title aur Meta Description automatically generate honge. Paid/Prime mein manual SEO editing unlock hoti hai.</div>')+'<button style="background:#043b2f;color:#f7d77d;border:0;border-radius:10px;padding:13px;font-weight:900;cursor:pointer" onclick="window.sdSubmitEdit()">SUBMIT FOR ADMIN APPROVAL</button></div></div>';
+    document.body.appendChild(box);
+  };
+
+  window.sdSubmitEdit=async function(){
+    if(!sdCurrentVendor||!sdDb)return;
+    const user=firebase.auth().currentUser;if(!user){requireLogin();return;}
+    const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,business_name:document.getElementById("sdEditName").value.trim(),owner_name:document.getElementById("sdEditOwner").value.trim(),city:document.getElementById("sdEditCity").value.trim(),category:document.getElementById("sdEditCategory").value.trim(),price:document.getElementById("sdEditPrice").value.trim(),description:document.getElementById("sdEditDesc").value.trim(),status:"pending"};
+    const seoTitle=document.getElementById("sdEditSeoTitle");const seoDesc=document.getElementById("sdEditSeoDesc");if(seoTitle)payload.seo_title=seoTitle.value.trim();if(seoDesc)payload.seo_description=seoDesc.value.trim();
+    const {error}=await sdDb.from("vendor_profile_edit_requests").insert([payload]);
+    if(error){alert("Edit request save nahi hua. Supabase mein vendor_profile_edit_requests table/migration add karna hoga.\n\n"+error.message);return;}
+    document.getElementById("sdEditModal").remove();alert("Profile changes Admin Approval ke liye bhej diye gaye hain ✅");
+  };
+
+  /* Guest contact lock: capture before existing inline onclick. */
+  document.addEventListener("click",function(e){
+    const wa=e.target.closest(".waBtn");
+    const detail=e.target.closest(".detailBtn");
+    const card=e.target.closest(".vendorCard");
+    if(!card||(!wa&&!detail))return;
+    const name=(card.querySelector("h3")||{}).textContent||"";
+    const v=(window.__sdLastVendorRows||[]).find(function(x){return vendorName(x).trim()===name.trim();});
+    if(!v)return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    if(detail) openVendorProfile(v,true); else contactVendor(v);
+  },true);
+
+  function syncRows(){
+    try{window.__sdLastVendorRows=Array.isArray(window.vendors)?window.vendors:[];}catch(e){}
+  }
+  /* Pull approved vendors independently so profile links work even when the original
+     listing code keeps its data private inside its existing function scope. */
+  async function preloadRows(){
+    if(!sdDb)return;
+    const {data}=await sdDb.from("vendors").select("*").in("status",["approved","active","live"]);
+    window.__sdLastVendorRows=data||[];
+    if(data&&data.length){
+      const rows=data;
+      document.querySelectorAll(".vendorCard").forEach(function(card){
+        const nm=(card.querySelector("h3")||{}).textContent||""; const v=rows.find(function(x){return vendorName(x).trim()===nm.trim();});
+        if(!v)return;
+        const detail=card.querySelector(".detailBtn");
+        if(detail){detail.removeAttribute("onclick");detail.setAttribute("data-vendor-id",v.id);}
+        const img=card.querySelector("img");if(img)img.alt=vendorName(v)+" "+vendorCategory(v)+" in "+vendorCity(v);
+      });
+    }
+  }
+  setInterval(preloadRows,5000); setTimeout(preloadRows,1200);
+
+  /* Pretty URL entry: hosting must rewrite /vendor/* to this index.html. */
+  async function routeEntry(){
+    const m=location.pathname.match(/^\/vendor\/([^\/]+)\/?$/i);
+    if(!m)return;
+    const v=await fetchVendorBySlug(decodeURIComponent(m[1]));
+    if(v) openVendorProfile(v,false); else {document.getElementById("sdVendorPage").classList.add("active");document.getElementById("sdVendorPage").innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Ye vendor profile available nahi hai.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';}
+  }
+  window.addEventListener("popstate",function(){
+    if(history.state&&history.state.sdVendor){routeEntry();return;}
+    const page=document.getElementById("sdVendorPage");if(page)page.classList.remove("active");
+    document.querySelectorAll("[data-sd-hidden]").forEach(function(el){el.style.display=el.dataset.sdHidden;delete el.dataset.sdHidden;});restoreHomeSeo();
+  });
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",routeEntry);else routeEntry();
+})();
+</script>
+
 </body>
 </html>
