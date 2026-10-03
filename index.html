@@ -939,6 +939,7 @@
         <a onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</a>
         <a id="authMenuLink" onclick="openAuthModal()">Login / Create Account</a>
         <a id="adminMenuLink" onclick="openAdminPanel()" style="display:none;">Admin Panel</a>
+        <a id="vendorDashboardMenuLink" onclick="openVendorDashboard()" style="display:none;">Vendor Dashboard</a>
       </div>
 
       <button class="mobileMenuBtn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">☰</button>
@@ -3863,6 +3864,30 @@ document.addEventListener("click", function(e){
   .sdVBtn{min-height:34px;padding:6px 4px;font-size:9px;border-radius:7px}
 }
 @media(max-width:380px){.sdFeaturedCard{grid-template-columns:40% 60%}.sdFeaturedBody{padding:10px 8px 9px!important}.sdVendorNameRow h3{font-size:15px!important}.sdPriceRow strong{font-size:14px}.sdVBtn{font-size:8px;padding:5px 3px}}
+
+/* ===== STEP 4: AUTH-ONLY VENDOR DASHBOARD ===== */
+.vendorDashModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:10050;overflow:auto;padding:18px}
+.vendorDashPanel{width:min(980px,100%);margin:28px auto;background:#fffaf0;border:2px solid #d6a53a;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.32);overflow:hidden}
+.vendorDashHead{background:linear-gradient(135deg,#043b2f,#075443);color:#fff;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.vendorDashHead h2{margin:0;color:#f7d77d;font-size:26px}
+.vendorDashHead p{margin:5px 0 0;color:#fff3d2;font-size:13px}
+.vendorDashClose{border:1px solid rgba(247,215,125,.7);background:transparent;color:#fff;font-size:26px;width:42px;height:42px;border-radius:10px;cursor:pointer}
+.vendorDashBody{padding:20px}
+.vendorDashGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.vendorDashStat{background:#fff;border:1px solid #ead7a4;border-radius:15px;padding:15px}
+.vendorDashStat small{display:block;color:#777;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.vendorDashStat strong{display:block;color:#043b2f;font-size:18px;line-height:1.2}
+.vendorDashCard{background:#fff;border:1px solid #ead7a4;border-radius:17px;padding:18px;margin-top:14px}
+.vendorDashCard h3{color:#043b2f;margin:0 0 12px;font-size:19px}
+.vendorDashActions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.vendorDashBtn{border:0;border-radius:11px;padding:13px 14px;font-weight:900;cursor:pointer;background:#043b2f;color:#f7d77d}
+.vendorDashBtn.light{background:#fff7df;border:1px solid #d6a53a;color:#043b2f}
+.vendorDashBtn.green{background:#0caf59;color:#fff}
+.vendorDashEmpty{text-align:center;padding:35px 15px;color:#666}
+.vendorDashBadge{display:inline-flex;padding:6px 11px;border-radius:999px;font-size:12px;font-weight:900;background:#fff1cc;color:#6b4a00;border:1px solid #e7c45a}
+@media(max-width:700px){
+ .vendorDashModal{padding:8px}.vendorDashPanel{margin:10px auto;border-radius:18px}.vendorDashHead{padding:16px}.vendorDashHead h2{font-size:21px}.vendorDashBody{padding:12px}.vendorDashGrid{grid-template-columns:1fr 1fr}.vendorDashActions{grid-template-columns:1fr 1fr}.vendorDashBtn{font-size:13px;padding:12px 8px}
+}
 </style>
 
 <div id="sdVendorPage" class="sdVendorPage" aria-live="polite"></div>
@@ -4040,7 +4065,7 @@ document.addEventListener("click", function(e){
   async function openVendorProfile(vOrId,push){
     const v=typeof vOrId==='object'?vOrId:await fetchVendorById(vOrId); if(!v){alert("Vendor profile nahi mili.");return;}
     const status=String(v.status||"").toLowerCase(); if(!["approved","active","live"].includes(status)){alert("Ye vendor profile abhi live nahi hai.");return;}
-    sdCurrentVendor=v;
+    sdCurrentVendor=v; window.sdCurrentVendor=v;
     const page=document.getElementById("sdVendorPage"); if(!page)return;
     if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/vendor/"+vendorSlug(v)+"/");}
     page.innerHTML=profileHtml(v); page.classList.add("active");
@@ -4129,6 +4154,233 @@ document.addEventListener("click", function(e){
     document.querySelectorAll("[data-sd-hidden]").forEach(function(el){el.style.display=el.dataset.sdHidden;delete el.dataset.sdHidden;});restoreHomeSeo();
   });
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",routeEntry);else routeEntry();
+})();
+</script>
+
+
+
+<!-- STEP 4: Vendor Dashboard -->
+<div id="vendorDashboardModal" class="vendorDashModal" aria-hidden="true">
+  <div class="vendorDashPanel">
+    <div class="vendorDashHead">
+      <div>
+        <h2>👤 Vendor Dashboard</h2>
+        <p id="vendorDashWelcome">Login vendor dashboard</p>
+      </div>
+      <button class="vendorDashClose" onclick="closeVendorDashboard()" aria-label="Close">×</button>
+    </div>
+    <div class="vendorDashBody" id="vendorDashBody">
+      <div class="vendorDashEmpty">Dashboard loading...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== STEP 4 DASHBOARD: visible/openable only after Firebase login ===== */
+(function(){
+  function currentUser(){
+    try{return (typeof firebaseAuth!=='undefined' && firebaseAuth) ? firebaseAuth.currentUser : null;}catch(e){return null;}
+  }
+
+  function setDashboardVisibility(user){
+    var link=document.getElementById('vendorDashboardMenuLink');
+    if(link) link.style.display=user ? 'block' : 'none';
+  }
+
+  window.closeVendorDashboard=function(){
+    var modal=document.getElementById('vendorDashboardModal');
+    if(modal){modal.style.display='none';modal.setAttribute('aria-hidden','true');}
+  };
+
+  window.openVendorDashboard=async function(){
+    var user=currentUser();
+    if(!user){
+      alert('Vendor Dashboard dekhne ke liye pehle Login / Create Account kijiye.');
+      if(typeof openAuthModal==='function') openAuthModal();
+      return;
+    }
+
+    var modal=document.getElementById('vendorDashboardModal');
+    var body=document.getElementById('vendorDashBody');
+    var welcome=document.getElementById('vendorDashWelcome');
+    if(!modal||!body)return;
+    modal.style.display='block';modal.setAttribute('aria-hidden','false');
+    welcome.textContent=(user.displayName||user.email||'Vendor')+' — aapki listing ka control panel';
+    body.innerHTML='<div class="vendorDashEmpty">⏳ Aapki vendor listing load ho rahi hai...</div>';
+
+    var rows=[];
+    try{
+      if(typeof supabaseClient!=='undefined' && supabaseClient){
+        var queries=[
+          supabaseClient.from('vendors').select('*').eq('firebase_uid',user.uid),
+          supabaseClient.from('vendors').select('*').eq('owner_user_id',user.uid),
+          supabaseClient.from('vendors').select('*').eq('user_id',user.uid)
+        ];
+        for(var i=0;i<queries.length;i++){
+          try{
+            var r=await queries[i];
+            if(r && Array.isArray(r.data) && r.data.length){rows=r.data;break;}
+          }catch(e){}
+        }
+      }
+    }catch(e){}
+
+    if(!rows.length){
+      body.innerHTML='<div class="vendorDashEmpty"><div style="font-size:42px">🏪</div><h3 style="color:#043b2f;margin:8px 0">Abhi koi vendor listing nahi mili</h3><p>Agar aapne listing submit ki hai to Admin Approval ke baad yahan status dikhega.</p><button class="vendorDashBtn" onclick="closeVendorDashboard();openListingModal();">+ List Your Business</button></div>';
+      return;
+    }
+
+    rows.sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''));});
+    var v=rows[0];
+    var name=v.business_name||v.name||'Vendor';
+    var plan=v.plan||v.listing_type||v.subscription_plan||'free';
+    var status=v.status||'pending';
+    var city=v.city||v.location||'—';
+    var category=v.category||v.categories||'—';
+    var price=v.price||v.starting_price||'—';
+    var expiry=v.subscription_end_date||v.expires_at||v.plan_expiry||'—';
+    var profileUrl='';
+    var slug=v.slug||v.seo_slug||v.vendor_slug||'';
+    if(slug) profileUrl='/vendor/'+encodeURIComponent(slug);
+
+    var planLabel=String(plan).toLowerCase().includes('prime')?'PRIME PRO':String(plan).toLowerCase().includes('paid')?'PAID':'FREE';
+    var statusLabel=String(status).toUpperCase();
+
+    body.innerHTML=''+
+      '<div class="vendorDashGrid">'+
+        '<div class="vendorDashStat"><small>Business</small><strong>'+escDash(name)+'</strong></div>'+
+        '<div class="vendorDashStat"><small>Plan</small><strong>'+escDash(planLabel)+'</strong></div>'+
+        '<div class="vendorDashStat"><small>Status</small><strong>'+escDash(statusLabel)+'</strong></div>'+
+        '<div class="vendorDashStat"><small>Expiry</small><strong>'+escDash(expiry)+'</strong></div>'+
+      '</div>'+
+      '<div class="vendorDashCard">'+
+        '<h3>📋 My Vendor Listing</h3>'+
+        '<p style="margin:6px 0;color:#555"><b>Location:</b> '+escDash(city)+'</p>'+ 
+        '<p style="margin:6px 0;color:#555"><b>Category:</b> '+escDash(category)+'</p>'+ 
+        '<p style="margin:6px 0;color:#555"><b>Starting Price:</b> '+escDash(price)+'</p>'+ 
+        '<p style="margin:10px 0"><span class="vendorDashBadge">'+escDash(statusLabel)+'</span></p>'+ 
+        '<div class="vendorDashActions">'+
+          (profileUrl?'<button class="vendorDashBtn" onclick="window.location.href=\''+profileUrl.replace(/'/g,"\\'")+'\'">👁 View Profile</button>':'<button class="vendorDashBtn" onclick="alert(\'Profile slug abhi available nahi hai.\')">👁 View Profile</button>')+
+          '<button class="vendorDashBtn light" onclick="closeVendorDashboard();openListingModal();">⬆️ Upgrade / Manage Plan</button>'+ 
+          '<button class="vendorDashBtn green" onclick="alert(\'Profile edit workflow Admin Approval ke through chalega.\')">✏️ Edit Profile</button>'+ 
+        '</div>'+ 
+      '</div>';
+  };
+
+  function escDash(v){
+    return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  window.addEventListener('click',function(e){
+    var modal=document.getElementById('vendorDashboardModal');
+    if(e.target===modal) window.closeVendorDashboard();
+  });
+
+  function bindAuth(){
+    try{
+      if(typeof firebaseAuth!=='undefined' && firebaseAuth){
+        firebaseAuth.onAuthStateChanged(function(user){
+          setDashboardVisibility(user);
+          if(!user) window.closeVendorDashboard();
+        });
+        setDashboardVisibility(firebaseAuth.currentUser);
+      }
+    }catch(e){setDashboardVisibility(null);}
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindAuth); else bindAuth();
+})();
+</script>
+
+<!-- STEP 7 SEO SYSTEM -->
+<script>
+(function(){
+  const SITE_NAME='Samagra Decor';
+  const SITE_URL='https://www.samagradecor.com';
+  function slugify(v){return String(v||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
+  function setMeta(name,content){let el=document.querySelector('meta[name="'+name+'"]');if(!el){el=document.createElement('meta');el.name=name;document.head.appendChild(el)}el.content=content||''}
+  function setProp(prop,content){let el=document.querySelector('meta[property="'+prop+'"]');if(!el){el=document.createElement('meta');el.setAttribute('property',prop);document.head.appendChild(el)}el.content=content||''}
+  function canonical(url){let el=document.querySelector('link[rel="canonical"]');if(!el){el=document.createElement('link');el.rel='canonical';document.head.appendChild(el)}el.href=url}
+  function seoForVendor(v){
+    const name=v.business_name||v.name||'Decoration Vendor';
+    const city=v.city||v.location||'';
+    const category=Array.isArray(v.category)?v.category.join(', '):(v.category||v.categories||'Decoration Services');
+    const slug=slugify(v.slug||name);
+    const url=SITE_URL+'/vendor/'+slug;
+    const title=(name+' | '+category+(city?' in '+city:'')+' | '+SITE_NAME).slice(0,60);
+    const desc=((v.description||('Book '+name+' for '+category+(city?' in '+city:''))).replace(/\s+/g,' ').trim()).slice(0,155);
+    document.title=title;
+    setMeta('description',desc); setMeta('robots',v.status==='approved'&&v.is_active!==false?'index,follow':'noindex,nofollow');
+    setProp('og:title',title); setProp('og:description',desc); setProp('og:url',url); setProp('og:type','website');
+    canonical(url);
+    let old=document.getElementById('vendor-schema'); if(old) old.remove();
+    const data={'@context':'https://schema.org','@type':'LocalBusiness','name':name,'description':desc,'url':url};
+    if(v.phone||v.mobile) data.telephone=v.phone||v.mobile;
+    if(city) data.address={'@type':'PostalAddress','addressLocality':city,'addressCountry':'IN'};
+    if(v.image||v.image_url||v.photo_url) data.image=v.image||v.image_url||v.photo_url;
+    const sc=document.createElement('script'); sc.id='vendor-schema'; sc.type='application/ld+json'; sc.textContent=JSON.stringify(data); document.head.appendChild(sc);
+    return {slug,url,title,desc};
+  }
+  window.SamagraSEO={slugify,seoForVendor,refresh:function(){
+    const path=location.pathname;
+    if(path.startsWith('/vendor/')){ setMeta('robots','index,follow'); canonical(location.href.split('?')[0]); }
+  }};
+  SamagraSEO.refresh();
+})();
+</script>
+
+
+<style id="sdStep9ReviewStyles">
+.sd-review-box{margin-top:18px;background:#fffdf7;border:1px solid #d8c59a;border-radius:16px;padding:18px}
+.sd-review-form{display:grid;gap:10px;margin-top:14px}.sd-review-form textarea{min-height:90px;resize:vertical}.sd-review-form input,.sd-review-form textarea{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #d8c59a;border-radius:10px;font:inherit}.sd-star-picker{display:flex;gap:5px}.sd-star-picker button{border:0;background:transparent;font-size:28px;cursor:pointer;padding:0}.sd-review-submit{background:#043b2f;color:#f7d77d;border:0;border-radius:10px;padding:12px;font-weight:900;cursor:pointer}.sd-review-list{display:grid;gap:10px;margin-top:14px}.sd-review-item{background:#fff;border:1px solid #eadfca;border-radius:12px;padding:13px}.sd-review-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.sd-review-stars{color:#b8860b;font-weight:900;letter-spacing:1px}.sd-verified{display:inline-block;background:#e8f6ee;color:#087443;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:800;margin-left:6px}.sd-review-date{color:#888;font-size:11px}.sd-review-empty{color:#777;font-size:13px;padding:10px 0}.sd-review-lock{background:#f7f1e3;border-radius:10px;padding:12px;color:#665d4e;font-size:13px}
+</style>
+<script>
+(function(){
+  const db = window.sdDb || (window.supabaseClient || null);
+  function escR(x){return String(x??'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
+  function stars(n){n=Math.max(0,Math.min(5,Number(n)||0));return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);}
+  function currentUser(){try{return firebase.auth().currentUser||null}catch(e){return null}}
+  async function loadReviews(v){
+    const box=document.getElementById('sdStep9Reviews'); if(!box||!db||!v?.id)return;
+    const {data,error}=await db.from('vendor_reviews').select('id,rating,review_text,created_at,is_verified,status,user_id').eq('vendor_id',v.id).eq('status','approved').order('created_at',{ascending:false}).limit(20);
+    if(error){box.querySelector('.sd-review-list').innerHTML='<div class="sd-review-empty">Reviews abhi configure nahi hain.</div>';return;}
+    const rows=data||[];
+    const list=rows.map(r=>'<div class="sd-review-item"><div class="sd-review-head"><div><span class="sd-review-stars">'+stars(r.rating)+'</span>'+(r.is_verified?'<span class="sd-verified">✓ Verified</span>':'')+'</div><span class="sd-review-date">'+escR(r.created_at?new Date(r.created_at).toLocaleDateString('en-IN'):'')+'</span></div><div style="margin-top:7px;color:#444;line-height:1.55">'+escR(r.review_text)+'</div></div>').join('');
+    box.querySelector('.sd-review-list').innerHTML=list||'<div class="sd-review-empty">Abhi koi approved review nahi hai.</div>';
+  }
+  async function renderReviewBox(v){
+    const page=document.getElementById('sdVendorPage');if(!page)return;
+    let old=document.getElementById('sdStep9Reviews');if(old)old.remove();
+    const user=currentUser();
+    const box=document.createElement('section');box.id='sdStep9Reviews';box.className='sd-review-box';
+    box.innerHTML='<h2 style="margin:0;color:#043b2f">⭐ Customer Reviews & Ratings</h2><div class="sd-review-list"><div class="sd-review-empty">Reviews load ho rahe hain...</div></div>'+
+      (user?'<div class="sd-review-form"><b>Apna review dein</b><div class="sd-star-picker" id="sdStarPicker">'+[1,2,3,4,5].map(i=>'<button type="button" data-star="'+i+'">☆</button>').join('')+'</div><textarea id="sdReviewText" maxlength="1000" placeholder="Vendor ke experience ke baare mein likhein..."></textarea><button class="sd-review-submit" id="sdReviewSubmit">SUBMIT REVIEW</button><div style="font-size:11px;color:#777">Review pehle moderation ke liye jayega. Approved hone ke baad profile par dikhega.</div></div>':'<div class="sd-review-lock">🔒 Review dene ke liye Login / Create Account karein.</div>');
+    const panels=page.querySelectorAll('.sdVendorPanel');
+    const target=Array.from(panels).find(x=>/Ratings & Reviews/i.test(x.textContent||''));
+    if(target)target.replaceWith(box); else page.querySelector('.sdVendorGrid')?.appendChild(box);
+    let selected=0;
+    box.querySelectorAll('[data-star]').forEach(btn=>btn.addEventListener('click',function(){selected=Number(this.dataset.star);box.querySelectorAll('[data-star]').forEach(b=>b.textContent=Number(b.dataset.star)<=selected?'★':'☆')}));
+    const submit=box.querySelector('#sdReviewSubmit');
+    if(submit)submit.addEventListener('click',async function(){
+      const u=currentUser(); if(!u){alert('Review dene ke liye login karein.');return;}
+      if(!selected){alert('Please rating select karein.');return;}
+      const text=(box.querySelector('#sdReviewText')?.value||'').trim();if(text.length<5){alert('Review kam se kam 5 characters ka hona chahiye.');return;}
+      submit.disabled=true;submit.textContent='SUBMITTING...';
+      const {data:existing}=await db.from('vendor_reviews').select('id').eq('vendor_id',v.id).eq('user_id',u.uid).maybeSingle();
+      if(existing){alert('Aap is vendor ko already review de chuke hain.');submit.disabled=false;submit.textContent='SUBMIT REVIEW';return;}
+      const {error}=await db.from('vendor_reviews').insert([{vendor_id:v.id,user_id:u.uid,rating:selected,review_text:text,status:'pending',is_verified:false}]);
+      if(error){alert('Review submit nahi hua. Supabase mein vendor_reviews table/RLS configure karein.\n\n'+error.message);submit.disabled=false;submit.textContent='SUBMIT REVIEW';return;}
+      alert('Review submit ho gaya. Admin approval ke baad live hoga. ✅');box.querySelector('#sdReviewText').value='';selected=0;box.querySelectorAll('[data-star]').forEach(b=>b.textContent='☆');submit.disabled=false;submit.textContent='SUBMIT REVIEW';
+    });
+    loadReviews(v);
+  }
+  const original=window.openVendorProfile;
+  if(typeof original==='function'){
+    window.openVendorProfile=async function(v,push){await original(v,push);setTimeout(function(){if(window.sdCurrentVendor||document.querySelector('#sdVendorPage.active')){let cur=window.sdCurrentVendor; if(!cur){try{cur=window.sdCurrentVendor}catch(e){}} if(cur)renderReviewBox(cur);}},80)};
+  }
+  // Keep a global current vendor reference synchronized if the original script exposes it.
+  const oldOpen=window.openVendorProfile;
+  window.sdRefreshReviews=function(){if(window.sdCurrentVendor)renderReviewBox(window.sdCurrentVendor)};
 })();
 </script>
 
