@@ -915,7 +915,61 @@
 }
 
 </style>
-</head>
+<style>
+/* STEP 10 — Customer Requirement / Lead System */
+.req-overlay{position:fixed;inset:0;background:rgba(20,16,10,.58);display:none;align-items:center;justify-content:center;padding:18px;z-index:10000}
+.req-modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#fffaf0;border:1px solid #b89b65;border-radius:18px;box-shadow:0 22px 70px rgba(0,0,0,.28);padding:22px}
+.req-modal h2{margin:0 0 6px;font-size:25px}.req-muted{color:#6f6659;font-size:13px;margin-bottom:16px}
+.req-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.req-field{display:flex;flex-direction:column;gap:6px}.req-field.full{grid-column:1/-1}.req-field label{font-weight:800;font-size:13px}.req-field input,.req-field select,.req-field textarea{border:1px solid #cdbb98;border-radius:10px;padding:11px 12px;background:#fff;font:inherit}.req-field textarea{min-height:100px;resize:vertical}
+.req-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}.req-btn{border:0;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer}.req-primary{background:#7a5a20;color:#fff}.req-secondary{background:#eee5d4;color:#4e463a}
+.req-card{background:#fffaf0;border:1px solid #d2bf99;border-radius:14px;padding:15px;margin:10px 0}.req-card h3{margin:0 0 5px}.req-meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.req-pill{background:#eee3cf;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800}.req-lead-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.req-empty{padding:22px;text-align:center;color:#756b5c}.req-success{padding:12px;border-radius:10px;background:#e8f5e9;color:#215b2a;font-weight:700;margin-top:10px}
+@media(max-width:650px){.req-grid,.req-lead-grid{grid-template-columns:1fr}.req-field.full{grid-column:auto}.req-modal{padding:16px}.req-actions{flex-direction:column}.req-btn{width:100%}}
+</style><style>
+/* STEP 11 — Vendor Lead Matching */
+.lead-wrap{max-width:1100px;margin:28px auto;padding:0 16px}
+.lead-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lead-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.lead-tab{border:1px solid #cdbb98;background:#fffaf0;border-radius:999px;padding:8px 13px;font-weight:800;cursor:pointer}
+.lead-tab.active{background:#7a5a20;color:#fff}
+.lead-card{background:#fffaf0;border:1px solid #d2bf99;border-radius:15px;padding:17px;margin:12px 0}
+.lead-card h3{margin:0 0 7px}.lead-meta{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
+.lead-pill{background:#eee3cf;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800}
+.lead-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.lead-btn{border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer}
+.lead-call{background:#315f2d;color:#fff}.lead-wa{background:#17823b;color:#fff}.lead-status{background:#7a5a20;color:#fff}
+.lead-muted{color:#706658;font-size:13px}.lead-empty{text-align:center;padding:25px;color:#756b5c}
+.lead-priority{font-size:12px;font-weight:900;padding:4px 8px;border-radius:999px;background:#ead7a8}
+@media(max-width:650px){.lead-wrap{padding:0 10px}.lead-card{padding:13px}.lead-actions .lead-btn{flex:1;min-width:120px}}
+</style><style>
+/* STEP 12 — Notifications & Communication */
+.notif-wrap{position:relative;display:inline-block}
+.notif-bell{border:0;background:transparent;font-size:21px;cursor:pointer;position:relative;padding:7px}
+.notif-count{position:absolute;top:0;right:0;background:#b3261e;color:#fff;border-radius:999px;min-width:17px;height:17px;font-size:10px;font-weight:900;display:none;align-items:center;justify-content:center}
+.notif-panel{position:absolute;right:0;top:43px;width:min(390px,calc(100vw - 24px));max-height:500px;overflow:auto;background:#fffaf0;border:1px solid #cdbb98;border-radius:14px;box-shadow:0 18px 45px rgba(0,0,0,.2);z-index:10001;display:none}
+.notif-head{padding:13px 14px;border-bottom:1px solid #dfd0b3;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.notif-head strong{font-size:16px}.notif-action{border:0;background:transparent;font-weight:800;cursor:pointer}
+.notif-item{padding:12px 14px;border-bottom:1px solid #eee3d0;cursor:pointer}
+.notif-item.unread{background:#f4ead7}.notif-title{font-weight:850}.notif-time{font-size:11px;color:#756b5c;margin-top:4px}
+.notif-empty{padding:24px;text-align:center;color:#756b5c}
+.comm-btn{border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer}
+.comm-call{background:#315f2d;color:#fff}.comm-wa{background:#17823b;color:#fff}
+.notif-prefs{padding:14px;border-top:1px solid #dfd0b3;background:#fffdf8}
+.notif-pref-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:13px}
+@media(max-width:600px){.notif-panel{position:fixed;right:12px;top:58px}.notif-bell{font-size:20px}}
+</style><style>
+/* STEP 13 — Payment & Subscription */
+.pay-wrap{max-width:1100px;margin:28px auto;padding:0 16px}
+.pay-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.pay-card{background:#fffaf0;border:1px solid #cdbb98;border-radius:16px;padding:18px}
+.pay-card h3{margin:0 0 7px}.pay-price{font-size:27px;font-weight:900}.pay-muted{color:#71675a;font-size:13px}
+.pay-btn{border:0;border-radius:10px;padding:11px 15px;font-weight:900;cursor:pointer;background:#7a5a20;color:#fff;width:100%;margin-top:12px}
+.pay-btn.secondary{background:#eee3cf;color:#4d4437}.pay-current{border:2px solid #7a5a20}
+.pay-status{padding:12px;border-radius:10px;background:#f1e5cf;margin:14px 0;font-weight:800}
+.pay-history{margin-top:20px}.pay-row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #e1d4bc;font-size:13px}
+.pay-ok{color:#236b2b}.pay-fail{color:#a02d2d}
+@media(max-width:750px){.pay-grid{grid-template-columns:1fr}.pay-wrap{padding:0 10px}.pay-row{flex-direction:column}}
+</style></head>
 
 <body>
   <div class="top" id="home">
@@ -4384,5 +4438,517 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
+
+<!-- STEP 10: Customer Requirement / Lead System -->
+<div id="requirementOverlay" class="req-overlay">
+  <div class="req-modal">
+    <h2>Post Your Requirement</h2>
+    <div class="req-muted">Apni decoration requirement post karein. Public profile par aapka mobile number nahi dikhaya jayega.</div>
+    <form id="requirementForm">
+      <div class="req-grid">
+        <div class="req-field"><label>Event Type *</label><select id="reqEvent" required><option value="">Select event</option><option>Wedding</option><option>Birthday</option><option>Engagement</option><option>Anniversary</option><option>Corporate Event</option><option>Baby Shower</option><option>Other</option></select></div>
+        <div class="req-field"><label>City / Location *</label><input id="reqCity" required placeholder="e.g. Jabalpur"></div>
+        <div class="req-field"><label>Required Service *</label><select id="reqService" required><option value="">Select service</option><option>Wedding Decoration</option><option>Birthday Decoration</option><option>Stage Decoration</option><option>Balloon Decoration</option><option>Flower Decoration</option><option>DJ</option><option>Photography</option><option>Makeup Artist</option><option>Lighting & Sound</option><option>Other</option></select></div>
+        <div class="req-field"><label>Event Date</label><input id="reqDate" type="date"></div>
+        <div class="req-field"><label>Approx Budget</label><input id="reqBudget" placeholder="e.g. ₹50,000"></div>
+        <div class="req-field"><label>Guest Count</label><input id="reqGuests" type="number" min="1" placeholder="e.g. 150"></div>
+        <div class="req-field"><label>Your Mobile *</label><input id="reqMobile" type="tel" required pattern="[0-9+() -]{8,18}" placeholder="10 digit mobile"></div>
+        <div class="req-field"><label>WhatsApp</label><input id="reqWhatsapp" type="tel" placeholder="WhatsApp number"></div>
+        <div class="req-field full"><label>Requirement Details *</label><textarea id="reqDetails" required placeholder="Venue, decoration style, expected date/time, special requirements..."></textarea></div>
+        <div class="req-field full"><label>Reference Photo URL (optional)</label><input id="reqPhoto" type="url" placeholder="https://..."></div>
+      </div>
+      <div id="reqMessage"></div>
+      <div class="req-actions"><button type="button" class="req-btn req-secondary" onclick="closeRequirementModal()">Cancel</button><button class="req-btn req-primary" type="submit">Submit Requirement</button></div>
+    </form>
+  </div>
+</div>
+
+<div id="requirementsSection" style="display:none;margin:25px 0">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+    <div><h2 style="margin:0">My Requirements</h2><div class="req-muted">Aapki posted requirements aur lead status.</div></div>
+    <button class="req-btn req-primary" onclick="openRequirementModal()">+ Post Requirement</button>
+  </div>
+  <div id="myRequirementsList"></div>
+</div>
+
+<script>
+(function(){
+  const SB_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
+  const SB_KEY = window.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
+  const hasSupabase = typeof window.supabase !== "undefined" && !SB_URL.includes("YOUR_PROJECT");
+  const client = hasSupabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+
+  function authUser(){
+    try { return window.currentUser || null; } catch(e){ return null; }
+  }
+  window.openRequirementModal = function(){
+    const u=authUser();
+    if(!u){ alert("Requirement post karne ke liye login karein."); if(typeof window.openAuthModal==="function") window.openAuthModal(); return; }
+    document.getElementById("requirementOverlay").style.display="flex";
+  };
+  window.closeRequirementModal = function(){ document.getElementById("requirementOverlay").style.display="none"; };
+
+  async function saveRequirement(data){
+    if(!client) throw new Error("Supabase connection is not configured.");
+    const {data:row,error}=await client.from("customer_requirements").insert(data).select().single();
+    if(error) throw error;
+    return row;
+  }
+
+  document.getElementById("requirementForm").addEventListener("submit",async function(e){
+    e.preventDefault();
+    const u=authUser();
+    if(!u){alert("Please login first.");return;}
+    const msg=document.getElementById("reqMessage");
+    msg.innerHTML="";
+    const payload={
+      customer_id:u.id,
+      event_type:document.getElementById("reqEvent").value,
+      city:document.getElementById("reqCity").value.trim(),
+      service:document.getElementById("reqService").value,
+      event_date:document.getElementById("reqDate").value||null,
+      budget:document.getElementById("reqBudget").value.trim()||null,
+      guest_count:Number(document.getElementById("reqGuests").value)||null,
+      mobile:document.getElementById("reqMobile").value.trim(),
+      whatsapp:document.getElementById("reqWhatsapp").value.trim()||null,
+      details:document.getElementById("reqDetails").value.trim(),
+      reference_photo_url:document.getElementById("reqPhoto").value.trim()||null,
+      status:"pending",
+      created_at:new Date().toISOString()
+    };
+    try{
+      await saveRequirement(payload);
+      msg.innerHTML='<div class="req-success">Requirement successfully submit ho gayi. Admin review ke baad matching vendors ko lead milegi.</div>';
+      this.reset();
+      setTimeout(()=>{closeRequirementModal();loadMyRequirements();},900);
+    }catch(err){
+      console.error(err);
+      msg.innerHTML='<div style="color:#a33;font-weight:700;margin-top:10px">Requirement save nahi ho paayi. Supabase table/RLS configuration check karein.</div>';
+    }
+  });
+
+  async function loadMyRequirements(){
+    const box=document.getElementById("myRequirementsList"), sec=document.getElementById("requirementsSection");
+    const u=authUser();
+    if(!u || !client){sec.style.display="none";return;}
+    sec.style.display="block";
+    const {data,error}=await client.from("customer_requirements").select("*").eq("customer_id",u.id).order("created_at",{ascending:false});
+    if(error){box.innerHTML='<div class="req-empty">Requirements load nahi ho pa rahi.</div>';return;}
+    if(!data?.length){box.innerHTML='<div class="req-empty">Abhi koi requirement post nahi ki hai.</div>';return;}
+    box.innerHTML=data.map(r=>`<div class="req-card">
+      <h3>${esc(r.event_type||"Event")} — ${esc(r.city||"")}</h3>
+      <div class="req-meta"><span class="req-pill">${esc(r.service||"")}</span><span class="req-pill">Status: ${esc(r.status||"pending")}</span>${r.budget?`<span class="req-pill">Budget: ${esc(r.budget)}</span>`:""}${r.event_date?`<span class="req-pill">Date: ${esc(r.event_date)}</span>`:""}</div>
+      <div>${esc(r.details||"")}</div>
+    </div>`).join("");
+  }
+  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+  window.loadMyRequirements=loadMyRequirements;
+
+  // Expose a safe hook for an existing "Post Your Requirement" button.
+  window.openPostRequirement = window.openRequirementModal;
+  document.addEventListener("click",e=>{
+    const el=e.target.closest("[data-post-requirement]");
+    if(el){e.preventDefault();openRequirementModal();}
+  });
+  setTimeout(loadMyRequirements,500);
+})();
+</script>
+
+<!-- STEP 11: Vendor Lead Dashboard -->
+<section id="vendorLeadsSection" class="lead-wrap" style="display:none">
+  <div class="lead-head">
+    <div>
+      <h2 style="margin:0">My Leads</h2>
+      <div class="lead-muted">Aapke liye matched customer requirements.</div>
+    </div>
+    <div id="leadPlanBadge"></div>
+  </div>
+  <div class="lead-tabs">
+    <button class="lead-tab active" data-lead-filter="all">All</button>
+    <button class="lead-tab" data-lead-filter="new">New</button>
+    <button class="lead-tab" data-lead-filter="contacted">Contacted</button>
+    <button class="lead-tab" data-lead-filter="quoted">Quoted</button>
+    <button class="lead-tab" data-lead-filter="won">Won</button>
+    <button class="lead-tab" data-lead-filter="lost">Lost</button>
+  </div>
+  <div id="vendorLeadsList"></div>
+</section>
+
+<script>
+(function(){
+  const SB_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
+  const SB_KEY = window.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
+  const client = (typeof window.supabase !== "undefined" && !SB_URL.includes("YOUR_PROJECT"))
+    ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+  let allLeads = [], currentFilter = "all";
+
+  function user(){ try{return window.currentUser || null}catch(e){return null} }
+  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+  function planRank(p){return String(p||"free").toLowerCase().includes("prime")?3:String(p||"free").toLowerCase().includes("paid")?2:1}
+  function currentPlan(){return String(window.currentVendorPlan||window.vendorPlan||"free").toLowerCase()}
+
+  function render(){
+    const box=document.getElementById("vendorLeadsList");
+    let rows=allLeads.filter(x=>currentFilter==="all"||String(x.status||"new").toLowerCase()===currentFilter);
+    if(!rows.length){box.innerHTML='<div class="lead-empty">Is filter mein koi lead nahi hai.</div>';return;}
+    box.innerHTML=rows.map(l=>{
+      const r=l.customer_requirements||l.requirement||l;
+      const contactAllowed=!!l.contact_unlocked || !!l.is_contact_visible;
+      const phone=contactAllowed?(l.customer_mobile||r.mobile||""):"";
+      const wa=contactAllowed?(l.customer_whatsapp||r.whatsapp||phone):"";
+      const status=String(l.status||"new").toLowerCase();
+      return `<article class="lead-card">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:start">
+          <div><h3>${esc(r.event_type||"Event")} — ${esc(r.city||"")}</h3>
+          <div class="lead-muted">${esc(r.service||"")}</div></div>
+          ${l.priority_plan?`<span class="lead-priority">${esc(l.priority_plan)}</span>`:""}
+        </div>
+        <div class="lead-meta">
+          ${r.event_date?`<span class="lead-pill">📅 ${esc(r.event_date)}</span>`:""}
+          ${r.budget?`<span class="lead-pill">💰 ${esc(r.budget)}</span>`:""}
+          ${r.guest_count?`<span class="lead-pill">👥 ${esc(r.guest_count)} guests</span>`:""}
+          <span class="lead-pill">Status: ${esc(status)}</span>
+        </div>
+        <div>${esc(r.details||"")}</div>
+        ${contactAllowed
+          ? `<div class="lead-muted" style="margin-top:10px">Customer: ${esc(l.customer_name||"")} ${phone?`· ${esc(phone)}`:""}</div>`
+          : `<div class="lead-muted" style="margin-top:10px">Customer contact details lead authorization ke baad available honge.</div>`}
+        <div class="lead-actions">
+          ${phone?`<a class="lead-btn lead-call" href="tel:${encodeURIComponent(phone)}">Call</a>`:""}
+          ${wa?`<a class="lead-btn lead-wa" target="_blank" href="https://wa.me/${String(wa).replace(/[^0-9]/g,"")}">WhatsApp</a>`:""}
+          <button class="lead-btn lead-status" onclick="window.updateLeadStatus('${esc(l.id)}','contacted')">Contacted</button>
+          <button class="lead-btn lead-status" onclick="window.updateLeadStatus('${esc(l.id)}','quoted')">Quoted</button>
+          <button class="lead-btn lead-status" onclick="window.updateLeadStatus('${esc(l.id)}','won')">Won</button>
+          <button class="lead-btn" onclick="window.updateLeadStatus('${esc(l.id)}','lost')">Lost</button>
+        </div>
+      </article>`;
+    }).join("");
+  }
+
+  async function load(){
+    const section=document.getElementById("vendorLeadsSection");
+    const u=user();
+    if(!u || !client){section.style.display="none";return;}
+    section.style.display="block";
+    if(window.vendorPlan) document.getElementById("leadPlanBadge").innerHTML='<span class="lead-priority">'+esc(window.vendorPlan)+'</span>';
+    const {data,error}=await client.from("vendor_leads")
+      .select("*,customer_requirements(*)")
+      .eq("vendor_user_id",u.id)
+      .order("created_at",{ascending:false});
+    if(error){console.error(error);document.getElementById("vendorLeadsList").innerHTML='<div class="lead-empty">Leads load nahi ho pa rahi. Supabase vendor_leads table/RLS check karein.</div>';return;}
+    allLeads=data||[];
+    // Server-side matching/authorization is expected. Client never assigns itself a lead.
+    allLeads.sort((a,b)=>planRank(b.priority_plan)-planRank(a.priority_plan));
+    render();
+  }
+
+  window.updateLeadStatus=async function(id,status){
+    const u=user();
+    if(!u||!client)return alert("Please login first.");
+    const allowed=["new","contacted","interested","quoted","won","lost"];
+    if(!allowed.includes(status))return;
+    const {error}=await client.from("vendor_leads").update({status,updated_at:new Date().toISOString()})
+      .eq("id",id).eq("vendor_user_id",u.id);
+    if(error){alert("Lead status update nahi ho paaya.");console.error(error);return;}
+    await load();
+  };
+
+  document.addEventListener("click",e=>{
+    const tab=e.target.closest("[data-lead-filter]");
+    if(!tab)return;
+    document.querySelectorAll("[data-lead-filter]").forEach(x=>x.classList.remove("active"));
+    tab.classList.add("active");currentFilter=tab.dataset.leadFilter;render();
+  });
+
+  window.loadVendorLeads=load;
+  setTimeout(load,700);
+})();
+</script>
+
+<!-- STEP 12: Notification Center -->
+<div id="notificationCenter" class="notif-wrap" style="display:none">
+  <button id="notificationBell" class="notif-bell" aria-label="Notifications" title="Notifications">
+    🔔<span id="notificationCount" class="notif-count">0</span>
+  </button>
+  <div id="notificationPanel" class="notif-panel">
+    <div class="notif-head">
+      <strong>Notifications</strong>
+      <button class="notif-action" id="markAllNotifications">Mark all read</button>
+    </div>
+    <div id="notificationList"><div class="notif-empty">Loading...</div></div>
+    <div class="notif-prefs">
+      <strong>Notification Preferences</strong>
+      <div class="notif-pref-row"><span>New leads</span><input type="checkbox" id="prefLeads" checked></div>
+      <div class="notif-pref-row"><span>Profile / approval updates</span><input type="checkbox" id="prefProfile" checked></div>
+      <div class="notif-pref-row"><span>Subscription reminders</span><input type="checkbox" id="prefSubscription" checked></div>
+      <button id="saveNotifPrefs" class="comm-btn" style="background:#7a5a20;color:#fff;margin-top:7px">Save Preferences</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const SB_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
+  const SB_KEY = window.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
+  const client = (typeof window.supabase !== "undefined" && !SB_URL.includes("YOUR_PROJECT"))
+    ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+  let notifications = [];
+  let prefs = {leads:true,profile:true,subscription:true};
+
+  function user(){try{return window.currentUser||null}catch(e){return null}}
+  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+  function ago(ts){
+    if(!ts)return "";
+    const s=Math.max(0,Math.floor((Date.now()-new Date(ts).getTime())/1000));
+    if(s<60)return s+" sec ago"; if(s<3600)return Math.floor(s/60)+" min ago";
+    if(s<86400)return Math.floor(s/3600)+" hr ago"; return Math.floor(s/86400)+" days ago";
+  }
+
+  async function loadPrefs(){
+    const u=user(); if(!u||!client)return;
+    const {data}=await client.from("notification_preferences").select("*").eq("user_id",u.id).maybeSingle();
+    if(data){prefs={leads:data.leads!==false,profile:data.profile!==false,subscription:data.subscription!==false};}
+    document.getElementById("prefLeads").checked=prefs.leads;
+    document.getElementById("prefProfile").checked=prefs.profile;
+    document.getElementById("prefSubscription").checked=prefs.subscription;
+  }
+
+  function render(){
+    const list=document.getElementById("notificationList");
+    const unread=notifications.filter(n=>!n.is_read).length;
+    const badge=document.getElementById("notificationCount");
+    badge.textContent=unread>99?"99+":unread; badge.style.display=unread?"flex":"none";
+    if(!notifications.length){list.innerHTML='<div class="notif-empty">No notifications.</div>';return;}
+    list.innerHTML=notifications.map(n=>`<div class="notif-item ${n.is_read?"":"unread"}" data-notification-id="${esc(n.id)}">
+      <div class="notif-title">${esc(n.title||"Notification")}</div>
+      <div>${esc(n.message||"")}</div>
+      <div class="notif-time">${esc(ago(n.created_at))}</div>
+    </div>`).join("");
+  }
+
+  async function load(){
+    const center=document.getElementById("notificationCenter"),u=user();
+    if(!u||!client){center.style.display="none";return;}
+    center.style.display="inline-block";
+    await loadPrefs();
+    const {data,error}=await client.from("notifications").select("*").eq("user_id",u.id).order("created_at",{ascending:false}).limit(50);
+    if(error){console.error(error);notifications=[];render();return;}
+    notifications=data||[];render();
+  }
+
+  async function markRead(id){
+    const u=user();if(!u||!client)return;
+    await client.from("notifications").update({is_read:true,read_at:new Date().toISOString()}).eq("id",id).eq("user_id",u.id);
+    const n=notifications.find(x=>x.id===id);if(n)n.is_read=true;render();
+  }
+
+  document.getElementById("notificationBell").addEventListener("click",async e=>{
+    e.stopPropagation();
+    const p=document.getElementById("notificationPanel");
+    p.style.display=p.style.display==="block"?"none":"block";
+    if(p.style.display==="block")await load();
+  });
+  document.addEventListener("click",e=>{
+    const c=document.getElementById("notificationCenter");
+    if(c&&!c.contains(e.target))document.getElementById("notificationPanel").style.display="none";
+  });
+  document.getElementById("notificationList").addEventListener("click",e=>{
+    const item=e.target.closest("[data-notification-id]");if(item)markRead(item.dataset.notificationId);
+  });
+  document.getElementById("markAllNotifications").addEventListener("click",async()=>{
+    const u=user();if(!u||!client)return;
+    await client.from("notifications").update({is_read:true,read_at:new Date().toISOString()}).eq("user_id",u.id).eq("is_read",false);
+    notifications.forEach(n=>n.is_read=true);render();
+  });
+  document.getElementById("saveNotifPrefs").addEventListener("click",async()=>{
+    const u=user();if(!u||!client)return;
+    prefs={leads:document.getElementById("prefLeads").checked,profile:document.getElementById("prefProfile").checked,subscription:document.getElementById("prefSubscription").checked};
+    const {error}=await client.from("notification_preferences").upsert({
+      user_id:u.id,leads:prefs.leads,profile:prefs.profile,subscription:prefs.subscription,updated_at:new Date().toISOString()
+    },{onConflict:"user_id"});
+    if(error)alert("Preferences save nahi ho paayi.");else alert("Preferences saved.");
+  });
+
+  // Realtime updates: database notification insert will refresh the center.
+  if(client){
+    try{
+      client.channel("samagra-notifications")
+        .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications"},payload=>{
+          const u=user();if(u&&payload.new&&payload.new.user_id===u.id){notifications.unshift(payload.new);render();}
+        }).subscribe();
+    }catch(e){console.warn("Realtime notifications unavailable",e);}
+  }
+
+  window.loadNotifications=load;
+  setTimeout(load,800);
+})();
+</script>
+
+<!-- STEP 13: Payment & Subscription -->
+<section id="subscriptionSection" class="pay-wrap" style="display:none">
+  <div>
+    <h2 style="margin:0">Plans & Subscription</h2>
+    <div class="pay-muted">Payment verification ke baad hi paid features activate honge.</div>
+  </div>
+  <div id="subscriptionStatus" class="pay-status">Loading subscription...</div>
+
+  <div class="pay-grid">
+    <article id="paidPlanCard" class="pay-card">
+      <h3>Paid Listing</h3>
+      <div class="pay-price">₹199<span style="font-size:13px">/year</span></div>
+      <div class="pay-muted">Enhanced listing features</div>
+      <button class="pay-btn" onclick="window.startSubscription('paid')">Upgrade to Paid</button>
+    </article>
+    <article id="primePlanCard" class="pay-card">
+      <h3>Prime Pro</h3>
+      <div class="pay-price">₹999<span style="font-size:13px">/year</span></div>
+      <div class="pay-muted">Premium listing + priority features</div>
+      <button class="pay-btn" onclick="window.startSubscription('prime')">Upgrade to Prime Pro</button>
+    </article>
+    <article class="pay-card">
+      <h3>Free Listing</h3>
+      <div class="pay-price">₹0</div>
+      <div class="pay-muted">Basic vendor profile</div>
+      <button class="pay-btn secondary" onclick="window.activateFreePlan()">Use Free Listing</button>
+    </article>
+  </div>
+
+  <div class="pay-history">
+    <h3>Payment History</h3>
+    <div id="paymentHistory"><div class="pay-muted">No payment history loaded.</div></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  const SB_URL=window.SUPABASE_URL||"https://YOUR_PROJECT.supabase.co";
+  const SB_KEY=window.SUPABASE_ANON_KEY||"YOUR_SUPABASE_ANON_KEY";
+  const client=(typeof window.supabase!=="undefined"&&!SB_URL.includes("YOUR_PROJECT"))
+    ? window.supabase.createClient(SB_URL,SB_KEY):null;
+
+  // Set this to your Razorpay Key ID. Secret key must NEVER be placed in HTML.
+  const RAZORPAY_KEY_ID=window.RAZORPAY_KEY_ID||"YOUR_RAZORPAY_KEY_ID";
+  const PLANS={
+    paid:{name:"Paid Listing",amount:199,durationDays:365},
+    prime:{name:"Prime Pro",amount:999,durationDays:365}
+  };
+
+  function user(){try{return window.currentUser||null}catch(e){return null}}
+  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+  function norm(p){p=String(p||"free").toLowerCase();return p.includes("prime")?"prime":p.includes("paid")?"paid":"free";}
+  function fmt(d){if(!d)return"-";return new Date(d).toLocaleDateString("en-IN");}
+
+  async function loadSubscription(){
+    const section=document.getElementById("subscriptionSection"),u=user();
+    if(!u||!client){section.style.display="none";return;}
+    section.style.display="block";
+
+    const {data,error}=await client.from("subscriptions").select("*").eq("user_id",u.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
+    if(error){document.getElementById("subscriptionStatus").textContent="Subscription table/RLS configure nahi hai.";return;}
+
+    if(!data){
+      document.getElementById("subscriptionStatus").innerHTML="Current Plan: <b>Free</b>";
+      return;
+    }
+
+    const expired=data.status==="active" && data.expires_at && new Date(data.expires_at)<new Date();
+    if(expired){
+      // Server-side expiry automation should perform this update. This client call is only a fallback for the user's own row.
+      await client.from("subscriptions").update({plan:"free",status:"expired",updated_at:new Date().toISOString()})
+        .eq("id",data.id).eq("user_id",u.id);
+      data.plan="free";data.status="expired";
+    }
+
+    document.getElementById("subscriptionStatus").innerHTML=
+      `Current Plan: <b>${esc(data.plan||"free").toUpperCase()}</b> · Status: <b>${esc(data.status||"")}</b> · Expires: <b>${fmt(data.expires_at)}</b>`;
+    document.getElementById("paidPlanCard").classList.toggle("pay-current",norm(data.plan)==="paid");
+    document.getElementById("primePlanCard").classList.toggle("pay-current",norm(data.plan)==="prime");
+    loadHistory(u.id);
+  }
+
+  async function loadHistory(uid){
+    const box=document.getElementById("paymentHistory");
+    const {data,error}=await client.from("payments").select("*").eq("user_id",uid).order("created_at",{ascending:false}).limit(20);
+    if(error||!data?.length){box.innerHTML='<div class="pay-muted">No payment history.</div>';return;}
+    box.innerHTML=data.map(p=>`<div class="pay-row">
+      <span><b>${esc(p.plan||"")}</b><br><small>${esc(fmt(p.created_at))}</small></span>
+      <span>₹${esc(p.amount||"")} · <b class="${p.status==="success"?"pay-ok":"pay-fail"}">${esc(p.status||"")}</b></span>
+    </div>`).join("");
+  }
+
+  async function createOrder(plan){
+    if(!client)throw new Error("Supabase connection is not configured.");
+    // IMPORTANT: order amount and Razorpay order_id must be created by a trusted Supabase Edge Function.
+    const {data,error}=await client.functions.invoke("create-subscription-order",{
+      body:{plan,return_url:location.href}
+    });
+    if(error)throw error;
+    if(!data?.order_id)throw new Error("Secure payment order was not created.");
+    return data;
+  }
+
+  async function verifyPayment(payload){
+    const {data,error}=await client.functions.invoke("verify-subscription-payment",{body:payload});
+    if(error)throw error;
+    return data;
+  }
+
+  window.startSubscription=async function(plan){
+    const u=user();
+    if(!u){alert("Subscription ke liye login karein.");if(typeof window.openAuthModal==="function")window.openAuthModal();return;}
+    if(!client){alert("Supabase configuration missing.");return;}
+    const cfg=PLANS[plan];if(!cfg)return;
+
+    try{
+      const order=await createOrder(plan);
+      if(typeof window.Razorpay==="undefined"){alert("Razorpay checkout load nahi hua.");return;}
+      const options={
+        key:RAZORPAY_KEY_ID,
+        order_id:order.order_id,
+        amount:order.amount,
+        currency:order.currency||"INR",
+        name:"Samagra Decor",
+        description:cfg.name,
+        prefill:{name:u.user_metadata?.full_name||"",email:u.email||""},
+        theme:{color:"#7a5a20"},
+        handler:async function(response){
+          try{
+            const result=await verifyPayment({
+              plan,
+              razorpay_order_id:response.razorpay_order_id,
+              razorpay_payment_id:response.razorpay_payment_id,
+              razorpay_signature:response.razorpay_signature
+            });
+            if(!result?.verified)throw new Error("Payment verification failed.");
+            alert("Payment verified. Subscription activate ho gayi.");
+            await loadSubscription();
+            if(typeof window.loadNotifications==="function")window.loadNotifications();
+          }catch(e){console.error(e);alert("Payment verify nahi hua. Plan activate nahi kiya gaya.");}
+        },
+        modal:{ondismiss:function(){console.log("Checkout closed");}}
+      };
+      new window.Razorpay(options).open();
+    }catch(e){console.error(e);alert("Secure payment order create nahi ho paaya.");}
+  };
+
+  window.activateFreePlan=async function(){
+    const u=user();if(!u||!client)return;
+    const {error}=await client.from("subscriptions").upsert({
+      user_id:u.id,plan:"free",status:"active",expires_at:null,updated_at:new Date().toISOString()
+    },{onConflict:"user_id"});
+    if(error){alert("Free plan update nahi hua.");return;}
+    alert("Free Listing active hai.");
+    loadSubscription();
+  };
+
+  // Optional Razorpay loader; only public checkout script is loaded.
+  if(!document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]')){
+    const s=document.createElement("script");s.src="https://checkout.razorpay.com/v1/checkout.js";s.async=true;document.head.appendChild(s);
+  }
+
+  window.loadSubscription=loadSubscription;
+  setTimeout(loadSubscription,900);
+})();
+</script>
 </body>
 </html>
