@@ -914,200 +914,6 @@
   .adProfileBtn{font-size:11px;padding:8px 10px;margin-top:0}
 }
 
-
-/* ===== STEP 1 FINAL FEATURED VENDOR UI ===== */
-.sdFeaturedCard{
-  grid-template-columns:minmax(300px, 42%) minmax(0, 58%) !important;
-  align-items:stretch !important;
-  overflow:hidden !important;
-}
-.sdFeaturedImage{
-  position:relative !important;
-  border-right:2px solid #c8a24a !important;
-  min-height:390px !important;
-}
-.sdFeaturedImage img{
-  width:100% !important;
-  height:100% !important;
-  min-height:390px !important;
-  object-fit:cover !important;
-}
-.sdFeaturedBody{
-  padding:16px !important;
-  min-width:0 !important;
-}
-.sdNameBlock{
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:7px;
-}
-.sdNameBlock h3{
-  font-size:29px !important;
-  line-height:1.14 !important;
-  font-weight:950 !important;
-  color:#063f34 !important;
-  margin:0 !important;
-}
-.sdPlanBadgeRight{
-  position:static !important;
-  display:inline-flex !important;
-  width:max-content !important;
-  margin:0 !important;
-  font-weight:950 !important;
-}
-.sdRating{
-  font-size:15px !important;
-  font-weight:800 !important;
-  margin:2px 0 10px !important;
-}
-.sdInfoBox{
-  border:2px solid #c7a451 !important;
-  background:#fffaf0 !important;
-  border-radius:16px !important;
-  padding:16px !important;
-  margin-top:2px !important;
-}
-.sdInfoLine,
-.sdDescription{
-  font-size:17px !important;
-  line-height:1.45 !important;
-  font-weight:850 !important;
-  color:#193f37 !important;
-  margin:7px 0 !important;
-}
-.sdInfoLine span,
-.sdDescription span{
-  font-weight:950 !important;
-  color:#073f34 !important;
-}
-.sdInfoTags{
-  display:flex !important;
-  flex-wrap:wrap !important;
-  gap:7px !important;
-  margin:12px 0 !important;
-}
-.sdInfoTags span{
-  font-size:12px !important;
-  font-weight:900 !important;
-}
-.sdPriceRow{
-  border-top:1px solid #ddcfaa !important;
-  border-bottom:1px solid #ddcfaa !important;
-  padding:12px 0 !important;
-  margin:7px 0 12px !important;
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:flex-start !important;
-  gap:3px !important;
-}
-.sdPriceRow span{
-  font-size:13px !important;
-  letter-spacing:1px !important;
-  font-weight:950 !important;
-  color:#716b5b !important;
-}
-.sdPriceRow strong{
-  font-size:29px !important;
-  line-height:1.1 !important;
-  font-weight:950 !important;
-  color:#007153 !important;
-}
-.sdActionGrid{
-  display:grid !important;
-  grid-template-columns:1fr 1fr !important;
-  gap:8px !important;
-}
-.sdActionGrid .sdVBtn{
-  min-height:46px !important;
-  font-weight:900 !important;
-  border-radius:10px !important;
-}
-.sdActionGrid .sdShare{
-  background:#0aa956 !important;
-  color:#fff !important;
-}
-.sdPhotoClickable{
-  border:0 !important;
-  cursor:pointer !important;
-}
-.sdFeaturedImage .sdPlanBadge{display:none !important;}
-
-@media(max-width:700px){
-  .sdFeaturedCard{
-    grid-template-columns:42% 58% !important;
-    min-height:0 !important;
-  }
-  .sdFeaturedImage{
-    min-height:0 !important;
-    height:auto !important;
-    border-right:2px solid #c8a24a !important;
-    border-bottom:0 !important;
-  }
-  .sdFeaturedImage img{
-    min-height:100% !important;
-    height:100% !important;
-    object-fit:cover !important;
-  }
-  .sdFeaturedBody{
-    padding:10px !important;
-  }
-  .sdNameBlock h3{
-    font-size:20px !important;
-  }
-  .sdInfoBox{
-    padding:10px !important;
-    border-radius:12px !important;
-  }
-  .sdInfoLine,
-  .sdDescription{
-    font-size:13px !important;
-    line-height:1.35 !important;
-    margin:5px 0 !important;
-  }
-  .sdPriceRow strong{
-    font-size:21px !important;
-  }
-  .sdPriceRow span{
-    font-size:10px !important;
-  }
-  .sdActionGrid{
-    grid-template-columns:1fr 1fr !important;
-    gap:6px !important;
-  }
-  .sdActionGrid .sdVBtn{
-    min-height:40px !important;
-    font-size:11px !important;
-    padding:5px 4px !important;
-  }
-  .sdPlanBadgeRight{
-    font-size:10px !important;
-    padding:5px 8px !important;
-  }
-  .sdInfoTags span{
-    font-size:9px !important;
-    padding:4px 6px !important;
-  }
-  .sdPhotoCount{
-    left:7px !important;
-    bottom:7px !important;
-    font-size:9px !important;
-    padding:5px 7px !important;
-  }
-  .sdImageCity{
-    left:7px !important;
-    bottom:42px !important;
-    font-size:9px !important;
-    padding:4px 6px !important;
-  }
-  .sdFav{
-    width:34px !important;
-    height:34px !important;
-    font-size:18px !important;
-  }
-}
-
 </style>
 </head>
 
@@ -2051,9 +1857,6 @@
       if(!box) return;
 
       const source = Array.isArray(list) ? list.slice() : [];
-
-      // Final Featured order: Prime Pro -> Paid -> Free.
-      // Always show up to 5 vendors. If no Prime/Paid exist, Free vendors fill the section.
       source.sort(function(a,b){
         const priorityDiff = vendorPlanPriority(b) - vendorPlanPriority(a);
         if(priorityDiff !== 0) return priorityDiff;
@@ -2066,7 +1869,7 @@
       currentVendorList = displayList;
 
       if(displayList.length === 0){
-        box.innerHTML = "<div class='sdEmptyFeatured'><b>Featured Vendors</b><span>Abhi koi approved vendor available nahi hai.</span></div>";
+        box.innerHTML = "<div class='sdEmptyFeatured'><b>Featured Vendors</b><span>Paid aur Prime Pro vendors yahan featured honge. Abhi approved Free vendors bhi yahan dikh sakte hain.</span></div>";
         return;
       }
 
@@ -2076,45 +1879,37 @@
         const isPaidOrPrime = plan === "paid" || plan === "prime_pro";
         const planLabel = plan === "prime_pro" ? "👑 PRIME PRO" : plan === "paid" ? "💎 PAID" : "FREE";
         const imageCount = Array.isArray(v.photos) ? v.photos.length : 0;
-        const ratingText = Number(v.reviews || 0) > 0
-          ? `<div class="sdRating">⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)} reviews)</div>`
-          : "";
-        const shareBtn = isPaidOrPrime
-          ? `<button class="sdVBtn sdShare" onclick="shareVendor(${index})" title="Share Profile">↗ Share</button>`
-          : "";
+        const reviewText = Number(v.reviews || 0) > 0 ? "⭐ " + escapeHtml(v.rating) + " (" + escapeHtml(v.reviews) + ")" : "⭐ New Vendor";
+        const shareBtn = isPaidOrPrime ? `<button class="sdVBtn sdShare" onclick="shareVendor(${index})" title="Share Profile">↗ Share</button>` : "";
+        const ownerText = v.owner || v.owner_name || "Not provided";
+        const descText = v.description || v.desc || "";
+        const photoCountBtn = imageCount ? `<button class="sdPhotoCount" onclick="viewDetails(${index})" title="View Profile">▧ ${imageCount}+ Photos</button>` : "";
 
         return `
           <article class="vendorCard sdFeaturedCard sdPlan-${plan}">
             <div class="vendorImg sdFeaturedImage">
               <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name + ' ' + v.category + ' ' + v.city)}" loading="lazy" decoding="async">
+              <div class="sdImageTopTags">
+                <span class="sdImageVerified">✓ Verified</span>
+                <span class="sdImageVisibility">${plan === "prime_pro" ? "Priority Visibility" : plan === "paid" ? "Better Visibility" : "Basic Listing"}</span>
+              </div>
               ${v.city ? `<div class="sdImageCity">📍 ${escapeHtml(v.city)}</div>` : ""}
-              ${imageCount ? `<button class="sdPhotoCount sdPhotoClickable" onclick="viewDetails(${index})" title="View Profile">▧ ${imageCount}+ Photos</button>` : ""}
+              ${photoCountBtn}
             </div>
-
             <div class="vendorBody sdFeaturedBody">
               <div class="sdVendorNameRow">
-                <div class="sdNameBlock">
-                  <h3>${escapeHtml(v.name)}</h3>
-                  <div class="sdPlanBadge sdPlanBadgeRight ${plan}">${planLabel}</div>
-                </div>
                 <button class="favBtn sdFav" onclick="addFavorite(${index})" title="Favorite">♡</button>
-              </div>
-
-              ${ratingText}
-
-              <div class="sdInfoBox">
-                <div class="sdInfoLine"><span>👤 Owner:</span> <b>${escapeHtml(v.owner_name || "Not provided")}</b></div>
-                <div class="sdInfoLine"><span>📍 Location:</span> <b>${escapeHtml(v.city || "Not provided")}</b></div>
-                <div class="sdInfoLine"><span>🏷️ Category:</span> <b>${escapeHtml(v.category || "Not provided")}</b></div>
-                <div class="sdDescription"><span>📝 Description:</span> <b>${escapeHtml(v.desc || "Samagra Decor verified event service vendor.")}</b></div>
-
-                <div class="sdInfoTags">
-                  <span>✓ Verified</span>
-                  ${plan === "prime_pro" ? "<span>Priority Visibility</span>" : plan === "paid" ? "<span>Better Visibility</span>" : "<span>Basic Listing</span>"}
+                <div class="sdNameAndPlan">
+                  <h3>${escapeHtml(v.name).toUpperCase()}</h3>
+                  <div class="sdPlanInline ${plan}">${planLabel}</div>
                 </div>
-
-                <div class="sdPriceRow"><span>STARTING PRICE</span><strong>${priceText}</strong></div>
-
+              </div>
+              <div class="sdInfoBox">
+                <div class="sdInfoLine"><b>👤 Owner:</b> ${escapeHtml(ownerText)}</div>
+                <div class="sdInfoLine"><b>📍 Location:</b> ${escapeHtml(v.city || "Not provided")}</div>
+                <div class="sdCategoryLine"><b>🏷️ Category:</b> ${escapeHtml(v.category || "Not provided")}</div>
+                ${descText ? `<div class="sdDescriptionLine"><b>📝 Description:</b> ${escapeHtml(descText)}</div>` : ""}
+                <div class="sdPriceRow"><span>STARTING PRICE:</span><strong>${priceText}</strong></div>
                 <div class="cardActions sdActionGrid">
                   <button class="sdVBtn sdCall" onclick="vendorCall(${index})">📞 Call</button>
                   <button class="sdVBtn sdWhats" onclick="vendorWhatsApp(${index})">☘ WhatsApp</button>
@@ -4012,39 +3807,50 @@ document.addEventListener("click", function(e){
 .sdPlanBadge.prime_pro{background:linear-gradient(135deg,#f5d16b,#dca82f);color:#10241f}
 .sdPlanBadge.paid{background:#6334e8;color:#fff}
 .sdPlanBadge.free{background:#f7f7f4;color:#173f32;border:1px solid #ddd}
-.sdFeaturedImage .badge{top:52px;left:13px;padding:7px 11px;background:#043b2f;color:#fff;font-weight:900}
+.sdFeaturedImage .badge{display:none}
+.sdImageTopTags{position:absolute;top:13px;left:13px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;z-index:4}
+.sdImageTopTags span{display:inline-flex;align-items:center;width:max-content;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:1000;box-shadow:0 4px 12px rgba(0,0,0,.16)}
+.sdImageVerified{background:#043b2f;color:#fff}
+.sdImageVisibility{background:#f5ead0;color:#173f32;border:1px solid #d3b56c}
 .sdImageCity,.sdPhotoCount{position:absolute;bottom:12px;background:rgba(0,0,0,.70);color:#fff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:900;z-index:3}
 .sdImageCity{left:12px}.sdPhotoCount{right:12px}
-.sdFeaturedBody{padding:18px 18px 15px!important;display:flex;flex-direction:column;min-width:0}
-.sdVendorNameRow{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-.sdVendorNameRow h3{font-size:23px!important;line-height:1.08!important;font-weight:1000!important;margin:0 0 6px!important;color:#073b2f!important;overflow-wrap:anywhere}
+.sdFeaturedBody{padding:18px 18px 15px!important;display:flex;flex-direction:column;min-width:0;background:#fff8e8;border-left:1px solid #b99a55;box-sizing:border-box}
+.sdVendorNameRow{display:flex;align-items:center;gap:10px;min-width:0;margin-bottom:4px}
+.sdVendorNameRow h3{font-size:23px!important;line-height:1.08!important;font-weight:1000!important;margin:0!important;color:#073b2f!important;overflow-wrap:anywhere;text-transform:uppercase;letter-spacing:.2px}
+.sdNameAndPlan{min-width:0;flex:1}
+.sdPlanInline{display:inline-flex;align-items:center;margin-top:7px;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:1000;letter-spacing:.35px;box-shadow:0 3px 8px rgba(0,0,0,.08)}
+.sdPlanInline.prime_pro{background:linear-gradient(135deg,#f5d16b,#dca82f);color:#10241f}
+.sdPlanInline.paid{background:#6334e8;color:#fff}
+.sdPlanInline.free{background:#f7f7f4;color:#173f32;border:1px solid #ddd}
 .sdRating{font-weight:800;color:#544c39;font-size:13px}
-.sdFav{width:40px;height:40px;padding:0!important;border-radius:50%!important;background:#fff!important;border:1px solid #e0c57c!important;color:#a67400!important;font-size:23px!important;flex:none}
-.sdInfoLine{font-size:13px;color:#173f32;margin-top:11px}.sdInfoLine b{font-weight:900}
-.sdCategoryLine{font-size:14px;font-weight:800;color:#514d42;margin-top:7px;line-height:1.35}
-.sdInfoTags{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0 10px}
-.sdInfoTags span{font-size:11px;font-weight:900;background:#f7f3e7;color:#365047;padding:6px 9px;border-radius:999px}
-.sdPriceRow{border-top:1px solid #eee3c8;border-bottom:1px solid #eee3c8;padding:10px 0;margin:2px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.sdPriceRow span{font-size:10px;font-weight:1000;color:#756f61;letter-spacing:.8px}.sdPriceRow strong{font-size:21px;color:#006044;font-weight:1000}
-.sdActionGrid{display:grid!important;grid-template-columns:auto auto 1fr auto;gap:7px!important;margin-top:auto!important}
+.sdFav{width:40px;height:40px;padding:0!important;border-radius:50%!important;background:#fff!important;border:1px solid #d6b65c!important;color:#a67400!important;font-size:23px!important;flex:none;order:-1}
+.sdInfoBox{margin-top:4px;padding:12px 12px 10px;border:none;border-radius:15px;background:#f0dfb9;box-sizing:border-box}
+.sdInfoLine{font-size:14px;color:#173f32;margin-top:8px;line-height:1.35;font-weight:900}.sdInfoLine:first-child{margin-top:0}.sdInfoLine b{font-weight:1000}
+.sdCategoryLine{font-size:14px;font-weight:1000;color:#173f32;margin-top:8px;line-height:1.35}
+.sdDescriptionLine{font-size:14px;font-weight:900;color:#173f32;margin-top:8px;line-height:1.35}
+.sdPriceRow{border-top:1px solid #ddcfab;border-bottom:1px solid #ddcfab;padding:10px 0;margin:2px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sdPriceRow span{font-size:11px;font-weight:1000;color:#756f61;letter-spacing:.5px;white-space:nowrap}.sdPriceRow strong{font-size:22px;color:#006044;font-weight:1000;text-align:right;white-space:nowrap}
+.sdActionGrid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;margin-top:auto!important}
 .sdVBtn{min-height:42px;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:1000;cursor:pointer;white-space:nowrap;transition:.18s;border:1px solid #d8d1bf}
 .sdVBtn:hover{transform:translateY(-1px)}
-.sdCall{background:#064c3d;color:#fff;border-color:#064c3d}.sdWhats{background:#0dbb59;color:#fff;border-color:#0dbb59}.sdProfile{background:#043b2f;color:#fff;border-color:#043b2f}.sdShare{background:#fff;color:#064c3d;border-color:#8aa99e}.sdActionGrid .sdFav{height:42px}
+.sdCall{background:#064c3d;color:#fff;border-color:#064c3d}.sdWhats{background:#0dbb59;color:#fff;border-color:#0dbb59}.sdProfile{background:#043b2f;color:#fff;border-color:#043b2f}.sdShare{background:#0dbb59;color:#fff;border-color:#0dbb59}
 .sdEmptyFeatured{grid-column:1/-1;min-height:150px;border:1px dashed #d6a53a;border-radius:20px;background:#fffdf7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;color:#173f32;padding:20px}.sdEmptyFeatured span{font-size:14px;color:#706a5b}
 @media(min-width:701px){#vendorList{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 @media(max-width:700px){
   #vendorList{grid-template-columns:1fr!important;gap:13px!important}
-  .sdFeaturedCard{grid-template-columns:42% 58%;min-height:225px}
+  .sdFeaturedCard{grid-template-columns:40% 60%;min-height:225px}
   .sdFeaturedImage{min-height:225px!important}
-  .sdFeaturedBody{padding:13px 11px 11px!important}
-  .sdVendorNameRow h3{font-size:17px!important;line-height:1.04!important}
-  .sdRating{font-size:11px}.sdInfoLine{font-size:11px;margin-top:7px}.sdCategoryLine{font-size:11px;margin-top:5px;line-height:1.25}
-  .sdInfoTags{gap:4px;margin:7px 0}.sdInfoTags span{font-size:9px;padding:4px 6px}
-  .sdPriceRow{padding:7px 0;margin-bottom:8px}.sdPriceRow span{font-size:8px}.sdPriceRow strong{font-size:16px}
-  .sdPlanBadge{top:9px;left:9px;padding:5px 7px;font-size:9px}.sdFeaturedImage .badge{top:38px;left:9px;padding:5px 7px;font-size:9px}.sdImageCity,.sdPhotoCount{bottom:8px;padding:4px 6px;font-size:8px}
+  .sdImageTopTags{top:9px;left:9px;gap:4px}.sdImageTopTags span{font-size:8px;padding:5px 7px}
+  .sdFeaturedBody{padding:11px 9px 10px!important;background:#fff8e8;border-left:1px solid #b99a55}
+  .sdVendorNameRow{gap:7px;margin-bottom:3px}.sdVendorNameRow h3{font-size:17px!important;line-height:1.04!important}
+  .sdFav{width:34px;height:34px;font-size:19px!important}
+  .sdPlanInline{font-size:9px;padding:5px 7px;margin-top:5px}
+  .sdRating{font-size:10px}.sdInfoBox{padding:9px 9px 8px;border-radius:12px}
+  .sdInfoLine{font-size:11px;margin-top:6px;line-height:1.28}.sdCategoryLine,.sdDescriptionLine{font-size:11px;margin-top:6px;line-height:1.25}
+  .sdInfoTags{gap:4px;margin:6px 0}.sdInfoTags span{font-size:8px;padding:4px 5px}
+  .sdPriceRow{padding:7px 0;margin-bottom:7px}.sdPriceRow span{font-size:8px}.sdPriceRow strong{font-size:15px}
   .sdActionGrid{grid-template-columns:1fr 1fr!important;gap:5px!important}
-  .sdVBtn{min-height:34px;padding:6px 5px;font-size:9px;border-radius:7px}
-  .sdProfile{grid-column:1/-1}.sdActionGrid .sdShare{grid-column:1/2}.sdActionGrid .sdFav{grid-column:2/3;width:auto;height:34px;font-size:19px!important}
+  .sdVBtn{min-height:34px;padding:6px 4px;font-size:9px;border-radius:7px}
 }
 @media(max-width:380px){.sdFeaturedCard{grid-template-columns:40% 60%}.sdFeaturedBody{padding:10px 8px 9px!important}.sdVendorNameRow h3{font-size:15px!important}.sdPriceRow strong{font-size:14px}.sdVBtn{font-size:8px;padding:5px 3px}}
 </style>
