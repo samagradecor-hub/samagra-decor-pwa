@@ -915,61 +915,7 @@
 }
 
 </style>
-<style>
-/* STEP 10 — Customer Requirement / Lead System */
-.req-overlay{position:fixed;inset:0;background:rgba(20,16,10,.58);display:none;align-items:center;justify-content:center;padding:18px;z-index:10000}
-.req-modal{width:min(760px,100%);max-height:92vh;overflow:auto;background:#fffaf0;border:1px solid #b89b65;border-radius:18px;box-shadow:0 22px 70px rgba(0,0,0,.28);padding:22px}
-.req-modal h2{margin:0 0 6px;font-size:25px}.req-muted{color:#6f6659;font-size:13px;margin-bottom:16px}
-.req-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.req-field{display:flex;flex-direction:column;gap:6px}.req-field.full{grid-column:1/-1}.req-field label{font-weight:800;font-size:13px}.req-field input,.req-field select,.req-field textarea{border:1px solid #cdbb98;border-radius:10px;padding:11px 12px;background:#fff;font:inherit}.req-field textarea{min-height:100px;resize:vertical}
-.req-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}.req-btn{border:0;border-radius:10px;padding:11px 16px;font-weight:800;cursor:pointer}.req-primary{background:#7a5a20;color:#fff}.req-secondary{background:#eee5d4;color:#4e463a}
-.req-card{background:#fffaf0;border:1px solid #d2bf99;border-radius:14px;padding:15px;margin:10px 0}.req-card h3{margin:0 0 5px}.req-meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.req-pill{background:#eee3cf;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800}.req-lead-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.req-empty{padding:22px;text-align:center;color:#756b5c}.req-success{padding:12px;border-radius:10px;background:#e8f5e9;color:#215b2a;font-weight:700;margin-top:10px}
-@media(max-width:650px){.req-grid,.req-lead-grid{grid-template-columns:1fr}.req-field.full{grid-column:auto}.req-modal{padding:16px}.req-actions{flex-direction:column}.req-btn{width:100%}}
-</style><style>
-/* STEP 11 — Vendor Lead Matching */
-.lead-wrap{max-width:1100px;margin:28px auto;padding:0 16px}
-.lead-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.lead-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
-.lead-tab{border:1px solid #cdbb98;background:#fffaf0;border-radius:999px;padding:8px 13px;font-weight:800;cursor:pointer}
-.lead-tab.active{background:#7a5a20;color:#fff}
-.lead-card{background:#fffaf0;border:1px solid #d2bf99;border-radius:15px;padding:17px;margin:12px 0}
-.lead-card h3{margin:0 0 7px}.lead-meta{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
-.lead-pill{background:#eee3cf;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800}
-.lead-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
-.lead-btn{border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer}
-.lead-call{background:#315f2d;color:#fff}.lead-wa{background:#17823b;color:#fff}.lead-status{background:#7a5a20;color:#fff}
-.lead-muted{color:#706658;font-size:13px}.lead-empty{text-align:center;padding:25px;color:#756b5c}
-.lead-priority{font-size:12px;font-weight:900;padding:4px 8px;border-radius:999px;background:#ead7a8}
-@media(max-width:650px){.lead-wrap{padding:0 10px}.lead-card{padding:13px}.lead-actions .lead-btn{flex:1;min-width:120px}}
-</style><style>
-/* STEP 12 — Notifications & Communication */
-.notif-wrap{position:relative;display:inline-block}
-.notif-bell{border:0;background:transparent;font-size:21px;cursor:pointer;position:relative;padding:7px}
-.notif-count{position:absolute;top:0;right:0;background:#b3261e;color:#fff;border-radius:999px;min-width:17px;height:17px;font-size:10px;font-weight:900;display:none;align-items:center;justify-content:center}
-.notif-panel{position:absolute;right:0;top:43px;width:min(390px,calc(100vw - 24px));max-height:500px;overflow:auto;background:#fffaf0;border:1px solid #cdbb98;border-radius:14px;box-shadow:0 18px 45px rgba(0,0,0,.2);z-index:10001;display:none}
-.notif-head{padding:13px 14px;border-bottom:1px solid #dfd0b3;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.notif-head strong{font-size:16px}.notif-action{border:0;background:transparent;font-weight:800;cursor:pointer}
-.notif-item{padding:12px 14px;border-bottom:1px solid #eee3d0;cursor:pointer}
-.notif-item.unread{background:#f4ead7}.notif-title{font-weight:850}.notif-time{font-size:11px;color:#756b5c;margin-top:4px}
-.notif-empty{padding:24px;text-align:center;color:#756b5c}
-.comm-btn{border:0;border-radius:9px;padding:9px 13px;font-weight:800;cursor:pointer}
-.comm-call{background:#315f2d;color:#fff}.comm-wa{background:#17823b;color:#fff}
-.notif-prefs{padding:14px;border-top:1px solid #dfd0b3;background:#fffdf8}
-.notif-pref-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:13px}
-@media(max-width:600px){.notif-panel{position:fixed;right:12px;top:58px}.notif-bell{font-size:20px}}
-</style><style>
-/* STEP 13 — Payment & Subscription */
-.pay-wrap{max-width:1100px;margin:28px auto;padding:0 16px}
-.pay-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.pay-card{background:#fffaf0;border:1px solid #cdbb98;border-radius:16px;padding:18px}
-.pay-card h3{margin:0 0 7px}.pay-price{font-size:27px;font-weight:900}.pay-muted{color:#71675a;font-size:13px}
-.pay-btn{border:0;border-radius:10px;padding:11px 15px;font-weight:900;cursor:pointer;background:#7a5a20;color:#fff;width:100%;margin-top:12px}
-.pay-btn.secondary{background:#eee3cf;color:#4d4437}.pay-current{border:2px solid #7a5a20}
-.pay-status{padding:12px;border-radius:10px;background:#f1e5cf;margin:14px 0;font-weight:800}
-.pay-history{margin-top:20px}.pay-row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #e1d4bc;font-size:13px}
-.pay-ok{color:#236b2b}.pay-fail{color:#a02d2d}
-@media(max-width:750px){.pay-grid{grid-template-columns:1fr}.pay-wrap{padding:0 10px}.pay-row{flex-direction:column}}
-</style></head>
+</head>
 
 <body>
   <div class="top" id="home">
@@ -992,8 +938,7 @@
         <a onclick="showInfoPage('faq')">FAQ</a>
         <a onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</a>
         <a id="authMenuLink" onclick="openAuthModal()">Login / Create Account</a>
-        <a id="adminMenuLink" onclick="openAdminPanel()" style="display:none;">Admin Panel</a>
-        <a id="vendorDashboardMenuLink" onclick="openVendorDashboard()" style="display:none;">Vendor Dashboard</a>
+        <a id="adminMenuLink" onclick="openAdminPanel()" style="display:none !important;" aria-hidden="true">Admin Panel</a>
       </div>
 
       <button class="mobileMenuBtn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">☰</button>
@@ -1256,9 +1201,6 @@
 
   <div class="sd-footer-bottom">
     <span>© 2026 Samagra Decor. All Rights Reserved.</span>
-    <div class="sd-footer-legal">
-      <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Refund</a><a href="#">Help</a>
-    </div>
   </div>
 </footer>
 
@@ -1284,7 +1226,7 @@
         <div class="vendorFormSub">Apne business ke liye listing plan choose karein</div>
         <div class="newPlanGrid">
           <div class="newPlanCard"><h2>🆓 Free Listing</h2><div class="newPlanPrice">₹0 <span>• Always Free</span></div><p>✅ Basic Vendor Profile<br>✅ Maximum 2 Categories<br>✅ Maximum 4 Business Photos<br>✅ Mobile / Call button<br>✅ WhatsApp button<br>✅ Customer Rating & Reviews<br>✅ Basic Search Listing<br><br>❌ Video Link<br>❌ Share Button<br>❌ Featured Listing</p><button class="monthlyBtn" onclick="openPlanForm('free')">CREATE FREE LISTING</button></div>
-          <div class="newPlanCard"><h2>💎 Paid Listing</h2><div class="newPlanPrice">₹29 / Month<br>₹199 / Year</div><p>✅ Complete Vendor Profile<br>✅ Maximum 7 Categories<br>✅ Maximum 7 Business Photos<br>✅ YouTube / Instagram / Drive Video Link<br>✅ Call & WhatsApp<br>✅ Customer Rating & Reviews<br>✅ Better Search Visibility<br>✅ Verified / Paid Vendor Badge<br>✅ Vendor Profile Share Button<br>✅ Active Subscription</p><button class="monthlyBtn" onclick="chooseListingPlan('paid')">CHOOSE PAID LISTING</button></div>
+          <div class="newPlanCard"><h2>💎 Paid Listing</h2><div class="newPlanPrice">₹29 / Month<br>₹299 / Year</div><p>✅ Complete Vendor Profile<br>✅ Maximum 7 Categories<br>✅ Maximum 7 Business Photos<br>✅ YouTube / Instagram / Drive Video Link<br>✅ Call & WhatsApp<br>✅ Customer Rating & Reviews<br>✅ Better Search Visibility<br>✅ Verified / Paid Vendor Badge<br>✅ Vendor Profile Share Button<br>✅ Active Subscription</p><button class="monthlyBtn" onclick="chooseListingPlan('paid')">CHOOSE PAID LISTING</button></div>
           <div class="newPlanCard"><h2>👑 Prime Pro</h2><div class="newPlanPrice">₹149 / Month<br>₹999 / Year</div><p>⭐ Everything in Paid — ALL Features<br>⭐ Maximum 12 Categories<br>⭐ Maximum 12 Business / Portfolio Photos<br>⭐ Video Link<br>⭐ PRIME PRO Badge<br>⭐ Featured Business<br>⭐ Premium Vendor Profile<br>⭐ Better Customer Reach<br>⭐ Featured Section Visibility<br>⭐ Profile Sharing<br>⭐ Priority Search Visibility</p><button class="monthlyBtn" onclick="chooseListingPlan('prime_pro')">CHOOSE PRIME PRO</button></div>
         </div>
         <button class="backBtn" onclick="closeListingModal()">← Back</button>
@@ -1776,25 +1718,6 @@
       updateVendorCategoryHiddenValue();
     }
 
-    function getVendorPlan(v){
-      const raw = String(v && (v.plan || v.listing_type || v.listingType || v.subscription_plan || v.subscription_type || "free")).toLowerCase().trim();
-      const end = v && (v.subscription_end || v.plan_end || v.expires_at || v.subscription_expires_at);
-      if(end && new Date(end).getTime() < Date.now()) return "free";
-      if(raw.includes("prime")) return "prime_pro";
-      if(raw.includes("paid") || raw.includes("monthly") || raw.includes("yearly")) return "paid";
-      return "free";
-    }
-
-    function isVendorFeatured(v){
-      const plan = getVendorPlan(v);
-      return plan === "prime_pro" || plan === "paid" || v.featured === true || String(v.featured || v.is_featured || "").toLowerCase() === "true";
-    }
-
-    function vendorPlanPriority(v){
-      const p = v && v.plan ? v.plan : getVendorPlan(v && v.raw ? v.raw : v);
-      return p === "prime_pro" ? 3 : p === "paid" ? 2 : 1;
-    }
-
     function normalizeVendor(v){
       let photos = [];
 
@@ -1843,9 +1766,7 @@
         img: mainImage,
         photos: photos,
         video_url: safeText(v.video_url || v.video || v.video_link || v.videoUrl || ""),
-        desc: safeText(v.description || v.business_description || v.desc || "Samagra Decor verified event service vendor."),
-        plan: getVendorPlan(v),
-        featured: isVendorFeatured(v)
+        desc: safeText(v.description || v.business_description || v.desc || "Samagra Decor verified event service vendor.")
       };
     }
 
@@ -1909,71 +1830,37 @@
 
     function renderVendors(list, featuredOnly){
       const box = document.getElementById("vendorList");
-      if(!box) return;
-
-      const source = Array.isArray(list) ? list.slice() : [];
-      source.sort(function(a,b){
-        const priorityDiff = vendorPlanPriority(b) - vendorPlanPriority(a);
-        if(priorityDiff !== 0) return priorityDiff;
-        const bf = (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-        if(bf !== 0) return bf;
-        return String(a.name || "").localeCompare(String(b.name || ""));
-      });
-
-      const displayList = featuredOnly ? source.slice(0, 5) : source;
-      currentVendorList = displayList;
-
-      if(displayList.length === 0){
-        box.innerHTML = "<div class='sdEmptyFeatured'><b>Featured Vendors</b><span>Paid aur Prime Pro vendors yahan featured honge. Abhi approved Free vendors bhi yahan dikh sakte hain.</span></div>";
+      currentVendorList = list;
+      if(list.length === 0){
+        box.innerHTML = "<p style='grid-column:1/-1;text-align:center;font-weight:bold;'>Abhi koi approved vendor live nahi hai.</p>";
         return;
       }
 
+      const displayList = featuredOnly ? list.slice(0, 3) : list;
       const html = displayList.map(function(v,index){
-        const priceText = v.price > 0 ? "₹" + v.price.toLocaleString("en-IN") : "Price on request";
-        const plan = v.plan || getVendorPlan(v.raw || v);
-        const isPaidOrPrime = plan === "paid" || plan === "prime_pro";
-        const planLabel = plan === "prime_pro" ? "👑 PRIME PRO" : plan === "paid" ? "💎 PAID" : "FREE";
-        const imageCount = Array.isArray(v.photos) ? v.photos.length : 0;
-        const reviewText = Number(v.reviews || 0) > 0 ? "⭐ " + escapeHtml(v.rating) + " (" + escapeHtml(v.reviews) + ")" : "⭐ New Vendor";
-        const shareBtn = isPaidOrPrime ? `<button class="sdVBtn sdShare" onclick="shareVendor(${index})" title="Share Profile">↗ Share</button>` : "";
-        const ownerText = v.owner || v.owner_name || "Not provided";
-        const descText = v.description || v.desc || "";
-        const photoCountBtn = imageCount ? `<button class="sdPhotoCount" onclick="viewDetails(${index})" title="View Profile">▧ ${imageCount}+ Photos</button>` : "";
+        const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
 
         return `
-          <article class="vendorCard sdFeaturedCard sdPlan-${plan}">
-            <div class="vendorImg sdFeaturedImage">
-              <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name + ' ' + v.category + ' ' + v.city)}" loading="lazy" decoding="async">
-              <div class="sdImageTopTags">
-                <span class="sdImageVerified">✓ Verified</span>
-                <span class="sdImageVisibility">${plan === "prime_pro" ? "Priority Visibility" : plan === "paid" ? "Better Visibility" : "Basic Listing"}</span>
-              </div>
-              ${v.city ? `<div class="sdImageCity">📍 ${escapeHtml(v.city)}</div>` : ""}
-              ${photoCountBtn}
+          <div class="vendorCard">
+            <div class="vendorImg">
+              <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name)}" loading="lazy" decoding="async">
+              <div class="badge">✅ Verified</div>
             </div>
-            <div class="vendorBody sdFeaturedBody">
-              <div class="sdVendorNameRow">
-                <button class="favBtn sdFav" onclick="addFavorite(${index})" title="Favorite">♡</button>
-                <div class="sdNameAndPlan">
-                  <h3>${escapeHtml(v.name).toUpperCase()}</h3>
-                  <div class="sdPlanInline ${plan}">${planLabel}</div>
-                </div>
+            <div class="vendorBody">
+              <h3>${escapeHtml(v.name)}</h3>
+              <div class="meta">
+                <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)})</span>
+                <span>📍 ${escapeHtml(v.city)}</span>
+                <span>▦ ${escapeHtml(v.category)}</span>
               </div>
-              <div class="sdInfoBox">
-                <div class="sdInfoLine"><b>👤 Owner:</b> ${escapeHtml(ownerText)}</div>
-                <div class="sdInfoLine"><b>📍 Location:</b> ${escapeHtml(v.city || "Not provided")}</div>
-                <div class="sdCategoryLine"><b>🏷️ Category:</b> ${escapeHtml(v.category || "Not provided")}</div>
-                ${descText ? `<div class="sdDescriptionLine"><b>📝 Description:</b> ${escapeHtml(descText)}</div>` : ""}
-                <div class="sdPriceRow"><span>STARTING PRICE:</span><strong>${priceText}</strong></div>
-                <div class="cardActions sdActionGrid">
-                  <button class="sdVBtn sdCall" onclick="vendorCall(${index})">📞 Call</button>
-                  <button class="sdVBtn sdWhats" onclick="vendorWhatsApp(${index})">☘ WhatsApp</button>
-                  <button class="sdVBtn sdProfile" onclick="viewDetails(${index})">View Profile →</button>
-                  ${shareBtn}
-                </div>
+              <div class="price">${priceText}</div>
+              <div class="cardActions">
+                <button class="waBtn" onclick="vendorWhatsApp(${index})">☘</button>
+                <button class="detailBtn" onclick="viewDetails(${index})">View Details</button>
+                <button class="favBtn" onclick="addFavorite(${index})">♡</button>
               </div>
             </div>
-          </article>`;
+          </div>`;
       }).join("");
 
       box.innerHTML = html;
@@ -2041,35 +1928,6 @@
       openModal("detailsModal");
     }
 
-    function vendorCall(index){
-      const v = currentVendorList[index];
-      if(!v) return;
-      if(!requireLogin()) return;
-      const phone = v.phone && v.phone.length >= 10 ? v.phone : "";
-      if(!phone){ alert("Is vendor ka contact number available nahi hai."); return; }
-      window.location.href = "tel:+" + phone;
-    }
-
-    async function shareVendor(index){
-      const v = currentVendorList[index];
-      if(!v) return;
-      const slug = String(v.name + "-" + v.city).toLowerCase().trim().replace(/[^a-z0-9\\s-]/g,"").replace(/\\s+/g,"-").replace(/-+/g,"-");
-      const url = location.origin + "/vendor/" + slug + "/";
-      const text = v.name + " - " + v.category + " in " + v.city + " | Samagra Decor";
-      try{
-        if(navigator.share){
-          await navigator.share({title:v.name + " | Samagra Decor", text:text, url:url});
-        }else if(navigator.clipboard){
-          await navigator.clipboard.writeText(url);
-          alert("Vendor profile link copy ho gaya ✅");
-        }else{
-          prompt("Vendor profile link:", url);
-        }
-      }catch(e){
-        if(e && e.name !== "AbortError") alert("Share nahi ho paya. Link: " + url);
-      }
-    }
-
     function vendorWhatsApp(index){
       const v = currentVendorList[index];
       if (!requireLogin()) return;
@@ -2101,7 +1959,10 @@
       const adminMenuLink = document.getElementById("adminMenuLink");
       const adminQuickBtn = document.getElementById("adminQuickBtn");
 
-      if(adminMenuLink) adminMenuLink.style.display = show ? "block" : "none";
+      if(adminMenuLink){
+        adminMenuLink.style.display = show ? "block" : "none";
+        adminMenuLink.setAttribute("aria-hidden", show ? "false" : "true");
+      }
       if(adminQuickBtn) adminQuickBtn.style.display = show ? "block" : "none";
     }
 
@@ -2958,7 +2819,7 @@
         : "₹149 / Month";
     const yearly =
       plan === "paid"
-        ? "₹199 / Year"
+        ? "₹299 / Year"
         : "₹999 / Year";
 
     const choice = window.prompt(
@@ -3456,7 +3317,7 @@
     }
 
     if (!data.short_url) {
-      throw new Error("Payment link unavailable.");
+      throw new Error("Payment link unavailable. Razorpay checkout create nahi hua.");
     }
 
     return data;
@@ -3830,118 +3691,13 @@ document.addEventListener("click", function(e){
 </script>
 <style id="sd-final-marketplace-layer">
 /* ===== SAMAGRA DECOR FINAL VENDOR PROFILE + PLAN LAYER ===== */
-.sdVendorPage{display:none;max-width:1180px;margin:0 auto;padding:24px 18px 55px;background:#fffaf0;min-height:70vh}
+.sdVendorPage{display:none;max-width:1120px;margin:0 auto;padding:28px 18px 55px;background:#fffaf0;min-height:60vh}
 .sdVendorPage.active{display:block}
-.sdVendorBack{display:inline-flex;align-items:center;gap:7px;border:1px solid #d6a53a;background:#fff;color:#043b2f;border-radius:999px;padding:10px 15px;font-weight:900;cursor:pointer;margin-bottom:16px}
-.sdVendorBack:hover{background:#fff1cc}
-.sdVendorHero{display:grid;grid-template-columns:42% 58%;gap:0;background:#fff;border:1px solid rgba(214,165,58,.55);border-radius:22px;overflow:hidden;box-shadow:0 12px 34px rgba(4,59,47,.10)}
-.sdVendorHeroImg{min-height:390px;background:#e8e4d9;position:relative;overflow:hidden}.sdVendorHeroImg img{width:100%;height:100%;min-height:390px;object-fit:cover;display:block}
-.sdVendorHeroBody{padding:22px;background:#fffdf5;position:relative}
-.sdVendorTopLine{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.sdVendorKicker{display:inline-flex;align-items:center;color:#6b4b00;background:#fff1b8;border:1px solid #d6a53a;border-radius:999px;padding:6px 10px;font-weight:900;font-size:11px;text-transform:uppercase;letter-spacing:.7px}
-.sdVendorTitle{font-family:Arial,sans-serif;color:#043b2f;font-size:clamp(28px,3.5vw,42px);line-height:1.05;margin:9px 0 12px;text-transform:uppercase;font-weight:950;letter-spacing:.2px}
-.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}
-.sdVendorDesc{color:#384640;line-height:1.65;margin:12px 0;font-size:14px;font-weight:600}
-.sdVendorActions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}.sdVendorActions button{border:0;border-radius:11px;padding:13px 12px;font-weight:900;cursor:pointer}.sdVendorCall{background:#043b2f;color:#fff}.sdVendorWhatsApp{background:#0dbb59;color:#fff}.sdVendorShare{background:#0dbb59;color:#fff}.sdVendorEdit{background:#fff1cc;color:#5a4300;border:1px solid #d6a53a!important}.sdVendorView{background:#043b2f;color:#f7d77d}.sdVendorActions .full{grid-column:1/-1}
-.sdVendorInfoStrip{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:16px}.sdVendorInfoItem{padding:11px 12px;border-radius:11px;background:#fff7df;border:1px solid rgba(214,165,58,.35)}.sdVendorInfoItem b{display:block;color:#043b2f;font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}.sdVendorInfoItem span{color:#3e4944;font-size:13px;font-weight:800;line-height:1.4}
-.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid rgba(214,165,58,.42);border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:1px solid #f0dfb8;cursor:pointer}.sdReviewSummary{display:flex;align-items:center;gap:15px;padding:14px;background:#fffaf0;border:1px solid #f0dfb8;border-radius:13px}.sdReviewScore{font-size:30px;font-weight:950;color:#043b2f}.sdReviewStars{color:#d6a53a;font-size:18px;letter-spacing:1px}.sdReviewText{color:#666;font-size:12px;margin-top:3px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}.sdSeoLock{padding:14px;border-radius:13px;background:#f7f5ee;border:1px dashed #cdbf9a;color:#666;line-height:1.55;font-size:13px}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}
-@media(max-width:800px){.sdVendorPage{padding:18px 12px 45px}.sdVendorHero,.sdVendorGrid{grid-template-columns:1fr}.sdVendorHeroImg,.sdVendorHeroImg img{min-height:250px;height:250px}.sdVendorHeroBody{padding:16px}.sdVendorTitle{font-size:27px}.sdVendorGrid{gap:12px}.sdGallery{grid-template-columns:repeat(2,1fr)}.sdVendorInfoStrip{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.sdVendorInfoStrip{grid-template-columns:1fr}.sdVendorActions{grid-template-columns:1fr 1fr}.sdVendorActions button{font-size:12px;padding:11px 8px}.sdVendorHeroImg,.sdVendorHeroImg img{height:220px;min-height:220px}.sdVendorMeta span{font-size:10px;padding:6px 8px}}
-
-/* ===== FEATURED VENDOR PREMIUM UI — DESKTOP + MOBILE ===== */
-.vendorTop{margin-bottom:18px}
-.vendorTop .heading{margin-bottom:2px}
-.vendors.sdFeaturedGrid{display:grid}
-.sdFeaturedCard{
-  display:grid!important;
-  grid-template-columns:minmax(210px,42%) minmax(0,58%);
-  min-height:250px;
-  border-radius:20px!important;
-  overflow:hidden;
-  border:1px solid #ead7a6!important;
-  background:#fffdf7!important;
-  box-shadow:0 10px 28px rgba(23,63,50,.10)!important;
-  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
-}
-.sdFeaturedCard:hover{transform:translateY(-4px);box-shadow:0 16px 35px rgba(23,63,50,.16)!important;border-color:#d6a53a!important}
-.sdFeaturedCard.sdPlan-prime_pro{border:2px solid #d6a53a!important;box-shadow:0 12px 32px rgba(181,128,22,.16)!important}
-.sdFeaturedCard.sdPlan-paid{border:1.5px solid #b89a3e!important}
-.sdFeaturedImage{height:100%!important;min-height:250px!important;position:relative!important}
-.sdFeaturedImage img{height:100%!important;width:100%!important;object-fit:cover!important}
-.sdPlanBadge{position:absolute;top:13px;left:13px;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:1000;letter-spacing:.35px;z-index:3;box-shadow:0 5px 15px rgba(0,0,0,.16)}
-.sdPlanBadge.prime_pro{background:linear-gradient(135deg,#f5d16b,#dca82f);color:#10241f}
-.sdPlanBadge.paid{background:#6334e8;color:#fff}
-.sdPlanBadge.free{background:#f7f7f4;color:#173f32;border:1px solid #ddd}
-.sdFeaturedImage .badge{display:none}
-.sdImageTopTags{position:absolute;top:13px;left:13px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;z-index:4}
-.sdImageTopTags span{display:inline-flex;align-items:center;width:max-content;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:1000;box-shadow:0 4px 12px rgba(0,0,0,.16)}
-.sdImageVerified{background:#043b2f;color:#fff}
-.sdImageVisibility{background:#f5ead0;color:#173f32;border:1px solid #d3b56c}
-.sdImageCity,.sdPhotoCount{position:absolute;bottom:12px;background:rgba(0,0,0,.70);color:#fff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:900;z-index:3}
-.sdImageCity{left:12px}.sdPhotoCount{right:12px}
-.sdFeaturedBody{padding:18px 18px 15px!important;display:flex;flex-direction:column;min-width:0;background:#fff8e8;border-left:1px solid #b99a55;box-sizing:border-box}
-.sdVendorNameRow{display:flex;align-items:center;gap:10px;min-width:0;margin-bottom:4px}
-.sdVendorNameRow h3{font-size:23px!important;line-height:1.08!important;font-weight:1000!important;margin:0!important;color:#073b2f!important;overflow-wrap:anywhere;text-transform:uppercase;letter-spacing:.2px}
-.sdNameAndPlan{min-width:0;flex:1}
-.sdPlanInline{display:inline-flex;align-items:center;margin-top:7px;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:1000;letter-spacing:.35px;box-shadow:0 3px 8px rgba(0,0,0,.08)}
-.sdPlanInline.prime_pro{background:linear-gradient(135deg,#f5d16b,#dca82f);color:#10241f}
-.sdPlanInline.paid{background:#6334e8;color:#fff}
-.sdPlanInline.free{background:#f7f7f4;color:#173f32;border:1px solid #ddd}
-.sdRating{font-weight:800;color:#544c39;font-size:13px}
-.sdFav{width:40px;height:40px;padding:0!important;border-radius:50%!important;background:#fff!important;border:1px solid #d6b65c!important;color:#a67400!important;font-size:23px!important;flex:none;order:-1}
-.sdInfoBox{margin-top:4px;padding:12px 12px 10px;border:none;border-radius:15px;background:#f0dfb9;box-sizing:border-box}
-.sdInfoLine{font-size:14px;color:#173f32;margin-top:8px;line-height:1.35;font-weight:900}.sdInfoLine:first-child{margin-top:0}.sdInfoLine b{font-weight:1000}
-.sdCategoryLine{font-size:14px;font-weight:1000;color:#173f32;margin-top:8px;line-height:1.35}
-.sdDescriptionLine{font-size:14px;font-weight:900;color:#173f32;margin-top:8px;line-height:1.35}
-.sdPriceRow{border-top:1px solid #ddcfab;border-bottom:1px solid #ddcfab;padding:10px 0;margin:2px 0 12px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.sdPriceRow span{font-size:11px;font-weight:1000;color:#756f61;letter-spacing:.5px;white-space:nowrap}.sdPriceRow strong{font-size:22px;color:#006044;font-weight:1000;text-align:right;white-space:nowrap}
-.sdActionGrid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;margin-top:auto!important}
-.sdVBtn{min-height:42px;padding:9px 11px;border-radius:9px;font-size:12px;font-weight:1000;cursor:pointer;white-space:nowrap;transition:.18s;border:1px solid #d8d1bf}
-.sdVBtn:hover{transform:translateY(-1px)}
-.sdCall{background:#064c3d;color:#fff;border-color:#064c3d}.sdWhats{background:#0dbb59;color:#fff;border-color:#0dbb59}.sdProfile{background:#043b2f;color:#fff;border-color:#043b2f}.sdShare{background:#0dbb59;color:#fff;border-color:#0dbb59}
-.sdEmptyFeatured{grid-column:1/-1;min-height:150px;border:1px dashed #d6a53a;border-radius:20px;background:#fffdf7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;color:#173f32;padding:20px}.sdEmptyFeatured span{font-size:14px;color:#706a5b}
-@media(min-width:701px){#vendorList{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-@media(max-width:700px){
-  #vendorList{grid-template-columns:1fr!important;gap:13px!important}
-  .sdFeaturedCard{grid-template-columns:40% 60%;min-height:225px}
-  .sdFeaturedImage{min-height:225px!important}
-  .sdImageTopTags{top:9px;left:9px;gap:4px}.sdImageTopTags span{font-size:8px;padding:5px 7px}
-  .sdFeaturedBody{padding:11px 9px 10px!important;background:#fff8e8;border-left:1px solid #b99a55}
-  .sdVendorNameRow{gap:7px;margin-bottom:3px}.sdVendorNameRow h3{font-size:17px!important;line-height:1.04!important}
-  .sdFav{width:34px;height:34px;font-size:19px!important}
-  .sdPlanInline{font-size:9px;padding:5px 7px;margin-top:5px}
-  .sdRating{font-size:10px}.sdInfoBox{padding:9px 9px 8px;border-radius:12px}
-  .sdInfoLine{font-size:11px;margin-top:6px;line-height:1.28}.sdCategoryLine,.sdDescriptionLine{font-size:11px;margin-top:6px;line-height:1.25}
-  .sdInfoTags{gap:4px;margin:6px 0}.sdInfoTags span{font-size:8px;padding:4px 5px}
-  .sdPriceRow{padding:7px 0;margin-bottom:7px}.sdPriceRow span{font-size:8px}.sdPriceRow strong{font-size:15px}
-  .sdActionGrid{grid-template-columns:1fr 1fr!important;gap:5px!important}
-  .sdVBtn{min-height:34px;padding:6px 4px;font-size:9px;border-radius:7px}
-}
-@media(max-width:380px){.sdFeaturedCard{grid-template-columns:40% 60%}.sdFeaturedBody{padding:10px 8px 9px!important}.sdVendorNameRow h3{font-size:15px!important}.sdPriceRow strong{font-size:14px}.sdVBtn{font-size:8px;padding:5px 3px}}
-
-/* ===== STEP 4: AUTH-ONLY VENDOR DASHBOARD ===== */
-.vendorDashModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:10050;overflow:auto;padding:18px}
-.vendorDashPanel{width:min(980px,100%);margin:28px auto;background:#fffaf0;border:2px solid #d6a53a;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.32);overflow:hidden}
-.vendorDashHead{background:linear-gradient(135deg,#043b2f,#075443);color:#fff;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.vendorDashHead h2{margin:0;color:#f7d77d;font-size:26px}
-.vendorDashHead p{margin:5px 0 0;color:#fff3d2;font-size:13px}
-.vendorDashClose{border:1px solid rgba(247,215,125,.7);background:transparent;color:#fff;font-size:26px;width:42px;height:42px;border-radius:10px;cursor:pointer}
-.vendorDashBody{padding:20px}
-.vendorDashGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.vendorDashStat{background:#fff;border:1px solid #ead7a4;border-radius:15px;padding:15px}
-.vendorDashStat small{display:block;color:#777;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.vendorDashStat strong{display:block;color:#043b2f;font-size:18px;line-height:1.2}
-.vendorDashCard{background:#fff;border:1px solid #ead7a4;border-radius:17px;padding:18px;margin-top:14px}
-.vendorDashCard h3{color:#043b2f;margin:0 0 12px;font-size:19px}
-.vendorDashActions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.vendorDashBtn{border:0;border-radius:11px;padding:13px 14px;font-weight:900;cursor:pointer;background:#043b2f;color:#f7d77d}
-.vendorDashBtn.light{background:#fff7df;border:1px solid #d6a53a;color:#043b2f}
-.vendorDashBtn.green{background:#0caf59;color:#fff}
-.vendorDashEmpty{text-align:center;padding:35px 15px;color:#666}
-.vendorDashBadge{display:inline-flex;padding:6px 11px;border-radius:999px;font-size:12px;font-weight:900;background:#fff1cc;color:#6b4a00;border:1px solid #e7c45a}
-@media(max-width:700px){
- .vendorDashModal{padding:8px}.vendorDashPanel{margin:10px auto;border-radius:18px}.vendorDashHead{padding:16px}.vendorDashHead h2{font-size:21px}.vendorDashBody{padding:12px}.vendorDashGrid{grid-template-columns:1fr 1fr}.vendorDashActions{grid-template-columns:1fr 1fr}.vendorDashBtn{font-size:13px;padding:12px 8px}
-}
+.sdVendorBack{display:inline-flex;align-items:center;gap:7px;border:1px solid #d6a53a;background:#fff;color:#043b2f;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-bottom:15px}
+.sdVendorHero{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;background:#fff;border:1px solid #f0dfb8;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.sdVendorHeroImg{min-height:330px;background:#eee}.sdVendorHeroImg img{width:100%;height:100%;min-height:330px;object-fit:cover;display:block}
+.sdVendorHeroBody{padding:25px}.sdVendorKicker{color:#a67400;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1px}.sdVendorTitle{font-family:Georgia,serif;color:#043b2f;font-size:clamp(30px,4vw,44px);line-height:1.05;margin:7px 0 10px}.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}.sdVendorDesc{color:#555;line-height:1.7;margin:12px 0}.sdVendorActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.sdVendorActions button{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.sdVendorContact{background:#0dbb59;color:#fff}.sdVendorEdit{background:#043b2f;color:#f7d77d}.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid #f0dfb8;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:1px solid #f0dfb8}.sdRelated{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sdRelated a{display:block;text-decoration:none;color:#043b2f;background:#fffaf0;border:1px solid #f0dfb8;border-radius:12px;padding:12px;font-weight:800}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}
+@media(max-width:800px){.sdVendorHero,.sdVendorGrid{grid-template-columns:1fr}.sdVendorHeroImg,.sdVendorHeroImg img{min-height:250px}.sdRelated{grid-template-columns:1fr}.sdGallery{grid-template-columns:repeat(2,1fr)}}
 </style>
 
 <div id="sdVendorPage" class="sdVendorPage" aria-live="polite"></div>
@@ -4052,66 +3808,25 @@ document.addEventListener("click", function(e){
     window.open("https://wa.me/"+phone+"?text="+msg,"_blank","noopener,noreferrer");
   }
 
-  function shareVendorProfile(v){
-    const url=location.origin+"/vendor/"+vendorSlug(v)+"/";
-    const text=vendorName(v)+" | "+vendorCategory(v)+" | "+vendorCity(v)+" — Samagra Decor";
-    if(navigator.share){navigator.share({title:vendorName(v),text:text,url:url}).catch(function(){});}
-    else if(navigator.clipboard){navigator.clipboard.writeText(url).then(function(){alert("Vendor profile link copy ho gaya ✅");}).catch(function(){prompt("Profile link:",url);});}
-    else prompt("Profile link:",url);
-  }
-  function callVendor(v){
-    const phone=vendorPhone(v); if(!phone){alert("Is vendor ka phone number available nahi hai.");return;}
-    window.location.href="tel:+"+phone;
-  }
-  function whatsappVendor(v){
-    const phone=vendorPhone(v); if(!phone){alert("Is vendor ka WhatsApp number available nahi hai.");return;}
-    const msg=encodeURIComponent("Hello, mujhe "+vendorName(v)+" ki Samagra Decor profile se details chahiye.");
-    window.open("https://wa.me/"+phone+"?text="+msg,"_blank","noopener,noreferrer");
-  }
   function profileHtml(v){
     const name=vendorName(v),city=vendorCity(v),cat=vendorCategory(v),imgs=vendorImages(v),plan=effectivePlan(v),cfg=SD_PLANS[plan]||SD_PLANS.free;
     const rating=Number(v.rating||0), reviews=Number(v.review_count||v.reviews||0);
-    const rawPrice=v.price||v.starting_price||"";
-    const price=Number(rawPrice)>0 ? "₹"+Number(rawPrice).toLocaleString("en-IN") : (rawPrice?String(rawPrice):"Price on Request");
+    const price=Number(v.price||v.starting_price||0)>0 ? "Starts from ₹"+Number(v.price||v.starting_price).toLocaleString("en-IN") : "Price on request";
     const main=imgs[0]||"https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80";
-    const gallery=(imgs.length?imgs:[main]).slice(0,cfg.photos).map(function(x,i){return '<img src="'+esc(x)+'" alt="'+esc(name+' '+cat+' '+city+' photo '+(i+1))+'" loading="lazy" onclick="window.open(\''+esc(x).replace(/'/g,"%27")+'\',\'_blank\')">';}).join("");
-    const owner=v.owner_name||v.owner||"Not Provided";
-    const reviewLabel=reviews?rating.toFixed(1)+" / 5 · "+reviews+" Reviews":"New Vendor · No Reviews Yet";
-    const stars=reviews ? "★★★★★".slice(0,Math.max(1,Math.min(5,Math.round(rating)))) : "☆☆☆☆☆";
-    const seoBlock=cfg.seo
-      ? '<section class="sdVendorPanel"><h2>🔎 Profile SEO</h2><div class="sdVendorInfoItem"><b>SEO Title</b><span>'+esc(v.seo_title||name+" – "+cat+" in "+city)+ '</span></div><div class="sdVendorInfoItem" style="margin-top:9px"><b>Meta Description</b><span>'+esc(v.seo_description||"SEO description not added yet.")+'</span></div>'+(cfg.advancedSeo?'<div class="sdVendorInfoItem" style="margin-top:9px"><b>SEO Content</b><span>'+esc(v.seo_content||"Premium SEO content can be added from vendor profile edit.")+'</span></div>':'')+'</section>'
-      : '<section class="sdVendorPanel"><h2>🔎 Profile SEO</h2><div class="sdSeoLock">🔒 <b>SEO controls are not available on Free Listing.</b><br>Free profile ka basic SEO title aur description automatically generate hoga. Paid ya Prime Pro plan par manual SEO controls unlock honge.</div></section>';
-    return '<button class="sdVendorBack" onclick="window.sdBackToHome()">← Back to Vendors</button>'+ 
+    const gallery=(imgs.length?imgs:[main]).slice(0,cfg.photos).map(function(x){return '<img src="'+esc(x)+'" alt="'+esc(name+' '+cat+' '+city)+'" loading="lazy">';}).join("");
+    const owner=v.owner_name||v.owner||"";
+    return '<button class="sdVendorBack" onclick="window.sdBackToHome()">← Back to Vendors</button>'+
       '<article class="sdVendorHero">'+
       '<div class="sdVendorHeroImg"><img src="'+esc(main)+'" alt="'+esc(name+' - '+cat+' in '+city)+'"></div>'+ 
-      '<div class="sdVendorHeroBody">'+
-      '<div class="sdVendorTopLine"><div class="sdVendorKicker">'+(plan==="prime_pro"?'👑 PRIME PRO':plan==="paid"?'💎 PAID VENDOR':'✓ FREE LISTING')+'</div></div>'+ 
-      '<h1 class="sdVendorTitle">'+esc(name.toUpperCase())+'</h1>'+ 
-      '<div class="sdVendorMeta"><span>⭐ '+esc(reviewLabel)+'</span><span>'+esc(cfg.name)+'</span></div>'+ 
-      '<p class="sdVendorDesc">'+esc(vendorDescription(v))+'</p>'+ 
-      '<div class="sdVendorInfoStrip">'+
-      '<div class="sdVendorInfoItem"><b>Owner</b><span>👤 '+esc(owner)+'</span></div>'+ 
-      '<div class="sdVendorInfoItem"><b>Location</b><span>📍 '+esc(city)+'</span></div>'+ 
-      '<div class="sdVendorInfoItem"><b>Category</b><span>🏷️ '+esc(cat)+'</span></div>'+ 
-      '<div class="sdVendorInfoItem"><b>Starting Price</b><span>💰 '+esc(price)+'</span></div>'+ 
-      '</div>'+ 
-      '<div class="sdVendorActions">'+
-      '<button class="sdVendorCall" onclick="window.sdCallCurrent()">📞 Call</button>'+ 
-      '<button class="sdVendorWhatsApp" onclick="window.sdWhatsCurrent()">☘ WhatsApp</button>'+ 
-      '<button class="sdVendorView full" onclick="window.scrollTo({top:document.getElementById(\'sdVendorPhotos\').offsetTop-20,behavior:\'smooth\'})">View Photos →</button>'+ 
-      '<button class="sdVendorShare" onclick="window.sdShareCurrent()">↗ Share Profile</button>'+ 
-      '<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>'+ 
-      '</div>'+ 
-      '<div class="sdPlanNote" style="margin-top:14px">'+esc(cfg.name)+' · '+cfg.categories+' categories / '+cfg.photos+' photos allowed. '+(cfg.seo?'Manual profile SEO controls enabled.':'Basic SEO is generated automatically; manual SEO controls are locked.')+'</div>'+ 
+      '<div class="sdVendorHeroBody"><div class="sdVendorKicker">'+(plan==="prime_pro"?'👑 Prime Pro':plan==="paid"?'💎 Paid Vendor':'✓ Samagra Decor Vendor')+'</div>'+ 
+      '<h1 class="sdVendorTitle">'+esc(name)+'</h1>'+
+      '<div class="sdVendorMeta"><span>📍 '+esc(city)+'</span><span>▦ '+esc(cat)+'</span><span>⭐ '+(reviews?rating.toFixed(1):'New Vendor')+(reviews?' ('+reviews+' reviews)':' · No reviews yet')+'</span><span>💰 '+esc(price)+'</span></div>'+ 
+      '<p class="sdVendorDesc">'+esc(vendorDescription(v))+'</p>'+
+      '<div class="sdVendorActions"><button class="sdVendorContact" onclick="window.sdContactCurrent()">🔒 Contact Vendor</button>'+ (plan!=="free"?'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>':'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>')+'</div>'+ 
+      '<div class="sdPlanNote" style="margin-top:14px">'+esc(cfg.name)+' · '+cfg.categories+' categories / '+cfg.photos+' photos allowed. '+(cfg.seo?'Advanced profile SEO controls enabled for this plan.':'SEO title & description are generated automatically.')+'</div>'+ 
       '</div></article>'+ 
-      '<div class="sdVendorGrid" id="sdVendorPhotos">'+
-      '<section class="sdVendorPanel"><h2>📸 Business Photos</h2><div class="sdGallery">'+gallery+'</div></section>'+ 
-      '<section class="sdVendorPanel"><h2>⭐ Ratings & Reviews</h2><div class="sdReviewSummary"><div><div class="sdReviewScore">'+(reviews?rating.toFixed(1):"—")+'</div><div class="sdReviewStars">'+stars+'</div></div><div><b style="color:#043b2f">'+(reviews?"Customer Rating":"New Vendor")+'</b><div class="sdReviewText">'+(reviews?reviews+" customer review(s)": "Abhi customer review available nahi hai.")+'</div></div></div><div style="margin-top:12px;color:#666;font-size:13px;line-height:1.6">Verified profile information aur vendor-provided business details yahan show hote hain.</div></section>'+ 
-      '</div>'+ 
-      '<div class="sdVendorGrid">'+
-      '<section class="sdVendorPanel"><h2>📋 Business Details</h2><p><b>Business Name:</b> '+esc(name)+'</p><p><b>Owner:</b> '+esc(owner)+'</p><p><b>Location:</b> '+esc(city)+'</p><p><b>Category:</b> '+esc(cat)+'</p><p><b>Starting Price:</b> '+esc(price)+'</p><p><b>Status:</b> Approved / Live</p></section>'+ 
-      seoBlock+ 
-      '</div>'+ 
+      '<div class="sdVendorGrid"><section class="sdVendorPanel"><h2>Business Photos</h2><div class="sdGallery">'+gallery+'</div></section>'+ 
+      '<section class="sdVendorPanel"><h2>Business Details</h2><p><b>Owner:</b> '+esc(owner||'Not provided')+'</p><p><b>Category:</b> '+esc(cat)+'</p><p><b>City:</b> '+esc(city)+'</p><p><b>Price:</b> '+esc(price)+'</p><p><b>Status:</b> Approved / Live</p></section></div>'+ 
       '<section class="sdVendorPanel" style="margin-top:18px"><h2>About '+esc(name)+'</h2><p style="color:#555;line-height:1.7">'+esc(v.seo_content||vendorDescription(v))+'</p></section>';
   }
 
@@ -4119,7 +3834,7 @@ document.addEventListener("click", function(e){
   async function openVendorProfile(vOrId,push){
     const v=typeof vOrId==='object'?vOrId:await fetchVendorById(vOrId); if(!v){alert("Vendor profile nahi mili.");return;}
     const status=String(v.status||"").toLowerCase(); if(!["approved","active","live"].includes(status)){alert("Ye vendor profile abhi live nahi hai.");return;}
-    sdCurrentVendor=v; window.sdCurrentVendor=v;
+    sdCurrentVendor=v;
     const page=document.getElementById("sdVendorPage"); if(!page)return;
     if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/vendor/"+vendorSlug(v)+"/");}
     page.innerHTML=profileHtml(v); page.classList.add("active");
@@ -4134,9 +3849,6 @@ document.addEventListener("click", function(e){
 
   window.sdBackToHome=backHome;
   window.sdContactCurrent=function(){if(sdCurrentVendor)contactVendor(sdCurrentVendor);};
-  window.sdCallCurrent=function(){if(sdCurrentVendor)callVendor(sdCurrentVendor);};
-  window.sdWhatsCurrent=function(){if(sdCurrentVendor)whatsappVendor(sdCurrentVendor);};
-  window.sdShareCurrent=function(){if(sdCurrentVendor)shareVendorProfile(sdCurrentVendor);};
 
   window.sdOpenEditCurrent=async function(){
     if(!sdCurrentVendor)return;
@@ -4211,744 +3923,5 @@ document.addEventListener("click", function(e){
 })();
 </script>
 
-
-
-<!-- STEP 4: Vendor Dashboard -->
-<div id="vendorDashboardModal" class="vendorDashModal" aria-hidden="true">
-  <div class="vendorDashPanel">
-    <div class="vendorDashHead">
-      <div>
-        <h2>👤 Vendor Dashboard</h2>
-        <p id="vendorDashWelcome">Login vendor dashboard</p>
-      </div>
-      <button class="vendorDashClose" onclick="closeVendorDashboard()" aria-label="Close">×</button>
-    </div>
-    <div class="vendorDashBody" id="vendorDashBody">
-      <div class="vendorDashEmpty">Dashboard loading...</div>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ===== STEP 4 DASHBOARD: visible/openable only after Firebase login ===== */
-(function(){
-  function currentUser(){
-    try{return (typeof firebaseAuth!=='undefined' && firebaseAuth) ? firebaseAuth.currentUser : null;}catch(e){return null;}
-  }
-
-  function setDashboardVisibility(user){
-    var link=document.getElementById('vendorDashboardMenuLink');
-    if(link) link.style.display=user ? 'block' : 'none';
-  }
-
-  window.closeVendorDashboard=function(){
-    var modal=document.getElementById('vendorDashboardModal');
-    if(modal){modal.style.display='none';modal.setAttribute('aria-hidden','true');}
-  };
-
-  window.openVendorDashboard=async function(){
-    var user=currentUser();
-    if(!user){
-      alert('Vendor Dashboard dekhne ke liye pehle Login / Create Account kijiye.');
-      if(typeof openAuthModal==='function') openAuthModal();
-      return;
-    }
-
-    var modal=document.getElementById('vendorDashboardModal');
-    var body=document.getElementById('vendorDashBody');
-    var welcome=document.getElementById('vendorDashWelcome');
-    if(!modal||!body)return;
-    modal.style.display='block';modal.setAttribute('aria-hidden','false');
-    welcome.textContent=(user.displayName||user.email||'Vendor')+' — aapki listing ka control panel';
-    body.innerHTML='<div class="vendorDashEmpty">⏳ Aapki vendor listing load ho rahi hai...</div>';
-
-    var rows=[];
-    try{
-      if(typeof supabaseClient!=='undefined' && supabaseClient){
-        var queries=[
-          supabaseClient.from('vendors').select('*').eq('firebase_uid',user.uid),
-          supabaseClient.from('vendors').select('*').eq('owner_user_id',user.uid),
-          supabaseClient.from('vendors').select('*').eq('user_id',user.uid)
-        ];
-        for(var i=0;i<queries.length;i++){
-          try{
-            var r=await queries[i];
-            if(r && Array.isArray(r.data) && r.data.length){rows=r.data;break;}
-          }catch(e){}
-        }
-      }
-    }catch(e){}
-
-    if(!rows.length){
-      body.innerHTML='<div class="vendorDashEmpty"><div style="font-size:42px">🏪</div><h3 style="color:#043b2f;margin:8px 0">Abhi koi vendor listing nahi mili</h3><p>Agar aapne listing submit ki hai to Admin Approval ke baad yahan status dikhega.</p><button class="vendorDashBtn" onclick="closeVendorDashboard();openListingModal();">+ List Your Business</button></div>';
-      return;
-    }
-
-    rows.sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''));});
-    var v=rows[0];
-    var name=v.business_name||v.name||'Vendor';
-    var plan=v.plan||v.listing_type||v.subscription_plan||'free';
-    var status=v.status||'pending';
-    var city=v.city||v.location||'—';
-    var category=v.category||v.categories||'—';
-    var price=v.price||v.starting_price||'—';
-    var expiry=v.subscription_end_date||v.expires_at||v.plan_expiry||'—';
-    var profileUrl='';
-    var slug=v.slug||v.seo_slug||v.vendor_slug||'';
-    if(slug) profileUrl='/vendor/'+encodeURIComponent(slug);
-
-    var planLabel=String(plan).toLowerCase().includes('prime')?'PRIME PRO':String(plan).toLowerCase().includes('paid')?'PAID':'FREE';
-    var statusLabel=String(status).toUpperCase();
-
-    body.innerHTML=''+
-      '<div class="vendorDashGrid">'+
-        '<div class="vendorDashStat"><small>Business</small><strong>'+escDash(name)+'</strong></div>'+
-        '<div class="vendorDashStat"><small>Plan</small><strong>'+escDash(planLabel)+'</strong></div>'+
-        '<div class="vendorDashStat"><small>Status</small><strong>'+escDash(statusLabel)+'</strong></div>'+
-        '<div class="vendorDashStat"><small>Expiry</small><strong>'+escDash(expiry)+'</strong></div>'+
-      '</div>'+
-      '<div class="vendorDashCard">'+
-        '<h3>📋 My Vendor Listing</h3>'+
-        '<p style="margin:6px 0;color:#555"><b>Location:</b> '+escDash(city)+'</p>'+ 
-        '<p style="margin:6px 0;color:#555"><b>Category:</b> '+escDash(category)+'</p>'+ 
-        '<p style="margin:6px 0;color:#555"><b>Starting Price:</b> '+escDash(price)+'</p>'+ 
-        '<p style="margin:10px 0"><span class="vendorDashBadge">'+escDash(statusLabel)+'</span></p>'+ 
-        '<div class="vendorDashActions">'+
-          (profileUrl?'<button class="vendorDashBtn" onclick="window.location.href=\''+profileUrl.replace(/'/g,"\\'")+'\'">👁 View Profile</button>':'<button class="vendorDashBtn" onclick="alert(\'Profile slug abhi available nahi hai.\')">👁 View Profile</button>')+
-          '<button class="vendorDashBtn light" onclick="closeVendorDashboard();openListingModal();">⬆️ Upgrade / Manage Plan</button>'+ 
-          '<button class="vendorDashBtn green" onclick="alert(\'Profile edit workflow Admin Approval ke through chalega.\')">✏️ Edit Profile</button>'+ 
-        '</div>'+ 
-      '</div>';
-  };
-
-  function escDash(v){
-    return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-  }
-
-  window.addEventListener('click',function(e){
-    var modal=document.getElementById('vendorDashboardModal');
-    if(e.target===modal) window.closeVendorDashboard();
-  });
-
-  function bindAuth(){
-    try{
-      if(typeof firebaseAuth!=='undefined' && firebaseAuth){
-        firebaseAuth.onAuthStateChanged(function(user){
-          setDashboardVisibility(user);
-          if(!user) window.closeVendorDashboard();
-        });
-        setDashboardVisibility(firebaseAuth.currentUser);
-      }
-    }catch(e){setDashboardVisibility(null);}
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindAuth); else bindAuth();
-})();
-</script>
-
-<!-- STEP 7 SEO SYSTEM -->
-<script>
-(function(){
-  const SITE_NAME='Samagra Decor';
-  const SITE_URL='https://www.samagradecor.com';
-  function slugify(v){return String(v||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');}
-  function setMeta(name,content){let el=document.querySelector('meta[name="'+name+'"]');if(!el){el=document.createElement('meta');el.name=name;document.head.appendChild(el)}el.content=content||''}
-  function setProp(prop,content){let el=document.querySelector('meta[property="'+prop+'"]');if(!el){el=document.createElement('meta');el.setAttribute('property',prop);document.head.appendChild(el)}el.content=content||''}
-  function canonical(url){let el=document.querySelector('link[rel="canonical"]');if(!el){el=document.createElement('link');el.rel='canonical';document.head.appendChild(el)}el.href=url}
-  function seoForVendor(v){
-    const name=v.business_name||v.name||'Decoration Vendor';
-    const city=v.city||v.location||'';
-    const category=Array.isArray(v.category)?v.category.join(', '):(v.category||v.categories||'Decoration Services');
-    const slug=slugify(v.slug||name);
-    const url=SITE_URL+'/vendor/'+slug;
-    const title=(name+' | '+category+(city?' in '+city:'')+' | '+SITE_NAME).slice(0,60);
-    const desc=((v.description||('Book '+name+' for '+category+(city?' in '+city:''))).replace(/\s+/g,' ').trim()).slice(0,155);
-    document.title=title;
-    setMeta('description',desc); setMeta('robots',v.status==='approved'&&v.is_active!==false?'index,follow':'noindex,nofollow');
-    setProp('og:title',title); setProp('og:description',desc); setProp('og:url',url); setProp('og:type','website');
-    canonical(url);
-    let old=document.getElementById('vendor-schema'); if(old) old.remove();
-    const data={'@context':'https://schema.org','@type':'LocalBusiness','name':name,'description':desc,'url':url};
-    if(v.phone||v.mobile) data.telephone=v.phone||v.mobile;
-    if(city) data.address={'@type':'PostalAddress','addressLocality':city,'addressCountry':'IN'};
-    if(v.image||v.image_url||v.photo_url) data.image=v.image||v.image_url||v.photo_url;
-    const sc=document.createElement('script'); sc.id='vendor-schema'; sc.type='application/ld+json'; sc.textContent=JSON.stringify(data); document.head.appendChild(sc);
-    return {slug,url,title,desc};
-  }
-  window.SamagraSEO={slugify,seoForVendor,refresh:function(){
-    const path=location.pathname;
-    if(path.startsWith('/vendor/')){ setMeta('robots','index,follow'); canonical(location.href.split('?')[0]); }
-  }};
-  SamagraSEO.refresh();
-})();
-</script>
-
-
-<style id="sdStep9ReviewStyles">
-.sd-review-box{margin-top:18px;background:#fffdf7;border:1px solid #d8c59a;border-radius:16px;padding:18px}
-.sd-review-form{display:grid;gap:10px;margin-top:14px}.sd-review-form textarea{min-height:90px;resize:vertical}.sd-review-form input,.sd-review-form textarea{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #d8c59a;border-radius:10px;font:inherit}.sd-star-picker{display:flex;gap:5px}.sd-star-picker button{border:0;background:transparent;font-size:28px;cursor:pointer;padding:0}.sd-review-submit{background:#043b2f;color:#f7d77d;border:0;border-radius:10px;padding:12px;font-weight:900;cursor:pointer}.sd-review-list{display:grid;gap:10px;margin-top:14px}.sd-review-item{background:#fff;border:1px solid #eadfca;border-radius:12px;padding:13px}.sd-review-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.sd-review-stars{color:#b8860b;font-weight:900;letter-spacing:1px}.sd-verified{display:inline-block;background:#e8f6ee;color:#087443;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:800;margin-left:6px}.sd-review-date{color:#888;font-size:11px}.sd-review-empty{color:#777;font-size:13px;padding:10px 0}.sd-review-lock{background:#f7f1e3;border-radius:10px;padding:12px;color:#665d4e;font-size:13px}
-</style>
-<script>
-(function(){
-  const db = window.sdDb || (window.supabaseClient || null);
-  function escR(x){return String(x??'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
-  function stars(n){n=Math.max(0,Math.min(5,Number(n)||0));return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);}
-  function currentUser(){try{return firebase.auth().currentUser||null}catch(e){return null}}
-  async function loadReviews(v){
-    const box=document.getElementById('sdStep9Reviews'); if(!box||!db||!v?.id)return;
-    const {data,error}=await db.from('vendor_reviews').select('id,rating,review_text,created_at,is_verified,status,user_id').eq('vendor_id',v.id).eq('status','approved').order('created_at',{ascending:false}).limit(20);
-    if(error){box.querySelector('.sd-review-list').innerHTML='<div class="sd-review-empty">Reviews abhi configure nahi hain.</div>';return;}
-    const rows=data||[];
-    const list=rows.map(r=>'<div class="sd-review-item"><div class="sd-review-head"><div><span class="sd-review-stars">'+stars(r.rating)+'</span>'+(r.is_verified?'<span class="sd-verified">✓ Verified</span>':'')+'</div><span class="sd-review-date">'+escR(r.created_at?new Date(r.created_at).toLocaleDateString('en-IN'):'')+'</span></div><div style="margin-top:7px;color:#444;line-height:1.55">'+escR(r.review_text)+'</div></div>').join('');
-    box.querySelector('.sd-review-list').innerHTML=list||'<div class="sd-review-empty">Abhi koi approved review nahi hai.</div>';
-  }
-  async function renderReviewBox(v){
-    const page=document.getElementById('sdVendorPage');if(!page)return;
-    let old=document.getElementById('sdStep9Reviews');if(old)old.remove();
-    const user=currentUser();
-    const box=document.createElement('section');box.id='sdStep9Reviews';box.className='sd-review-box';
-    box.innerHTML='<h2 style="margin:0;color:#043b2f">⭐ Customer Reviews & Ratings</h2><div class="sd-review-list"><div class="sd-review-empty">Reviews load ho rahe hain...</div></div>'+
-      (user?'<div class="sd-review-form"><b>Apna review dein</b><div class="sd-star-picker" id="sdStarPicker">'+[1,2,3,4,5].map(i=>'<button type="button" data-star="'+i+'">☆</button>').join('')+'</div><textarea id="sdReviewText" maxlength="1000" placeholder="Vendor ke experience ke baare mein likhein..."></textarea><button class="sd-review-submit" id="sdReviewSubmit">SUBMIT REVIEW</button><div style="font-size:11px;color:#777">Review pehle moderation ke liye jayega. Approved hone ke baad profile par dikhega.</div></div>':'<div class="sd-review-lock">🔒 Review dene ke liye Login / Create Account karein.</div>');
-    const panels=page.querySelectorAll('.sdVendorPanel');
-    const target=Array.from(panels).find(x=>/Ratings & Reviews/i.test(x.textContent||''));
-    if(target)target.replaceWith(box); else page.querySelector('.sdVendorGrid')?.appendChild(box);
-    let selected=0;
-    box.querySelectorAll('[data-star]').forEach(btn=>btn.addEventListener('click',function(){selected=Number(this.dataset.star);box.querySelectorAll('[data-star]').forEach(b=>b.textContent=Number(b.dataset.star)<=selected?'★':'☆')}));
-    const submit=box.querySelector('#sdReviewSubmit');
-    if(submit)submit.addEventListener('click',async function(){
-      const u=currentUser(); if(!u){alert('Review dene ke liye login karein.');return;}
-      if(!selected){alert('Please rating select karein.');return;}
-      const text=(box.querySelector('#sdReviewText')?.value||'').trim();if(text.length<5){alert('Review kam se kam 5 characters ka hona chahiye.');return;}
-      submit.disabled=true;submit.textContent='SUBMITTING...';
-      const {data:existing}=await db.from('vendor_reviews').select('id').eq('vendor_id',v.id).eq('user_id',u.uid).maybeSingle();
-      if(existing){alert('Aap is vendor ko already review de chuke hain.');submit.disabled=false;submit.textContent='SUBMIT REVIEW';return;}
-      const {error}=await db.from('vendor_reviews').insert([{vendor_id:v.id,user_id:u.uid,rating:selected,review_text:text,status:'pending',is_verified:false}]);
-      if(error){alert('Review submit nahi hua. Supabase mein vendor_reviews table/RLS configure karein.\n\n'+error.message);submit.disabled=false;submit.textContent='SUBMIT REVIEW';return;}
-      alert('Review submit ho gaya. Admin approval ke baad live hoga. ✅');box.querySelector('#sdReviewText').value='';selected=0;box.querySelectorAll('[data-star]').forEach(b=>b.textContent='☆');submit.disabled=false;submit.textContent='SUBMIT REVIEW';
-    });
-    loadReviews(v);
-  }
-  const original=window.openVendorProfile;
-  if(typeof original==='function'){
-    window.openVendorProfile=async function(v,push){await original(v,push);setTimeout(function(){if(window.sdCurrentVendor||document.querySelector('#sdVendorPage.active')){let cur=window.sdCurrentVendor; if(!cur){try{cur=window.sdCurrentVendor}catch(e){}} if(cur)renderReviewBox(cur);}},80)};
-  }
-  // Keep a global current vendor reference synchronized if the original script exposes it.
-  const oldOpen=window.openVendorProfile;
-  window.sdRefreshReviews=function(){if(window.sdCurrentVendor)renderReviewBox(window.sdCurrentVendor)};
-})();
-</script>
-
-
-<!-- STEP 10: Customer Requirement / Lead System -->
-<div id="requirementOverlay" class="req-overlay">
-  <div class="req-modal">
-    <h2>Post Your Requirement</h2>
-    <div class="req-muted">Apni decoration requirement post karein. Public profile par aapka mobile number nahi dikhaya jayega.</div>
-    <form id="requirementForm">
-      <div class="req-grid">
-        <div class="req-field"><label>Event Type *</label><select id="reqEvent" required><option value="">Select event</option><option>Wedding</option><option>Birthday</option><option>Engagement</option><option>Anniversary</option><option>Corporate Event</option><option>Baby Shower</option><option>Other</option></select></div>
-        <div class="req-field"><label>City / Location *</label><input id="reqCity" required placeholder="e.g. Jabalpur"></div>
-        <div class="req-field"><label>Required Service *</label><select id="reqService" required><option value="">Select service</option><option>Wedding Decoration</option><option>Birthday Decoration</option><option>Stage Decoration</option><option>Balloon Decoration</option><option>Flower Decoration</option><option>DJ</option><option>Photography</option><option>Makeup Artist</option><option>Lighting & Sound</option><option>Other</option></select></div>
-        <div class="req-field"><label>Event Date</label><input id="reqDate" type="date"></div>
-        <div class="req-field"><label>Approx Budget</label><input id="reqBudget" placeholder="e.g. ₹50,000"></div>
-        <div class="req-field"><label>Guest Count</label><input id="reqGuests" type="number" min="1" placeholder="e.g. 150"></div>
-        <div class="req-field"><label>Your Mobile *</label><input id="reqMobile" type="tel" required pattern="[0-9+() -]{8,18}" placeholder="10 digit mobile"></div>
-        <div class="req-field"><label>WhatsApp</label><input id="reqWhatsapp" type="tel" placeholder="WhatsApp number"></div>
-        <div class="req-field full"><label>Requirement Details *</label><textarea id="reqDetails" required placeholder="Venue, decoration style, expected date/time, special requirements..."></textarea></div>
-        <div class="req-field full"><label>Reference Photo URL (optional)</label><input id="reqPhoto" type="url" placeholder="https://..."></div>
-      </div>
-      <div id="reqMessage"></div>
-      <div class="req-actions"><button type="button" class="req-btn req-secondary" onclick="closeRequirementModal()">Cancel</button><button class="req-btn req-primary" type="submit">Submit Requirement</button></div>
-    </form>
-  </div>
-</div>
-
-<div id="requirementsSection" style="display:none;margin:25px 0">
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-    <div><h2 style="margin:0">My Requirements</h2><div class="req-muted">Aapki posted requirements aur lead status.</div></div>
-    <button class="req-btn req-primary" onclick="openRequirementModal()">+ Post Requirement</button>
-  </div>
-  <div id="myRequirementsList"></div>
-</div>
-
-<script>
-(function(){
-  const SB_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
-  const SB_KEY = window.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
-  const hasSupabase = typeof window.supabase !== "undefined" && !SB_URL.includes("YOUR_PROJECT");
-  const client = hasSupabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
-
-  function authUser(){
-    try { return window.currentUser || null; } catch(e){ return null; }
-  }
-  window.openRequirementModal = function(){
-    const u=authUser();
-    if(!u){ alert("Requirement post karne ke liye login karein."); if(typeof window.openAuthModal==="function") window.openAuthModal(); return; }
-    document.getElementById("requirementOverlay").style.display="flex";
-  };
-  window.closeRequirementModal = function(){ document.getElementById("requirementOverlay").style.display="none"; };
-
-  async function saveRequirement(data){
-    if(!client) throw new Error("Supabase connection is not configured.");
-    const {data:row,error}=await client.from("customer_requirements").insert(data).select().single();
-    if(error) throw error;
-    return row;
-  }
-
-  document.getElementById("requirementForm").addEventListener("submit",async function(e){
-    e.preventDefault();
-    const u=authUser();
-    if(!u){alert("Please login first.");return;}
-    const msg=document.getElementById("reqMessage");
-    msg.innerHTML="";
-    const payload={
-      customer_id:u.id,
-      event_type:document.getElementById("reqEvent").value,
-      city:document.getElementById("reqCity").value.trim(),
-      service:document.getElementById("reqService").value,
-      event_date:document.getElementById("reqDate").value||null,
-      budget:document.getElementById("reqBudget").value.trim()||null,
-      guest_count:Number(document.getElementById("reqGuests").value)||null,
-      mobile:document.getElementById("reqMobile").value.trim(),
-      whatsapp:document.getElementById("reqWhatsapp").value.trim()||null,
-      details:document.getElementById("reqDetails").value.trim(),
-      reference_photo_url:document.getElementById("reqPhoto").value.trim()||null,
-      status:"pending",
-      created_at:new Date().toISOString()
-    };
-    try{
-      await saveRequirement(payload);
-      msg.innerHTML='<div class="req-success">Requirement successfully submit ho gayi. Admin review ke baad matching vendors ko lead milegi.</div>';
-      this.reset();
-      setTimeout(()=>{closeRequirementModal();loadMyRequirements();},900);
-    }catch(err){
-      console.error(err);
-      msg.innerHTML='<div style="color:#a33;font-weight:700;margin-top:10px">Requirement save nahi ho paayi. Supabase table/RLS configuration check karein.</div>';
-    }
-  });
-
-  async function loadMyRequirements(){
-    const box=document.getElementById("myRequirementsList"), sec=document.getElementById("requirementsSection");
-    const u=authUser();
-    if(!u || !client){sec.style.display="none";return;}
-    sec.style.display="block";
-    const {data,error}=await client.from("customer_requirements").select("*").eq("customer_id",u.id).order("created_at",{ascending:false});
-    if(error){box.innerHTML='<div class="req-empty">Requirements load nahi ho pa rahi.</div>';return;}
-    if(!data?.length){box.innerHTML='<div class="req-empty">Abhi koi requirement post nahi ki hai.</div>';return;}
-    box.innerHTML=data.map(r=>`<div class="req-card">
-      <h3>${esc(r.event_type||"Event")} — ${esc(r.city||"")}</h3>
-      <div class="req-meta"><span class="req-pill">${esc(r.service||"")}</span><span class="req-pill">Status: ${esc(r.status||"pending")}</span>${r.budget?`<span class="req-pill">Budget: ${esc(r.budget)}</span>`:""}${r.event_date?`<span class="req-pill">Date: ${esc(r.event_date)}</span>`:""}</div>
-      <div>${esc(r.details||"")}</div>
-    </div>`).join("");
-  }
-  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-  window.loadMyRequirements=loadMyRequirements;
-
-  // Expose a safe hook for an existing "Post Your Requirement" button.
-  window.openPostRequirement = window.openRequirementModal;
-  document.addEventListener("click",e=>{
-    const el=e.target.closest("[data-post-requirement]");
-    if(el){e.preventDefault();openRequirementModal();}
-  });
-  setTimeout(loadMyRequirements,500);
-})();
-</script>
-
-<!-- STEP 11: Vendor Lead Dashboard -->
-<section id="vendorLeadsSection" class="lead-wrap" style="display:none">
-  <div class="lead-head">
-    <div>
-      <h2 style="margin:0">My Leads</h2>
-      <div class="lead-muted">Aapke liye matched customer requirements.</div>
-    </div>
-    <div id="leadPlanBadge"></div>
-  </div>
-  <div class="lead-tabs">
-    <button class="lead-tab active" data-lead-filter="all">All</button>
-    <button class="lead-tab" data-lead-filter="new">New</button>
-    <button class="lead-tab" data-lead-filter="contacted">Contacted</button>
-    <button class="lead-tab" data-lead-filter="quoted">Quoted</button>
-    <button class="lead-tab" data-lead-filter="won">Won</button>
-    <button class="lead-tab" data-lead-filter="lost">Lost</button>
-  </div>
-  <div id="vendorLeadsList"></div>
-</section>
-
-<script>
-(function(){
-  const SB_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
-  const SB_KEY = window.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
-  const client = (typeof window.supabase !== "undefined" && !SB_URL.includes("YOUR_PROJECT"))
-    ? window.supabase.createClient(SB_URL, SB_KEY) : null;
-  let allLeads = [], currentFilter = "all";
-
-  function user(){ try{return window.currentUser || null}catch(e){return null} }
-  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-  function planRank(p){return String(p||"free").toLowerCase().includes("prime")?3:String(p||"free").toLowerCase().includes("paid")?2:1}
-  function currentPlan(){return String(window.currentVendorPlan||window.vendorPlan||"free").toLowerCase()}
-
-  function render(){
-    const box=document.getElementById("vendorLeadsList");
-    let rows=allLeads.filter(x=>currentFilter==="all"||String(x.status||"new").toLowerCase()===currentFilter);
-    if(!rows.length){box.innerHTML='<div class="lead-empty">Is filter mein koi lead nahi hai.</div>';return;}
-    box.innerHTML=rows.map(l=>{
-      const r=l.customer_requirements||l.requirement||l;
-      const contactAllowed=!!l.contact_unlocked || !!l.is_contact_visible;
-      const phone=contactAllowed?(l.customer_mobile||r.mobile||""):"";
-      const wa=contactAllowed?(l.customer_whatsapp||r.whatsapp||phone):"";
-      const status=String(l.status||"new").toLowerCase();
-      return `<article class="lead-card">
-        <div style="display:flex;justify-content:space-between;gap:10px;align-items:start">
-          <div><h3>${esc(r.event_type||"Event")} — ${esc(r.city||"")}</h3>
-          <div class="lead-muted">${esc(r.service||"")}</div></div>
-          ${l.priority_plan?`<span class="lead-priority">${esc(l.priority_plan)}</span>`:""}
-        </div>
-        <div class="lead-meta">
-          ${r.event_date?`<span class="lead-pill">📅 ${esc(r.event_date)}</span>`:""}
-          ${r.budget?`<span class="lead-pill">💰 ${esc(r.budget)}</span>`:""}
-          ${r.guest_count?`<span class="lead-pill">👥 ${esc(r.guest_count)} guests</span>`:""}
-          <span class="lead-pill">Status: ${esc(status)}</span>
-        </div>
-        <div>${esc(r.details||"")}</div>
-        ${contactAllowed
-          ? `<div class="lead-muted" style="margin-top:10px">Customer: ${esc(l.customer_name||"")} ${phone?`· ${esc(phone)}`:""}</div>`
-          : `<div class="lead-muted" style="margin-top:10px">Customer contact details lead authorization ke baad available honge.</div>`}
-        <div class="lead-actions">
-          ${phone?`<a class="lead-btn lead-call" href="tel:${encodeURIComponent(phone)}">Call</a>`:""}
-          ${wa?`<a class="lead-btn lead-wa" target="_blank" href="https://wa.me/${String(wa).replace(/[^0-9]/g,"")}">WhatsApp</a>`:""}
-          <button class="lead-btn lead-status" onclick="window.updateLeadStatus('${esc(l.id)}','contacted')">Contacted</button>
-          <button class="lead-btn lead-status" onclick="window.updateLeadStatus('${esc(l.id)}','quoted')">Quoted</button>
-          <button class="lead-btn lead-status" onclick="window.updateLeadStatus('${esc(l.id)}','won')">Won</button>
-          <button class="lead-btn" onclick="window.updateLeadStatus('${esc(l.id)}','lost')">Lost</button>
-        </div>
-      </article>`;
-    }).join("");
-  }
-
-  async function load(){
-    const section=document.getElementById("vendorLeadsSection");
-    const u=user();
-    if(!u || !client){section.style.display="none";return;}
-    section.style.display="block";
-    if(window.vendorPlan) document.getElementById("leadPlanBadge").innerHTML='<span class="lead-priority">'+esc(window.vendorPlan)+'</span>';
-    const {data,error}=await client.from("vendor_leads")
-      .select("*,customer_requirements(*)")
-      .eq("vendor_user_id",u.id)
-      .order("created_at",{ascending:false});
-    if(error){console.error(error);document.getElementById("vendorLeadsList").innerHTML='<div class="lead-empty">Leads load nahi ho pa rahi. Supabase vendor_leads table/RLS check karein.</div>';return;}
-    allLeads=data||[];
-    // Server-side matching/authorization is expected. Client never assigns itself a lead.
-    allLeads.sort((a,b)=>planRank(b.priority_plan)-planRank(a.priority_plan));
-    render();
-  }
-
-  window.updateLeadStatus=async function(id,status){
-    const u=user();
-    if(!u||!client)return alert("Please login first.");
-    const allowed=["new","contacted","interested","quoted","won","lost"];
-    if(!allowed.includes(status))return;
-    const {error}=await client.from("vendor_leads").update({status,updated_at:new Date().toISOString()})
-      .eq("id",id).eq("vendor_user_id",u.id);
-    if(error){alert("Lead status update nahi ho paaya.");console.error(error);return;}
-    await load();
-  };
-
-  document.addEventListener("click",e=>{
-    const tab=e.target.closest("[data-lead-filter]");
-    if(!tab)return;
-    document.querySelectorAll("[data-lead-filter]").forEach(x=>x.classList.remove("active"));
-    tab.classList.add("active");currentFilter=tab.dataset.leadFilter;render();
-  });
-
-  window.loadVendorLeads=load;
-  setTimeout(load,700);
-})();
-</script>
-
-<!-- STEP 12: Notification Center -->
-<div id="notificationCenter" class="notif-wrap" style="display:none">
-  <button id="notificationBell" class="notif-bell" aria-label="Notifications" title="Notifications">
-    🔔<span id="notificationCount" class="notif-count">0</span>
-  </button>
-  <div id="notificationPanel" class="notif-panel">
-    <div class="notif-head">
-      <strong>Notifications</strong>
-      <button class="notif-action" id="markAllNotifications">Mark all read</button>
-    </div>
-    <div id="notificationList"><div class="notif-empty">Loading...</div></div>
-    <div class="notif-prefs">
-      <strong>Notification Preferences</strong>
-      <div class="notif-pref-row"><span>New leads</span><input type="checkbox" id="prefLeads" checked></div>
-      <div class="notif-pref-row"><span>Profile / approval updates</span><input type="checkbox" id="prefProfile" checked></div>
-      <div class="notif-pref-row"><span>Subscription reminders</span><input type="checkbox" id="prefSubscription" checked></div>
-      <button id="saveNotifPrefs" class="comm-btn" style="background:#7a5a20;color:#fff;margin-top:7px">Save Preferences</button>
-    </div>
-  </div>
-</div>
-
-<script>
-(function(){
-  const SB_URL = window.SUPABASE_URL || "https://YOUR_PROJECT.supabase.co";
-  const SB_KEY = window.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
-  const client = (typeof window.supabase !== "undefined" && !SB_URL.includes("YOUR_PROJECT"))
-    ? window.supabase.createClient(SB_URL, SB_KEY) : null;
-  let notifications = [];
-  let prefs = {leads:true,profile:true,subscription:true};
-
-  function user(){try{return window.currentUser||null}catch(e){return null}}
-  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-  function ago(ts){
-    if(!ts)return "";
-    const s=Math.max(0,Math.floor((Date.now()-new Date(ts).getTime())/1000));
-    if(s<60)return s+" sec ago"; if(s<3600)return Math.floor(s/60)+" min ago";
-    if(s<86400)return Math.floor(s/3600)+" hr ago"; return Math.floor(s/86400)+" days ago";
-  }
-
-  async function loadPrefs(){
-    const u=user(); if(!u||!client)return;
-    const {data}=await client.from("notification_preferences").select("*").eq("user_id",u.id).maybeSingle();
-    if(data){prefs={leads:data.leads!==false,profile:data.profile!==false,subscription:data.subscription!==false};}
-    document.getElementById("prefLeads").checked=prefs.leads;
-    document.getElementById("prefProfile").checked=prefs.profile;
-    document.getElementById("prefSubscription").checked=prefs.subscription;
-  }
-
-  function render(){
-    const list=document.getElementById("notificationList");
-    const unread=notifications.filter(n=>!n.is_read).length;
-    const badge=document.getElementById("notificationCount");
-    badge.textContent=unread>99?"99+":unread; badge.style.display=unread?"flex":"none";
-    if(!notifications.length){list.innerHTML='<div class="notif-empty">No notifications.</div>';return;}
-    list.innerHTML=notifications.map(n=>`<div class="notif-item ${n.is_read?"":"unread"}" data-notification-id="${esc(n.id)}">
-      <div class="notif-title">${esc(n.title||"Notification")}</div>
-      <div>${esc(n.message||"")}</div>
-      <div class="notif-time">${esc(ago(n.created_at))}</div>
-    </div>`).join("");
-  }
-
-  async function load(){
-    const center=document.getElementById("notificationCenter"),u=user();
-    if(!u||!client){center.style.display="none";return;}
-    center.style.display="inline-block";
-    await loadPrefs();
-    const {data,error}=await client.from("notifications").select("*").eq("user_id",u.id).order("created_at",{ascending:false}).limit(50);
-    if(error){console.error(error);notifications=[];render();return;}
-    notifications=data||[];render();
-  }
-
-  async function markRead(id){
-    const u=user();if(!u||!client)return;
-    await client.from("notifications").update({is_read:true,read_at:new Date().toISOString()}).eq("id",id).eq("user_id",u.id);
-    const n=notifications.find(x=>x.id===id);if(n)n.is_read=true;render();
-  }
-
-  document.getElementById("notificationBell").addEventListener("click",async e=>{
-    e.stopPropagation();
-    const p=document.getElementById("notificationPanel");
-    p.style.display=p.style.display==="block"?"none":"block";
-    if(p.style.display==="block")await load();
-  });
-  document.addEventListener("click",e=>{
-    const c=document.getElementById("notificationCenter");
-    if(c&&!c.contains(e.target))document.getElementById("notificationPanel").style.display="none";
-  });
-  document.getElementById("notificationList").addEventListener("click",e=>{
-    const item=e.target.closest("[data-notification-id]");if(item)markRead(item.dataset.notificationId);
-  });
-  document.getElementById("markAllNotifications").addEventListener("click",async()=>{
-    const u=user();if(!u||!client)return;
-    await client.from("notifications").update({is_read:true,read_at:new Date().toISOString()}).eq("user_id",u.id).eq("is_read",false);
-    notifications.forEach(n=>n.is_read=true);render();
-  });
-  document.getElementById("saveNotifPrefs").addEventListener("click",async()=>{
-    const u=user();if(!u||!client)return;
-    prefs={leads:document.getElementById("prefLeads").checked,profile:document.getElementById("prefProfile").checked,subscription:document.getElementById("prefSubscription").checked};
-    const {error}=await client.from("notification_preferences").upsert({
-      user_id:u.id,leads:prefs.leads,profile:prefs.profile,subscription:prefs.subscription,updated_at:new Date().toISOString()
-    },{onConflict:"user_id"});
-    if(error)alert("Preferences save nahi ho paayi.");else alert("Preferences saved.");
-  });
-
-  // Realtime updates: database notification insert will refresh the center.
-  if(client){
-    try{
-      client.channel("samagra-notifications")
-        .on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications"},payload=>{
-          const u=user();if(u&&payload.new&&payload.new.user_id===u.id){notifications.unshift(payload.new);render();}
-        }).subscribe();
-    }catch(e){console.warn("Realtime notifications unavailable",e);}
-  }
-
-  window.loadNotifications=load;
-  setTimeout(load,800);
-})();
-</script>
-
-<!-- STEP 13: Payment & Subscription -->
-<section id="subscriptionSection" class="pay-wrap" style="display:none">
-  <div>
-    <h2 style="margin:0">Plans & Subscription</h2>
-    <div class="pay-muted">Payment verification ke baad hi paid features activate honge.</div>
-  </div>
-  <div id="subscriptionStatus" class="pay-status">Loading subscription...</div>
-
-  <div class="pay-grid">
-    <article id="paidPlanCard" class="pay-card">
-      <h3>Paid Listing</h3>
-      <div class="pay-price">₹199<span style="font-size:13px">/year</span></div>
-      <div class="pay-muted">Enhanced listing features</div>
-      <button class="pay-btn" onclick="window.startSubscription('paid')">Upgrade to Paid</button>
-    </article>
-    <article id="primePlanCard" class="pay-card">
-      <h3>Prime Pro</h3>
-      <div class="pay-price">₹999<span style="font-size:13px">/year</span></div>
-      <div class="pay-muted">Premium listing + priority features</div>
-      <button class="pay-btn" onclick="window.startSubscription('prime')">Upgrade to Prime Pro</button>
-    </article>
-    <article class="pay-card">
-      <h3>Free Listing</h3>
-      <div class="pay-price">₹0</div>
-      <div class="pay-muted">Basic vendor profile</div>
-      <button class="pay-btn secondary" onclick="window.activateFreePlan()">Use Free Listing</button>
-    </article>
-  </div>
-
-  <div class="pay-history">
-    <h3>Payment History</h3>
-    <div id="paymentHistory"><div class="pay-muted">No payment history loaded.</div></div>
-  </div>
-</section>
-
-<script>
-(function(){
-  const SB_URL=window.SUPABASE_URL||"https://YOUR_PROJECT.supabase.co";
-  const SB_KEY=window.SUPABASE_ANON_KEY||"YOUR_SUPABASE_ANON_KEY";
-  const client=(typeof window.supabase!=="undefined"&&!SB_URL.includes("YOUR_PROJECT"))
-    ? window.supabase.createClient(SB_URL,SB_KEY):null;
-
-  // Set this to your Razorpay Key ID. Secret key must NEVER be placed in HTML.
-  const RAZORPAY_KEY_ID=window.RAZORPAY_KEY_ID||"YOUR_RAZORPAY_KEY_ID";
-  const PLANS={
-    paid:{name:"Paid Listing",amount:199,durationDays:365},
-    prime:{name:"Prime Pro",amount:999,durationDays:365}
-  };
-
-  function user(){try{return window.currentUser||null}catch(e){return null}}
-  function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
-  function norm(p){p=String(p||"free").toLowerCase();return p.includes("prime")?"prime":p.includes("paid")?"paid":"free";}
-  function fmt(d){if(!d)return"-";return new Date(d).toLocaleDateString("en-IN");}
-
-  async function loadSubscription(){
-    const section=document.getElementById("subscriptionSection"),u=user();
-    if(!u||!client){section.style.display="none";return;}
-    section.style.display="block";
-
-    const {data,error}=await client.from("subscriptions").select("*").eq("user_id",u.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
-    if(error){document.getElementById("subscriptionStatus").textContent="Subscription table/RLS configure nahi hai.";return;}
-
-    if(!data){
-      document.getElementById("subscriptionStatus").innerHTML="Current Plan: <b>Free</b>";
-      return;
-    }
-
-    const expired=data.status==="active" && data.expires_at && new Date(data.expires_at)<new Date();
-    if(expired){
-      // Server-side expiry automation should perform this update. This client call is only a fallback for the user's own row.
-      await client.from("subscriptions").update({plan:"free",status:"expired",updated_at:new Date().toISOString()})
-        .eq("id",data.id).eq("user_id",u.id);
-      data.plan="free";data.status="expired";
-    }
-
-    document.getElementById("subscriptionStatus").innerHTML=
-      `Current Plan: <b>${esc(data.plan||"free").toUpperCase()}</b> · Status: <b>${esc(data.status||"")}</b> · Expires: <b>${fmt(data.expires_at)}</b>`;
-    document.getElementById("paidPlanCard").classList.toggle("pay-current",norm(data.plan)==="paid");
-    document.getElementById("primePlanCard").classList.toggle("pay-current",norm(data.plan)==="prime");
-    loadHistory(u.id);
-  }
-
-  async function loadHistory(uid){
-    const box=document.getElementById("paymentHistory");
-    const {data,error}=await client.from("payments").select("*").eq("user_id",uid).order("created_at",{ascending:false}).limit(20);
-    if(error||!data?.length){box.innerHTML='<div class="pay-muted">No payment history.</div>';return;}
-    box.innerHTML=data.map(p=>`<div class="pay-row">
-      <span><b>${esc(p.plan||"")}</b><br><small>${esc(fmt(p.created_at))}</small></span>
-      <span>₹${esc(p.amount||"")} · <b class="${p.status==="success"?"pay-ok":"pay-fail"}">${esc(p.status||"")}</b></span>
-    </div>`).join("");
-  }
-
-  async function createOrder(plan){
-    if(!client)throw new Error("Supabase connection is not configured.");
-    // IMPORTANT: order amount and Razorpay order_id must be created by a trusted Supabase Edge Function.
-    const {data,error}=await client.functions.invoke("create-subscription-order",{
-      body:{plan,return_url:location.href}
-    });
-    if(error)throw error;
-    if(!data?.order_id)throw new Error("Secure payment order was not created.");
-    return data;
-  }
-
-  async function verifyPayment(payload){
-    const {data,error}=await client.functions.invoke("verify-subscription-payment",{body:payload});
-    if(error)throw error;
-    return data;
-  }
-
-  window.startSubscription=async function(plan){
-    const u=user();
-    if(!u){alert("Subscription ke liye login karein.");if(typeof window.openAuthModal==="function")window.openAuthModal();return;}
-    if(!client){alert("Supabase configuration missing.");return;}
-    const cfg=PLANS[plan];if(!cfg)return;
-
-    try{
-      const order=await createOrder(plan);
-      if(typeof window.Razorpay==="undefined"){alert("Razorpay checkout load nahi hua.");return;}
-      const options={
-        key:RAZORPAY_KEY_ID,
-        order_id:order.order_id,
-        amount:order.amount,
-        currency:order.currency||"INR",
-        name:"Samagra Decor",
-        description:cfg.name,
-        prefill:{name:u.user_metadata?.full_name||"",email:u.email||""},
-        theme:{color:"#7a5a20"},
-        handler:async function(response){
-          try{
-            const result=await verifyPayment({
-              plan,
-              razorpay_order_id:response.razorpay_order_id,
-              razorpay_payment_id:response.razorpay_payment_id,
-              razorpay_signature:response.razorpay_signature
-            });
-            if(!result?.verified)throw new Error("Payment verification failed.");
-            alert("Payment verified. Subscription activate ho gayi.");
-            await loadSubscription();
-            if(typeof window.loadNotifications==="function")window.loadNotifications();
-          }catch(e){console.error(e);alert("Payment verify nahi hua. Plan activate nahi kiya gaya.");}
-        },
-        modal:{ondismiss:function(){console.log("Checkout closed");}}
-      };
-      new window.Razorpay(options).open();
-    }catch(e){console.error(e);alert("Secure payment order create nahi ho paaya.");}
-  };
-
-  window.activateFreePlan=async function(){
-    const u=user();if(!u||!client)return;
-    const {error}=await client.from("subscriptions").upsert({
-      user_id:u.id,plan:"free",status:"active",expires_at:null,updated_at:new Date().toISOString()
-    },{onConflict:"user_id"});
-    if(error){alert("Free plan update nahi hua.");return;}
-    alert("Free Listing active hai.");
-    loadSubscription();
-  };
-
-  // Optional Razorpay loader; only public checkout script is loaded.
-  if(!document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]')){
-    const s=document.createElement("script");s.src="https://checkout.razorpay.com/v1/checkout.js";s.async=true;document.head.appendChild(s);
-  }
-
-  window.loadSubscription=loadSubscription;
-  setTimeout(loadSubscription,900);
-})();
-</script>
 </body>
 </html>
