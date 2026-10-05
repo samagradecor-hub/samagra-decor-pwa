@@ -1,24 +1,29 @@
-const CACHE_NAME = "samagra-decor-v1";
+const CACHE_NAME = "samagra-decor-v2";
 
-const FILES_TO_CACHE = [
+const STATIC_FILES = [
   "./",
   "./index.html",
-  "./manifest.json"
+  "./manifest.json",
+  "./logo.png"
 ];
 
-self.addEventListener("install", function(event) {
+// INSTALL
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(FILES_TO_CACHE);
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(STATIC_FILES);
     })
   );
+
+  self.skipWaiting();
 });
 
-self.addEventListener("activate", function(event) {
+// ACTIVATE
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then(function(cacheNames) {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map(function(cacheName) {
+        cacheNames.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
             return caches.delete(cacheName);
           }
@@ -26,12 +31,69 @@ self.addEventListener("activate", function(event) {
       );
     })
   );
+
+  self.clients.claim();
 });
 
-self.addEventListener("fetch", function(event) {
+// FETCH
+self.addEventListener("fetch", (event) => {
+  const request = event.request;
+
+  // Only handle GET requests
+  if (request.method !== "GET") {
+    return;
+  }
+
+  const url = new URL(request.url);
+
+  // Don't cache Supabase/API/external requests
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
+  // HTML/navigation → Network First
+  // This ensures users get the latest website version.
+  if (
+    request.mode === "navigate" ||
+    request.destination === "document"
+  ) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const responseClone = response.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseClone);
+          });
+
+          return response;
+        })
+        .catch(() => {
+          return caches.match("./index.html");
+        })
+    );
+
+    return;
+  }
+
+  // Static files → Cache First
   event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
+    caches.match(request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(request).then((response) => {
+        if (response.ok) {
+          const responseClone = response.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseClone);
+          });
+        }
+
+        return response;
+      });
     })
   );
 });
