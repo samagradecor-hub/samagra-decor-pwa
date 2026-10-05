@@ -1201,6 +1201,13 @@
 
   <div class="sd-footer-bottom">
     <span>© 2026 Samagra Decor. All Rights Reserved.</span>
+    <div class="sd-footer-legal">
+      <a href="#" onclick="showInfoPage('terms'); return false;">Terms</a>
+      <a href="#" onclick="showInfoPage('privacy'); return false;">Privacy</a>
+      <a href="#" onclick="showInfoPage('refund'); return false;">Refund</a>
+      <a href="#" onclick="showInfoPage('faq'); return false;">Help</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
   </div>
 </footer>
 
@@ -1226,7 +1233,7 @@
         <div class="vendorFormSub">Apne business ke liye listing plan choose karein</div>
         <div class="newPlanGrid">
           <div class="newPlanCard"><h2>🆓 Free Listing</h2><div class="newPlanPrice">₹0 <span>• Always Free</span></div><p>✅ Basic Vendor Profile<br>✅ Maximum 2 Categories<br>✅ Maximum 4 Business Photos<br>✅ Mobile / Call button<br>✅ WhatsApp button<br>✅ Customer Rating & Reviews<br>✅ Basic Search Listing<br><br>❌ Video Link<br>❌ Share Button<br>❌ Featured Listing</p><button class="monthlyBtn" onclick="openPlanForm('free')">CREATE FREE LISTING</button></div>
-          <div class="newPlanCard"><h2>💎 Paid Listing</h2><div class="newPlanPrice">₹29 / Month<br>₹299 / Year</div><p>✅ Complete Vendor Profile<br>✅ Maximum 7 Categories<br>✅ Maximum 7 Business Photos<br>✅ YouTube / Instagram / Drive Video Link<br>✅ Call & WhatsApp<br>✅ Customer Rating & Reviews<br>✅ Better Search Visibility<br>✅ Verified / Paid Vendor Badge<br>✅ Vendor Profile Share Button<br>✅ Active Subscription</p><button class="monthlyBtn" onclick="chooseListingPlan('paid')">CHOOSE PAID LISTING</button></div>
+          <div class="newPlanCard"><h2>💎 Paid Listing</h2><div class="newPlanPrice">₹29 / Month<br>₹199 / Year</div><p>✅ Complete Vendor Profile<br>✅ Maximum 7 Categories<br>✅ Maximum 7 Business Photos<br>✅ YouTube / Instagram / Drive Video Link<br>✅ Call & WhatsApp<br>✅ Customer Rating & Reviews<br>✅ Better Search Visibility<br>✅ Verified / Paid Vendor Badge<br>✅ Vendor Profile Share Button<br>✅ Active Subscription</p><button class="monthlyBtn" onclick="chooseListingPlan('paid')">CHOOSE PAID LISTING</button></div>
           <div class="newPlanCard"><h2>👑 Prime Pro</h2><div class="newPlanPrice">₹149 / Month<br>₹999 / Year</div><p>⭐ Everything in Paid — ALL Features<br>⭐ Maximum 12 Categories<br>⭐ Maximum 12 Business / Portfolio Photos<br>⭐ Video Link<br>⭐ PRIME PRO Badge<br>⭐ Featured Business<br>⭐ Premium Vendor Profile<br>⭐ Better Customer Reach<br>⭐ Featured Section Visibility<br>⭐ Profile Sharing<br>⭐ Priority Search Visibility</p><button class="monthlyBtn" onclick="chooseListingPlan('prime_pro')">CHOOSE PRIME PRO</button></div>
         </div>
         <button class="backBtn" onclick="closeListingModal()">← Back</button>
@@ -2819,7 +2826,7 @@
         : "₹149 / Month";
     const yearly =
       plan === "paid"
-        ? "₹299 / Year"
+        ? "₹199 / Year"
         : "₹999 / Year";
 
     const choice = window.prompt(
