@@ -2534,24 +2534,59 @@
       }
     }
 
+    // =========================
+    // FORGOT PASSWORD / RESET
+    // =========================
     async function forgotPassword(){
       const emailInput = document.getElementById("loginEmail");
-      const email = emailInput ? emailInput.value.trim() : "";
+      const email = emailInput ? emailInput.value.trim().toLowerCase() : "";
 
       if(!email){
-        alert("Pehle email address bharo.");
+        alert("Pehle registered email address bharo.");
         if(emailInput) emailInput.focus();
         return;
       }
 
       try{
+        // Firebase ka standard password-reset email flow.
+        // Isme Firebase khud secure reset link generate karta hai.
         await firebaseAuth.sendPasswordResetEmail(email);
-        alert("Password reset link email par bhej diya gaya ✅");
+
+        alert(
+          "Password reset link bhej diya gaya ✅\n\n" +
+          "Apna Gmail Inbox, Spam, Promotions aur Updates folder check karein.\n" +
+          "Kabhi-kabhi email aane me kuch minutes lag sakte hain."
+        );
+
+        if(emailInput) emailInput.value = email;
+
       }catch(error){
-        console.error("Reset error:", error);
+        console.error("Firebase reset error:", error);
+
         let msg = "Password reset email nahi bheja ja saka.";
-        if(error && error.code === "auth/user-not-found") msg = "Is email se account nahi mila.";
-        else if(error && error.code === "auth/invalid-email") msg = "Email address valid nahi hai.";
+
+        switch(error && error.code){
+          case "auth/user-not-found":
+            msg = "Is email se Firebase account nahi mila.";
+            break;
+          case "auth/invalid-email":
+            msg = "Email address valid nahi hai.";
+            break;
+          case "auth/operation-not-allowed":
+            msg = "Firebase me Email/Password sign-in enabled nahi hai.";
+            break;
+          case "auth/too-many-requests":
+            msg = "Bahut baar reset request ki gayi hai. Thodi der baad dobara try karein.";
+            break;
+          case "auth/network-request-failed":
+            msg = "Internet connection check karein aur dobara try karein.";
+            break;
+          default:
+            if(error && error.message){
+              msg += "\n\nFirebase: " + error.message;
+            }
+        }
+
         alert(msg);
       }
     }
@@ -2572,6 +2607,7 @@
         alert("Logout nahi hua. Please try again.");
       }
     }
+
 
     firebaseAuth.onAuthStateChanged(async function(user){
       currentUser = user || null;
