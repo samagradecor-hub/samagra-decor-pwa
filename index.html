@@ -914,6 +914,16 @@
   .adProfileBtn{font-size:11px;padding:8px 10px;margin-top:0}
 }
 
+
+/* ===== FINAL AUTH / ROLE SYSTEM ===== */
+.authRoleGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.authRoleBtn{border:2px solid #d6a53a;background:#fffdf7;color:#043b2f;border-radius:14px;padding:14px 10px;font-weight:900;font-size:15px;cursor:pointer}
+.authRoleBtn.active{background:#043b2f;color:#f7d77d;box-shadow:0 6px 16px rgba(4,59,47,.18)}
+.authRoleHint{font-size:12px;color:#666;line-height:1.45;margin:8px 0 2px}
+.authStatus{font-size:13px;color:#555;background:#fffaf0;border:1px solid #f0dfb8;border-radius:10px;padding:10px;margin:10px 0}
+.authError{font-size:13px;color:#9b1c1c;background:#fff1f1;border:1px solid #e7b0b0;border-radius:10px;padding:10px;margin:10px 0;display:none}
+@media(max-width:520px){.authRoleGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 
@@ -1321,8 +1331,23 @@
 
     firebase.initializeApp(firebaseConfig);
     const firebaseAuth = firebase.auth();
+    /*
+      REQUIRED FOR CROSS-DEVICE ROLE PERSISTENCE:
+      Create a Supabase table named user_profiles with:
+      id uuid primary key default gen_random_uuid(),
+      firebase_uid text unique not null,
+      email text,
+      full_name text,
+      role text check (role in ('customer','vendor')),
+      updated_at timestamptz default now()
+      and allow the signed-in user to read/upsert only their own row via RLS.
+      The code has a browser fallback so existing login is not blocked if this
+      table has not been created yet.
+    */
+
 
     let currentUser = null;
+    let currentUserRole = null;
     let isWebsiteAdmin = false;
     let vendors = [];
     let currentVendorList = [];
@@ -2121,149 +2146,456 @@
       loadVendors();
     }
 
+    /* =========================================================
+       FINAL AUTH SYSTEM
+       - Firebase Email/Password authentication
+       - Customer / Vendor role selection
+       - Role persistence through Supabase user_profiles when available
+       - Safe fallback to Firebase displayName/localStorage for UI continuity
+       - Session restoration with onAuthStateChanged
+       - Forgot password / logout
+       ========================================================= */
+
+    const AUTH_ROLE_KEY = "sd_user_role_v1";
+
+    function normalizeAuthRole(role){
+      role = String(role || "").trim().toLowerCase();
+      return role === "vendor" ? "vendor" : role === "customer" ? "customer" : null;
+    }
+
+    function getStoredAuthRole(uid){
+      try{
+        const raw = localStorage.getItem(AUTH_ROLE_KEY);
+        if(!raw) return null;
+        const data = JSON.parse(raw);
+        if(data && data.uid === uid) return normalizeAuthRole(data.role);
+      }catch(e){}
+      return null;
+    }
+
+    function setStoredAuthRole(uid, role){
+      role = normalizeAuthRole(role);
+      if(!uid || !role) return;
+      try{
+        localStorage.setItem(AUTH_ROLE_KEY, JSON.stringify({
+          uid: uid,
+          role: role,
+          saved_at: new Date().toISOString()
+        }));
+      }catch(e){}
+    }
+
+    function clearStoredAuthRole(){
+      try{ localStorage.removeItem(AUTH_ROLE_KEY); }catch(e){}
+    }
+
+    async function saveUserRole(user, role){
+      role = normalizeAuthRole(role);
+      if(!user || !role) return false;
+
+      setStoredAuthRole(user.uid, role);
+
+      /* Preferred persistent role store.
+         If user_profiles table/RLS is not installed yet, auth still works
+         and the local fallback keeps the current browser session usable. */
+      if(supabaseClient){
+        try{
+          const payload = {
+            firebase_uid: user.uid,
+            email: user.email || "",
+            full_name: user.displayName || "",
+            role: role,
+            updated_at: new Date().toISOString()
+          };
+
+          const result = await supabaseClient
+            .from("user_profiles")
+            .upsert(payload, { onConflict: "firebase_uid" });
+
+          if(!result.error) return true;
+          console.warn("user_profiles save skipped:", result.error.message);
+        }catch(e){
+          console.warn("user_profiles save skipped:", e);
+        }
+      }
+      return true;
+    }
+
+    async function getUserRole(user){
+      if(!user) return null;
+
+      /* 1. Prefer the persistent profile table. */
+      if(supabaseClient){
+        try{
+          const {data, error} = await supabaseClient
+            .from("user_profiles")
+            .select("role")
+            .eq("firebase_uid", user.uid)
+            .maybeSingle();
+
+          if(!error && data && normalizeAuthRole(data.role)){
+            const role = normalizeAuthRole(data.role);
+            setStoredAuthRole(user.uid, role);
+            return role;
+          }
+        }catch(e){}
+      }
+
+      /* 2. Existing vendor ownership is a useful server-backed signal. */
+      if(supabaseClient){
+        try{
+          const {data, error} = await supabaseClient
+            .from("vendors")
+            .select("id")
+            .or(
+              "firebase_uid.eq." + user.uid +
+              ",owner_user_id.eq." + user.uid +
+              ",user_id.eq." + user.uid
+            )
+            .limit(1);
+
+          if(!error && data && data.length){
+            setStoredAuthRole(user.uid, "vendor");
+            return "vendor";
+          }
+        }catch(e){}
+      }
+
+      /* 3. Browser fallback for accounts created before the profile table exists. */
+      return getStoredAuthRole(user.uid);
+    }
+
+    function roleLabel(role){
+      return normalizeAuthRole(role) === "vendor" ? "Vendor" : "Customer";
+    }
+
+    function roleIcon(role){
+      return normalizeAuthRole(role) === "vendor" ? "🏪" : "👤";
+    }
+
+    function updateAuthButtons(user, role){
+      const authQuickBtn = document.getElementById("authQuickBtn");
+      const authMenuLink = document.getElementById("authMenuLink");
+      const authHeroBtn = document.getElementById("authHeroBtn");
+
+      if(user){
+        const name = user.displayName || "My Account";
+        const label = role ? (roleLabel(role) + " • " + name) : name;
+        if(authQuickBtn) authQuickBtn.textContent = label;
+        if(authMenuLink) authMenuLink.textContent = "My Account / Logout";
+        if(authHeroBtn) authHeroBtn.textContent = role ? (roleIcon(role) + " My Account") : "My Account";
+      }else{
+        if(authQuickBtn) authQuickBtn.textContent = "Login / Create Account";
+        if(authMenuLink) authMenuLink.textContent = "Login / Create Account";
+        if(authHeroBtn) authHeroBtn.textContent = "Login / Create Account";
+      }
+    }
+
+    async function refreshCurrentUserRole(){
+      if(!currentUser){
+        currentUserRole = null;
+        updateAuthButtons(null, null);
+        return null;
+      }
+      currentUserRole = await getUserRole(currentUser);
+      updateAuthButtons(currentUser, currentUserRole);
+      return currentUserRole;
+    }
+
     function openAuthModal(){
       if(currentUser) showAccountScreen();
       else showLoginScreen();
-
       openModal("loginModal");
     }
 
-    function showLoginScreen(){
-      document.getElementById("authContent").innerHTML = `
+    function showLoginScreen(message){
+      const box = document.getElementById("authContent");
+      if(!box) return;
+
+      box.innerHTML = `
         <div class="authIcon">👤</div>
         <div class="authTitle">Welcome Back</div>
         <div class="authSub">Login to continue</div>
-        <input class="authInput" id="loginEmail" type="email" placeholder="✉  Email address" />
-        <input class="authInput" id="loginPassword" type="password" placeholder="🔒  Password" />
-        <button class="authTextBtn" onclick="forgotPassword()">Forgot Password?</button>
-        <button class="authMainBtn" onclick="loginUser()">LOGIN →</button>
+
+        <div class="authError" id="authLoginError"></div>
+
+        <input class="authInput" id="loginEmail" type="email"
+          placeholder="✉  Email address" autocomplete="email" />
+        <input class="authInput" id="loginPassword" type="password"
+          placeholder="🔒  Password" autocomplete="current-password" />
+
+        <button class="authTextBtn" type="button" onclick="forgotPassword()">Forgot Password?</button>
+        <button class="authMainBtn" type="button" onclick="loginUser()">LOGIN →</button>
+
         <div style="margin:14px 0;color:#c49a29;font-weight:bold;">OR</div>
-        <button class="authOutlineBtn" onclick="showCreateAccountScreen()">Create Account</button>
-        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
+
+        <button class="authOutlineBtn" type="button" onclick="showCreateAccountScreen()">Create Account</button>
+        <button class="authOutlineBtn" type="button" onclick="closeModal('loginModal')">Cancel</button>
       `;
+
+      if(message){
+        const err = document.getElementById("authLoginError");
+        if(err){ err.textContent = message; err.style.display = "block"; }
+      }
+
+      setTimeout(function(){
+        const input = document.getElementById("loginEmail");
+        if(input) input.focus();
+      }, 50);
     }
 
     function showCreateAccountScreen(){
-      document.getElementById("authContent").innerHTML = `
+      const box = document.getElementById("authContent");
+      if(!box) return;
+
+      let selectedRole = "customer";
+
+      box.innerHTML = `
         <div class="authIcon">👥</div>
         <div class="authTitle">Create Account</div>
         <div class="authSub">Join Samagra Decor</div>
-        <input class="authInput" id="createName" type="text" placeholder="👤  Full Name" />
-        <input class="authInput" id="createEmail" type="email" placeholder="✉  Email address" />
-        <input class="authInput" id="createPassword" type="password" placeholder="🔒  Password" />
-        <button class="authMainBtn" onclick="createAccount()">CREATE ACCOUNT →</button>
+
+        <input class="authInput" id="createName" type="text"
+          placeholder="👤  Full Name" autocomplete="name" />
+        <input class="authInput" id="createEmail" type="email"
+          placeholder="✉  Email address" autocomplete="email" />
+        <input class="authInput" id="createPassword" type="password"
+          placeholder="🔒  Password (minimum 6 characters)" autocomplete="new-password" />
+
+        <div class="authRoleHint">Account Type select karein:</div>
+        <div class="authRoleGrid">
+          <button type="button" id="roleCustomerBtn" class="authRoleBtn active">👤 Customer</button>
+          <button type="button" id="roleVendorBtn" class="authRoleBtn">🏪 Vendor</button>
+        </div>
+        <div class="authStatus" id="roleDescription">
+          Customer account se vendors ko search/contact aur requirements use kar sakte hain.
+        </div>
+
+        <button class="authMainBtn" type="button" onclick="createAccount()">CREATE ACCOUNT →</button>
+
         <div style="margin:14px 0;color:#c49a29;font-weight:bold;">OR</div>
-        <button class="authOutlineBtn" onclick="showLoginScreen()">Login</button>
-        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Cancel</button>
+
+        <button class="authOutlineBtn" type="button" onclick="showLoginScreen()">Login</button>
+        <button class="authOutlineBtn" type="button" onclick="closeModal('loginModal')">Cancel</button>
       `;
+
+      const customerBtn = document.getElementById("roleCustomerBtn");
+      const vendorBtn = document.getElementById("roleVendorBtn");
+      const desc = document.getElementById("roleDescription");
+
+      function setRole(role){
+        selectedRole = role;
+        if(customerBtn) customerBtn.classList.toggle("active", role === "customer");
+        if(vendorBtn) vendorBtn.classList.toggle("active", role === "vendor");
+        if(desc){
+          desc.textContent = role === "vendor"
+            ? "Vendor account se aap apna business list karke customer enquiries/leads receive kar sakte hain."
+            : "Customer account se vendors ko search/contact aur requirements use kar sakte hain.";
+        }
+      }
+
+      if(customerBtn) customerBtn.onclick = function(){ setRole("customer"); };
+      if(vendorBtn) vendorBtn.onclick = function(){ setRole("vendor"); };
+      setRole("customer");
+
+      window.__sdSelectedSignupRole = function(){ return selectedRole; };
     }
 
-    function showAccountScreen(){
-      const name = currentUser.displayName || "User";
-      const email = currentUser.email || "";
-
-      document.getElementById("authContent").innerHTML = `
-        <div class="authIcon">✅</div>
-        <div class="authTitle">Welcome</div>
-        <div class="authSub">${escapeHtml(name)}</div>
-        <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
-        <button class="authMainBtn" onclick="openListingModal(); closeModal('loginModal');">List Your Business</button>
-        <button class="authOutlineBtn" onclick="logoutUser()">Logout</button>
-        <button class="authOutlineBtn" onclick="closeModal('loginModal')">Close</button>
-      `;
-    }
-
-    function loginUser(){
-      const email = document.getElementById("loginEmail").value.trim();
-      const password = document.getElementById("loginPassword").value.trim();
-
-      if(!email || !password){
-        alert("Email aur password bharo.");
+    async function showAccountScreen(){
+      if(!currentUser){
+        showLoginScreen();
         return;
       }
 
-      firebaseAuth.signInWithEmailAndPassword(email, password)
-        .then(function(){
-          alert("Login successful ✅");
-          closeModal("loginModal");
-        })
-        .catch(function(error){
-          alert("Login Error: " + error.message);
-        });
+      const name = currentUser.displayName || "User";
+      const email = currentUser.email || "";
+      const role = currentUserRole || await refreshCurrentUserRole();
+
+      document.getElementById("authContent").innerHTML = `
+        <div class="authIcon">${roleIcon(role)}</div>
+        <div class="authTitle">Welcome</div>
+        <div class="authSub">${escapeHtml(name)}</div>
+        <div class="authStatus">
+          <b>Account Type:</b> ${escapeHtml(roleLabel(role))}
+        </div>
+        <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
+
+        ${role === "vendor"
+          ? `<button class="authMainBtn" type="button" onclick="openListingModal(); closeModal('loginModal');">🏪 List / Manage Business</button>`
+          : `<button class="authMainBtn" type="button" onclick="closeModal('loginModal'); scrollToRequirementSection();">📋 Post Your Requirement</button>`
+        }
+
+        <button class="authOutlineBtn" type="button" onclick="logoutUser()">Logout</button>
+        <button class="authOutlineBtn" type="button" onclick="closeModal('loginModal')">Close</button>
+      `;
     }
 
-    function createAccount(){
+    function scrollToRequirementSection(){
+      const el = document.getElementById("postRequirementSection") ||
+                 document.querySelector(".postRequirementSection");
+      if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    }
+
+    async function loginUser(){
+      const emailEl = document.getElementById("loginEmail");
+      const passEl = document.getElementById("loginPassword");
+      const email = emailEl ? emailEl.value.trim() : "";
+      const password = passEl ? passEl.value : "";
+
+      if(!email || !password){
+        showLoginScreen("Email aur password bharo.");
+        const e = document.getElementById("loginEmail");
+        const p = document.getElementById("loginPassword");
+        if(e) e.value = email;
+        if(p) p.value = password;
+        return;
+      }
+
+      const btn = document.querySelector("#authContent .authMainBtn");
+      if(btn){ btn.disabled = true; btn.textContent = "LOGIN HO RAHA HAI…"; }
+
+      try{
+        const result = await firebaseAuth.signInWithEmailAndPassword(email, password);
+        currentUser = result.user;
+        currentUserRole = await getUserRole(currentUser);
+
+        if(!currentUserRole){
+          /* Existing accounts created before role support are treated as customers
+             until the user explicitly changes/creates a vendor profile. */
+          currentUserRole = "customer";
+          await saveUserRole(currentUser, "customer");
+        }
+
+        updateAuthButtons(currentUser, currentUserRole);
+        await checkWebsiteAdmin(currentUser);
+        await showAccountScreen();
+        alert("Login successful ✅");
+      }catch(error){
+        console.error("Login error:", error);
+        let msg = "Login failed. Email/password check kijiye.";
+        if(error && error.code === "auth/user-not-found") msg = "Is email se account nahi mila.";
+        else if(error && error.code === "auth/wrong-password") msg = "Password galat hai.";
+        else if(error && error.code === "auth/invalid-credential") msg = "Email ya password galat hai.";
+        else if(error && error.code === "auth/too-many-requests") msg = "Bahut attempts ho gaye. Thodi der baad try karein.";
+        showLoginScreen(msg);
+      }
+    }
+
+    async function createAccount(){
       const name = document.getElementById("createName").value.trim();
-      const email = document.getElementById("createEmail").value.trim();
-      const password = document.getElementById("createPassword").value.trim();
+      const email = document.getElementById("createEmail").value.trim().toLowerCase();
+      const password = document.getElementById("createPassword").value;
+      const role = normalizeAuthRole(
+        typeof window.__sdSelectedSignupRole === "function"
+          ? window.__sdSelectedSignupRole()
+          : "customer"
+      ) || "customer";
 
       if(!name || !email || !password){
         alert("Name, email aur password bharo.");
         return;
       }
 
-      if(password.length < 6){
-        alert("Password kam se kam 6 digit/letter ka rakho.");
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+        alert("Valid email address bharo.");
         return;
       }
 
-      firebaseAuth.createUserWithEmailAndPassword(email, password)
-        .then(function(result){
-          return result.user.updateProfile({ displayName: name });
-        })
-        .then(function(){
-          alert("Account created ✅");
-          closeModal("loginModal");
-        })
-        .catch(function(error){
-          alert("Create Account Error: " + error.message);
-        });
+      if(password.length < 6){
+        alert("Password kam se kam 6 characters ka rakho.");
+        return;
+      }
+
+      const btn = document.querySelector("#authContent .authMainBtn");
+      if(btn){ btn.disabled = true; btn.textContent = "ACCOUNT BAN RAHA HAI…"; }
+
+      try{
+        const result = await firebaseAuth.createUserWithEmailAndPassword(email, password);
+        const user = result.user;
+
+        await user.updateProfile({displayName:name});
+        currentUser = user;
+        currentUserRole = role;
+
+        await saveUserRole(user, role);
+        updateAuthButtons(user, role);
+        await checkWebsiteAdmin(user);
+
+        alert((role === "vendor" ? "Vendor" : "Customer") + " account created successfully ✅");
+        await showAccountScreen();
+      }catch(error){
+        console.error("Create account error:", error);
+        let msg = "Account create nahi hua.";
+        if(error && error.code === "auth/email-already-in-use") msg = "Ye email pehle se registered hai. Login karein.";
+        else if(error && error.code === "auth/weak-password") msg = "Password kam se kam 6 characters ka rakhein.";
+        else if(error && error.code === "auth/invalid-email") msg = "Email address valid nahi hai.";
+        alert(msg);
+        showCreateAccountScreen();
+      }
     }
 
-    function forgotPassword(){
+    async function forgotPassword(){
       const emailInput = document.getElementById("loginEmail");
       const email = emailInput ? emailInput.value.trim() : "";
 
       if(!email){
         alert("Pehle email address bharo.");
+        if(emailInput) emailInput.focus();
         return;
       }
 
-      firebaseAuth.sendPasswordResetEmail(email)
-        .then(function(){
-          alert("Password reset link email par bhej diya gaya ✅");
-        })
-        .catch(function(error){
-          alert("Reset Error: " + error.message);
-        });
-    }
-
-    function logoutUser(){
-      firebaseAuth.signOut()
-        .then(function(){
-          alert("Logout successful ✅");
-          closeModal("loginModal");
-        })
-        .catch(function(error){
-          alert("Logout Error: " + error.message);
-        });
-    }
-
-    firebaseAuth.onAuthStateChanged(function(user){
-      currentUser = user;
-      checkWebsiteAdmin(user);
-
-      const authQuickBtn = document.getElementById("authQuickBtn");
-      const authMenuLink = document.getElementById("authMenuLink");
-
-      if(user){
-        const name = user.displayName || "My Account";
-        if(authQuickBtn) authQuickBtn.textContent = name;
-        if(authMenuLink) authMenuLink.textContent = "My Account / Logout";
-      }else{
-        if(authQuickBtn) authQuickBtn.textContent = "Login / Create Account";
-        if(authMenuLink) authMenuLink.textContent = "Login / Create Account";
+      try{
+        await firebaseAuth.sendPasswordResetEmail(email);
+        alert("Password reset link email par bhej diya gaya ✅");
+      }catch(error){
+        console.error("Reset error:", error);
+        let msg = "Password reset email nahi bheja ja saka.";
+        if(error && error.code === "auth/user-not-found") msg = "Is email se account nahi mila.";
+        else if(error && error.code === "auth/invalid-email") msg = "Email address valid nahi hai.";
+        alert(msg);
       }
+    }
+
+    async function logoutUser(){
+      try{
+        await firebaseAuth.signOut();
+        currentUser = null;
+        currentUserRole = null;
+        isWebsiteAdmin = false;
+        clearStoredAuthRole();
+        showAdminButtons(false);
+        updateAuthButtons(null, null);
+        closeModal("loginModal");
+        alert("Logout successful ✅");
+      }catch(error){
+        console.error("Logout error:", error);
+        alert("Logout nahi hua. Please try again.");
+      }
+    }
+
+    firebaseAuth.onAuthStateChanged(async function(user){
+      currentUser = user || null;
+
+      if(!user){
+        currentUserRole = null;
+        isWebsiteAdmin = false;
+        clearStoredAuthRole();
+        showAdminButtons(false);
+        updateAuthButtons(null, null);
+        return;
+      }
+
+      currentUserRole = await getUserRole(user);
+
+      /* Existing accounts that pre-date role support are customers by default.
+         Vendor listing still requires login and is linked to this Firebase UID. */
+      if(!currentUserRole){
+        currentUserRole = "customer";
+        await saveUserRole(user, "customer");
+      }
+
+      updateAuthButtons(user, currentUserRole);
+      await checkWebsiteAdmin(user);
     });
 
     function showInfoPage(type){
@@ -2862,7 +3194,7 @@
 
   function openListingModal() {
     let user = null;
-    try { user = firebase.auth().currentUser; } catch (e) {}
+    try { user = firebaseAuth.currentUser || firebase.auth().currentUser; } catch (e) {}
     if (!user) {
       alert("List Your Business karne ke liye pehle Login / Create Account kijiye.");
       if (typeof openAuthModal === "function") openAuthModal();
@@ -3800,11 +4132,18 @@ document.addEventListener("click", function(e){
   }
 
   function requireLogin(action){
-    let user=null; try{user=firebase.auth().currentUser;}catch(e){}
-    if(user) return true;
+    let user=null;
+    try{ user=firebaseAuth.currentUser || firebase.auth().currentUser; }catch(e){}
+    if(user){
+      currentUser = user;
+      return true;
+    }
     alert("Vendor se contact karne ke liye pehle Login / Create Account kijiye.");
     if(typeof window.openAuthModal==="function") window.openAuthModal();
-    else { const el=document.getElementById("loginModal"); if(el) el.style.display="flex"; }
+    else {
+      const el=document.getElementById("loginModal");
+      if(el) el.style.display="flex";
+    }
     return false;
   }
 
