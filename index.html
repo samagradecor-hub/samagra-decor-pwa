@@ -320,6 +320,76 @@
     .seoKeywords{margin-top:18px;text-align:center}
     .seoKeywords span{display:inline-block;background:#fff1cc;border:1px solid #e7c45a;color:#5a4300;border-radius:20px;padding:7px 10px;font-size:13px;font-weight:bold;margin:4px}
 
+
+    /* =========================================================
+       PASSWORD RESET SUCCESS POPUP — PREMIUM SAMAGRA DECOR UI
+       ========================================================= */
+    body.resetPopupOpen{overflow:hidden}
+    .resetSuccessOverlay{
+      position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;
+      padding:20px;background:radial-gradient(circle at 50% 15%,rgba(30,90,255,.12),transparent 34%),rgba(2,10,22,.78);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)
+    }
+    .resetSuccessOverlay.show{display:flex;animation:resetOverlayIn .22s ease-out both}
+    .resetSuccessCard{
+      width:min(560px,100%);position:relative;overflow:hidden;box-sizing:border-box;padding:34px 34px 25px;
+      border:1px solid rgba(255,255,255,.78);border-radius:30px;
+      background:radial-gradient(circle at 50% -10%,rgba(209,255,237,.95),transparent 36%),linear-gradient(180deg,#fff 0%,#f8fbff 100%);
+      box-shadow:0 35px 100px rgba(0,0,0,.48),0 0 0 1px rgba(214,165,58,.20),0 0 70px rgba(43,112,255,.12);
+      text-align:center;transform:translateY(12px) scale(.97);animation:resetCardIn .34s cubic-bezier(.2,.8,.2,1) .04s both
+    }
+    .resetSuccessCard::before{
+      content:"";position:absolute;left:0;right:0;top:0;height:5px;
+      background:linear-gradient(90deg,#0a6bff,#16c784,#d6a53a,#0a6bff);background-size:220% 100%;
+      animation:resetGradient 4s linear infinite
+    }
+    .resetSuccessGlow{position:absolute;width:240px;height:240px;left:50%;top:-110px;transform:translateX(-50%);border-radius:50%;background:rgba(30,119,255,.11);filter:blur(15px);pointer-events:none}
+    .resetSuccessClose{
+      position:absolute;z-index:5;top:16px;right:16px;width:42px;height:42px;border:1px solid #e2e7ee;border-radius:50%;
+      background:#fff;color:#334155;font-size:29px;line-height:38px;cursor:pointer;box-shadow:0 8px 20px rgba(15,23,42,.10);transition:.2s ease
+    }
+    .resetSuccessClose:hover{transform:rotate(90deg) scale(1.06);background:#f1f5f9;color:#061b3a}
+    .resetSuccessIconWrap{position:relative;width:112px;height:112px;margin:4px auto 15px;display:flex;align-items:center;justify-content:center}
+    .resetSuccessIconWrap::before{content:"";position:absolute;inset:3px;border-radius:30px;background:linear-gradient(145deg,#eaf3ff,#dfffee);box-shadow:inset 0 0 0 1px rgba(20,91,255,.08),0 15px 35px rgba(30,105,220,.15);transform:rotate(-5deg)}
+    .resetSuccessEnvelope{position:relative;z-index:2;width:74px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:linear-gradient(145deg,#1877ff,#0752d9);color:#fff;font-size:37px;box-shadow:0 13px 25px rgba(7,82,217,.28);animation:resetFloat 2.8s ease-in-out infinite}
+    .resetSuccessCheck{position:absolute;z-index:3;right:3px;bottom:1px;width:39px;height:39px;display:flex;align-items:center;justify-content:center;border:4px solid #fff;border-radius:50%;background:#16b85b;color:#fff;font-size:23px;font-weight:1000;box-shadow:0 8px 18px rgba(22,184,91,.32)}
+    .resetSuccessEyebrow{color:#0a5a48;font-size:11px;font-weight:1000;letter-spacing:1.5px;margin-bottom:9px}
+    .resetSuccessTitle{margin:0 auto 20px;max-width:480px;color:#061b3a;font-size:clamp(27px,4vw,38px);line-height:1.08;font-weight:1000;letter-spacing:-.8px}
+    .resetSuccessTitle span{color:#0a6bff}
+    .resetSuccessEmailBox{display:flex;align-items:center;gap:13px;text-align:left;margin:0 0 13px;padding:14px 16px;border:1px solid #bdebd8;border-radius:17px;background:linear-gradient(135deg,#f0fff8,#eef7ff)}
+    .resetSuccessGmailIcon{width:44px;min-width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:#fff;color:#ea4335;font-size:27px;font-weight:1000;box-shadow:0 5px 14px rgba(0,0,0,.08)}
+    .resetSuccessEmailText{min-width:0;display:flex;flex-direction:column;gap:4px}
+    .resetSuccessEmailText strong{color:#25364d;font-size:14px;line-height:1.3}
+    .resetSuccessEmailText span{color:#064bb5;font-size:17px;font-weight:1000;word-break:break-all}
+    .resetSuccessInfo{display:flex;align-items:flex-start;gap:11px;text-align:left;margin:0 0 17px;padding:14px 15px;border:1px solid #f1d68a;border-radius:17px;background:linear-gradient(135deg,#fff9e8,#fffdf5)}
+    .resetSuccessInfoIcon{flex:0 0 auto;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f2ad12;color:#fff;font-size:19px;font-weight:1000}
+    .resetSuccessInfo strong{display:block;color:#2a261c;font-size:14px;line-height:1.35}
+    .resetSuccessInfo p{margin:4px 0 0;color:#665d4c;font-size:13px;line-height:1.4}
+    .resetSuccessOkBtn{width:100%;min-height:58px;border:0;border-radius:17px;background:linear-gradient(135deg,#116fff,#0750d8);color:#fff;font-size:20px;font-weight:1000;letter-spacing:.3px;cursor:pointer;box-shadow:0 13px 28px rgba(8,83,216,.28);transition:transform .2s ease,box-shadow .2s ease}
+    .resetSuccessOkBtn span{display:inline-block;margin-left:8px;transition:.2s ease}
+    .resetSuccessOkBtn:hover{transform:translateY(-2px);box-shadow:0 17px 34px rgba(8,83,216,.35)}
+    .resetSuccessOkBtn:hover span{transform:translateX(5px)}
+    .resetSuccessFooter{margin-top:13px;color:#728096;font-size:12px;font-weight:800}
+    @keyframes resetOverlayIn{from{opacity:0}to{opacity:1}}
+    @keyframes resetCardIn{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes resetFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+    @keyframes resetGradient{0%{background-position:0 0}100%{background-position:220% 0}}
+    @media(max-width:600px){
+      .resetSuccessOverlay{padding:12px}
+      .resetSuccessCard{padding:29px 18px 20px;border-radius:24px}
+      .resetSuccessClose{top:12px;right:12px;width:38px;height:38px;font-size:25px;line-height:34px}
+      .resetSuccessIconWrap{width:92px;height:92px}
+      .resetSuccessEnvelope{width:65px;height:49px;font-size:31px}
+      .resetSuccessCheck{width:34px;height:34px;font-size:19px}
+      .resetSuccessTitle{font-size:27px}
+      .resetSuccessEmailBox{padding:12px}
+      .resetSuccessEmailText strong{font-size:13px}
+      .resetSuccessEmailText span{font-size:15px}
+      .resetSuccessInfo{padding:12px}
+      .resetSuccessInfo strong{font-size:13px}
+      .resetSuccessOkBtn{min-height:54px;font-size:18px}
+    }
+
     @media(max-width:950px){
       .menu{display:none}
       .mobileMenuBtn{display:flex;align-items:center;justify-content:center;width:46px;height:46px;padding:0;border:1px solid rgba(214,165,58,.65);border-radius:12px;background:rgba(255,255,255,.07);color:#fff;font-size:28px;line-height:1;box-shadow:0 5px 15px rgba(0,0,0,.16)}
@@ -1232,6 +1302,38 @@
     <div class="authBox">
       <span class="close" onclick="closeModal('loginModal')">×</span>
       <div id="authContent"></div>
+    </div>
+  </div>
+
+  <!-- Password Reset Success Popup -->
+  <div class="resetSuccessOverlay" id="resetSuccessOverlay" aria-hidden="true">
+    <div class="resetSuccessCard" role="dialog" aria-modal="true" aria-labelledby="resetSuccessTitle">
+      <button class="resetSuccessClose" type="button" aria-label="Close" onclick="closeResetSuccessPopup()">×</button>
+      <div class="resetSuccessGlow"></div>
+      <div class="resetSuccessIconWrap">
+        <div class="resetSuccessEnvelope">✉</div>
+        <div class="resetSuccessCheck">✓</div>
+      </div>
+      <div class="resetSuccessEyebrow">SAMAGRA DECOR • ACCOUNT SECURITY</div>
+      <h2 id="resetSuccessTitle" class="resetSuccessTitle">
+        Password Reset Link<br><span>Email Par Bhej Diya Gaya!</span>
+      </h2>
+      <div class="resetSuccessEmailBox">
+        <div class="resetSuccessGmailIcon">G</div>
+        <div class="resetSuccessEmailText">
+          <strong>Reset link is email par bheja gaya hai</strong>
+          <span id="resetSuccessEmail"></span>
+        </div>
+      </div>
+      <div class="resetSuccessInfo">
+        <div class="resetSuccessInfoIcon">!</div>
+        <div>
+          <strong>Gmail ke Inbox, Spam, Promotions aur Updates folder check karein.</strong>
+          <p>Kabhi-kabhi email aane mein kuch minutes lag sakte hain.</p>
+        </div>
+      </div>
+      <button class="resetSuccessOkBtn" type="button" onclick="closeResetSuccessPopup()">OK <span>→</span></button>
+      <div class="resetSuccessFooter">Aapka account secure hai 🔐</div>
     </div>
   </div>
 
@@ -2535,6 +2637,33 @@
     }
 
     // =========================
+    // PASSWORD RESET SUCCESS POPUP
+    // =========================
+    function showResetSuccessPopup(email){
+      const overlay = document.getElementById("resetSuccessOverlay");
+      const emailEl = document.getElementById("resetSuccessEmail");
+      if(emailEl) emailEl.textContent = email || "";
+      if(overlay){
+        overlay.classList.add("show");
+        overlay.setAttribute("aria-hidden","false");
+        document.body.classList.add("resetPopupOpen");
+      }
+    }
+
+    function closeResetSuccessPopup(){
+      const overlay = document.getElementById("resetSuccessOverlay");
+      if(overlay){
+        overlay.classList.remove("show");
+        overlay.setAttribute("aria-hidden","true");
+      }
+      document.body.classList.remove("resetPopupOpen");
+    }
+
+    document.addEventListener("keydown", function(event){
+      if(event.key === "Escape") closeResetSuccessPopup();
+    });
+
+    // =========================
     // FORGOT PASSWORD / RESET
     // =========================
     async function forgotPassword(){
@@ -2552,12 +2681,7 @@
         // Isme Firebase khud secure reset link generate karta hai.
         await firebaseAuth.sendPasswordResetEmail(email);
 
-        alert(
-          "Password reset link bhej diya gaya ✅\n\n" +
-          "Apna Gmail Inbox, Spam, Promotions aur Updates folder check karein.\n" +
-          "Kabhi-kabhi email aane me kuch minutes lag sakte hain."
-        );
-
+        showResetSuccessPopup(email);
         if(emailInput) emailInput.value = email;
 
       }catch(error){
