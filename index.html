@@ -995,6 +995,7 @@
 @media(max-width:520px){.authRoleGrid{grid-template-columns:1fr}}
 
 </style>
+<!-- SAMAGRA DECOR ADMIN FIX: cross-scope callVendorWrite + secure admin vendor list -->
 </head>
 
 <body>
@@ -2114,7 +2115,7 @@
         // Do not query it directly from the Firebase-authenticated browser.
         // The Edge Function verifies the Firebase ID token and checks admin_users
         // with the Supabase service role on the server.
-        const result = await callVendorWrite("check_admin", {});
+        const result = await window.callVendorWrite("check_admin", {});
 
         isWebsiteAdmin = result && result.is_admin === true;
         showAdminButtons(isWebsiteAdmin);
@@ -2149,85 +2150,64 @@
     async function loadAdminVendors(){
       const box = document.getElementById("adminContent");
 
-      if(!supabaseClient){
-        box.innerHTML = "Supabase connect nahi hai.";
+      if(!box){
+        return;
+      }
+
+      if(!isWebsiteAdmin){
+        box.innerHTML = "<b>Admin access required.</b>";
         return;
       }
 
       box.innerHTML = "Loading pending vendors...";
 
-      const { data: vendorData, error: vendorError } = await supabaseClient
-        .from("vendors")
-        .select("*")
-        .in("status", ["pending", "pending_payment"])
-        .order("created_at", { ascending:false });
+      try{
+        // Admin vendor data is read server-side with the Supabase service role.
+        // The browser never receives the service-role key and does not bypass RLS.
+        const result = await window.callVendorWrite("admin_list_vendors", {});
+        const vendorData = Array.isArray(result.vendors) ? result.vendors : [];
 
-      if(vendorError){
-        box.innerHTML = "Error: " + vendorError.message;
-        return;
+        if(vendorData.length === 0){
+          box.innerHTML = "<b>Abhi koi pending vendor nahi hai ✅</b>";
+          return;
+        }
+
+        box.innerHTML = vendorData.map(function(raw){
+          const v = normalizeVendor(raw);
+
+          const gallery = v.photos && v.photos.length > 0
+            ? v.photos.slice(0,4).map(function(url){
+                return `<img src="${escapeHtml(url)}" style="width:48%;height:95px;object-fit:cover;border-radius:10px;margin:4px;" />`;
+              }).join("")
+            : `<img src="${escapeHtml(v.img)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />`;
+
+          const videoBox = v.video_url
+            ? `<p><b>Video Link:</b> <a href="${escapeHtml(v.video_url)}" target="_blank" rel="noopener noreferrer">Open Video / Reel</a></p>`
+            : `<p><b>Video:</b> Not uploaded</p>`;
+
+          const priceText = v.price > 0 ? "₹" + v.price.toLocaleString("en-IN") : "Price not added";
+
+          return `
+            <div style="border:1px solid #e2c15d;border-radius:14px;padding:12px;margin:12px 0;background:#fffaf0;">
+              <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">${gallery}</div>
+              ${videoBox}
+              <h3 style="color:#043b2f;margin-bottom:6px;">${escapeHtml(v.name)}</h3>
+              <p><b>Owner:</b> ${escapeHtml(v.owner_name)}</p>
+              <p><b>City:</b> ${escapeHtml(v.city)}</p>
+              <p><b>Category:</b> ${escapeHtml(v.category)}</p>
+              <p><b>Phone:</b> ${escapeHtml(v.phone)}</p>
+              <p><b>Price:</b> ${priceText}</p>
+              <p><b>Status:</b> ${escapeHtml(raw.status)}</p>
+              <p><b>Description:</b> ${escapeHtml(v.desc)}</p>
+              <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">✅ Approve Vendor</button>
+              <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','rejected')">❌ Reject Vendor</button>
+            </div>
+          `;
+        }).join("");
+      }catch(error){
+        console.error("Admin vendor load error:", error);
+        box.innerHTML = "<b>Admin vendor load error:</b> " + escapeHtml(error?.message || String(error));
       }
-
-      if(!vendorData || vendorData.length === 0){
-        box.innerHTML = "<b>Abhi koi pending vendor nahi hai ✅</b>";
-        return;
-      }
-
-      const { data: imageData, error: imageError } = await supabaseClient
-        .from("vendor_images")
-        .select("vendor_id, image_url");
-
-      if(imageError){
-        console.log("Admin image load error:", imageError.message);
-      }
-
-      const imagesByVendor = {};
-
-      if(imageData && imageData.length > 0){
-        imageData.forEach(function(img){
-          if(!imagesByVendor[img.vendor_id]) imagesByVendor[img.vendor_id] = [];
-          imagesByVendor[img.vendor_id].push({ image_url: img.image_url });
-        });
-      }
-
-      const finalData = vendorData.map(function(v){
-        return {
-          ...v,
-          vendor_images: imagesByVendor[v.id] || []
-        };
-      });
-
-      box.innerHTML = finalData.map(function(raw){
-        const v = normalizeVendor(raw);
-
-        const gallery = v.photos && v.photos.length > 0
-          ? v.photos.slice(0,4).map(function(url){
-              return `<img src="${escapeHtml(url)}" style="width:48%;height:95px;object-fit:cover;border-radius:10px;margin:4px;" />`;
-            }).join("")
-          : `<img src="${escapeHtml(v.img)}" style="width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:10px;" />`;
-
-        const videoBox = v.video_url
-          ? `<p><b>Video Link:</b> <a href="${escapeHtml(v.video_url)}" target="_blank" rel="noopener noreferrer">Open Video / Reel</a></p>`
-          : `<p><b>Video:</b> Not uploaded</p>`;
-
-        const priceText = v.price > 0 ? "₹" + v.price.toLocaleString("en-IN") : "Price not added";
-
-        return `
-          <div style="border:1px solid #e2c15d;border-radius:14px;padding:12px;margin:12px 0;background:#fffaf0;">
-            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">${gallery}</div>
-            ${videoBox}
-            <h3 style="color:#043b2f;margin-bottom:6px;">${escapeHtml(v.name)}</h3>
-            <p><b>Owner:</b> ${escapeHtml(v.owner_name)}</p>
-            <p><b>City:</b> ${escapeHtml(v.city)}</p>
-            <p><b>Category:</b> ${escapeHtml(v.category)}</p>
-            <p><b>Phone:</b> ${escapeHtml(v.phone)}</p>
-            <p><b>Price:</b> ${priceText}</p>
-            <p><b>Status:</b> ${escapeHtml(raw.status)}</p>
-            <p><b>Description:</b> ${escapeHtml(v.desc)}</p>
-            <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','approved')">✅ Approve Vendor</button>
-            <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorStatus('${v.id}','rejected')">❌ Reject Vendor</button>
-          </div>
-        `;
-      }).join("");
     }
 
     async function updateVendorStatus(vendorId, status){
@@ -2242,7 +2222,7 @@
       }
 
       try{
-        await callVendorWrite(
+        await window.callVendorWrite(
           "admin_update_vendor_status",
           { vendor_id: vendorId, status: status }
         );
@@ -3627,7 +3607,7 @@
     }
   }
 
-  async function callVendorWrite(action, payload, files){
+  window.callVendorWrite = async function callVendorWrite(action, payload, files){
     if(!isSupabaseReady){
       throw new Error("Supabase connect nahi hai.");
     }
@@ -3735,7 +3715,7 @@
       ? files.filter(Boolean).slice(0, APP_MAX_DB_PHOTOS)
       : [];
 
-    const result = await callVendorWrite(
+    const result = await window.callVendorWrite(
       "update_vendor_media",
       {
         vendor_id: vendorId,
@@ -3751,7 +3731,7 @@
   }
 
   async function saveFreeVendor(vendorData) {
-    const result = await callVendorWrite(
+    const result = await window.callVendorWrite(
       "create_vendor",
       { vendor_data: vendorData }
     );
@@ -3763,7 +3743,7 @@
   }
 
   async function savePendingVendor(vendorData, paymentRef) {
-    const result = await callVendorWrite(
+    const result = await window.callVendorWrite(
       "create_pending_vendor",
       {
         payment_ref: paymentRef,
