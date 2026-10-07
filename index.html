@@ -1018,7 +1018,7 @@
         <a onclick="showInfoPage('faq')">FAQ</a>
         <a onclick="showFavorites()"><span class="redHeart">♥</span> Favorites</a>
         <a id="authMenuLink" onclick="openAuthModal()">Login / Create Account</a>
-        <a id="adminMenuLink" onclick="openAdminPanel()" style="display:none !important;" aria-hidden="true">Admin Panel</a>
+        <a id="adminMenuLink" onclick="openAdminPanel()" style="display:none;" aria-hidden="true">Admin Panel</a>
       </div>
 
       <button class="mobileMenuBtn" type="button" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">☰</button>
@@ -2107,24 +2107,24 @@
       isWebsiteAdmin = false;
       showAdminButtons(false);
 
-      if(!user || !supabaseClient) return;
+      if(!user || !supabaseClient) return false;
 
-      const email = (user.email || "").toLowerCase().trim();
+      try{
+        // IMPORTANT: admin_users is protected by RLS.
+        // Do not query it directly from the Firebase-authenticated browser.
+        // The Edge Function verifies the Firebase ID token and checks admin_users
+        // with the Supabase service role on the server.
+        const result = await callVendorWrite("check_admin", {});
 
-      const { data, error } = await supabaseClient
-        .from("admin_users")
-        .select("*")
-        .ilike("email", email)
-        .maybeSingle();
+        isWebsiteAdmin = result && result.is_admin === true;
+        showAdminButtons(isWebsiteAdmin);
 
-      if(error){
-        console.log("Admin check error:", error.message);
-        return;
-      }
-
-      if(data){
-        isWebsiteAdmin = true;
-        showAdminButtons(true);
+        return isWebsiteAdmin;
+      }catch(error){
+        console.log("Admin check error:", error?.message || error);
+        isWebsiteAdmin = false;
+        showAdminButtons(false);
+        return false;
       }
     }
 
@@ -2236,19 +2236,23 @@
         return;
       }
 
-      const { error } = await supabaseClient
-        .from("vendors")
-        .update({ status: status })
-        .eq("id", vendorId);
-
-      if(error){
-        alert("Update error: " + error.message);
+      if(!vendorId || !["approved","rejected"].includes(status)){
+        alert("Invalid vendor status request.");
         return;
       }
 
-      alert("Vendor " + status + " ho gaya ✅");
-      loadAdminVendors();
-      loadVendors();
+      try{
+        await callVendorWrite(
+          "admin_update_vendor_status",
+          { vendor_id: vendorId, status: status }
+        );
+
+        alert("Vendor " + status + " ho gaya ✅");
+        await loadAdminVendors();
+        await loadVendors();
+      }catch(error){
+        alert("Update error: " + (error?.message || error));
+      }
     }
 
     /* =========================================================
