@@ -1418,6 +1418,9 @@
     const SUPABASE_URL = "https://uomxewgvhbqjoamxfnnm.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_JizxCNPAlEeHRL1RaIGJXQ_Q8HeqzCq";
 
+    // Secure vendor-write endpoint. Firebase Auth token is verified server-side.
+    const VENDOR_WRITE_FUNCTION = SUPABASE_URL + "/functions/v1/vendor-write";
+
     const isSupabaseReady = SUPABASE_URL.includes("supabase.co") && SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes("YAHAN_");
     const supabaseClient = isSupabaseReady ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
@@ -3599,6 +3602,64 @@
     });
   }
 
+  async function getFreshFirebaseIdToken(){
+    const user = getCurrentFirebaseUser();
+    if(!user){
+      throw new Error("Login required. Pehle account login karein.");
+    }
+    try{
+      return await user.getIdToken(true);
+    }catch(error){
+      throw new Error("Firebase login token nahi mila. Dobara login karein.");
+    }
+  }
+
+  async function callVendorWrite(action, payload, files){
+    if(!isSupabaseReady){
+      throw new Error("Supabase connect nahi hai.");
+    }
+
+    const token = await getFreshFirebaseIdToken();
+    const safeFiles = Array.isArray(files) ? files.filter(Boolean).slice(0, APP_MAX_DB_PHOTOS) : [];
+
+    let body;
+    const headers = {
+      "Authorization": "Bearer " + token,
+      "apikey": SUPABASE_ANON_KEY
+    };
+
+    if(safeFiles.length){
+      const form = new FormData();
+      form.append("action", action);
+      form.append("payload", JSON.stringify(payload || {}));
+      safeFiles.forEach((file, index) => {
+        form.append("file_" + index, file, file.name || ("photo_" + (index + 1)));
+      });
+      body = form;
+    }else{
+      headers["Content-Type"] = "application/json";
+      body = JSON.stringify({action, payload: payload || {}});
+    }
+
+    const response = await fetch(VENDOR_WRITE_FUNCTION, {
+      method: "POST",
+      headers,
+      body
+    });
+
+    const raw = await response.text();
+    let data = {};
+    try{ data = raw ? JSON.parse(raw) : {}; }catch(e){ data = {}; }
+
+    if(!response.ok){
+      throw new Error(data.error || data.message || raw || ("Vendor write failed (" + response.status + ")"));
+    }
+    if(data.success === false){
+      throw new Error(data.error || data.message || "Vendor operation failed.");
+    }
+    return data;
+  }
+
   function buildAppVendorData() {
     const user = getCurrentFirebaseUser();
 
@@ -3652,108 +3713,54 @@
     };
   }
 
-  async function uploadVendorPhoto(file, vendorId, index) {
-    if (!supabaseClient) {
-      throw new Error("Supabase connect nahi hai.");
-    }
-
-    const compressed = await compressImage(file, 1000, 0.75);
-    const path =
-      "vendors/" +
-      vendorId +
-      "/photo_" +
-      (index + 1) +
-      "_" +
-      cryptoId() +
-      ".jpg";
-
-    const { error } = await supabaseClient.storage
-      .from("vendor-media")
-      .upload(path, compressed, {
-        cacheControl: "3600",
-        upsert: true,
-        contentType: "image/jpeg"
-      });
-
-    if (error) throw new Error(error.message);
-
-    const publicUrl =
-      SUPABASE_URL +
-      "/storage/v1/object/public/vendor-media/" +
-      path;
-
-    return publicUrl;
-  }
-
   async function patchVendorMedia(vendorId, files, videoUrl) {
-    if (!vendorId) {
+    if(!vendorId){
       throw new Error("Vendor ID missing.");
     }
 
-    const urls = ["", "", "", ""];
-    const uploadCount = Math.min(
-      Array.isArray(files) ? files.length : 0,
-      APP_MAX_DB_PHOTOS
+    const safeFiles = Array.isArray(files)
+      ? files.filter(Boolean).slice(0, APP_MAX_DB_PHOTOS)
+      : [];
+
+    const result = await callVendorWrite(
+      "update_vendor_media",
+      {
+        vendor_id: vendorId,
+        video_url: videoUrl || ""
+      },
+      safeFiles
     );
 
-    for (let index = 0; index < uploadCount; index++) {
-      urls[index] = await uploadVendorPhoto(files[index], vendorId, index);
+    if(!result.vendor || !result.vendor.id){
+      throw new Error("Vendor media update response missing.");
     }
-
-    const payload = {
-      image_url_1: urls[0],
-      image_url_2: urls[1],
-      image_url_3: urls[2],
-      image_url_4: urls[3],
-      video_url: videoUrl || "",
-      video: videoUrl || ""
-    };
-
-    const { error } = await supabaseClient
-      .from("vendors")
-      .update(payload)
-      .eq("id", vendorId);
-
-    if (error) throw new Error(error.message);
+    return result.vendor;
   }
 
   async function saveFreeVendor(vendorData) {
-    const { data, error } = await supabaseClient
-      .from("vendors")
-      .insert([vendorData])
-      .select()
-      .single();
+    const result = await callVendorWrite(
+      "create_vendor",
+      { vendor_data: vendorData }
+    );
 
-    if (error) throw new Error(error.message);
-    return data;
+    if(!result.vendor || !result.vendor.id){
+      throw new Error("Vendor saved but vendor ID nahi mili.");
+    }
+    return result.vendor;
   }
 
   async function savePendingVendor(vendorData, paymentRef) {
-    const pending = {
-      payment_ref: paymentRef,
-      firebase_uid: vendorData.firebase_uid || "",
-      business_name: vendorData.business_name || "",
-      name: vendorData.name || "",
-      owner_name: vendorData.owner_name || "",
-      email: vendorData.email || "",
-      mobile: vendorData.mobile || "",
-      phone: vendorData.phone || "",
-      city: vendorData.city || "",
-      category: vendorData.category || "",
-      price: vendorData.price || "0",
-      description: vendorData.description || "",
-      video_url: vendorData.video_url || "",
-      video: vendorData.video || "",
-      listing_type: vendorData.listing_type || "free",
-      razorpay_subscription_id: "",
-      payment_status: "pending"
-    };
+    const result = await callVendorWrite(
+      "create_pending_vendor",
+      {
+        payment_ref: paymentRef,
+        vendor_data: vendorData
+      }
+    );
 
-    const { error } = await supabaseClient
-      .from("pending_vendor_registrations")
-      .insert([pending]);
-
-    if (error) throw new Error(error.message);
+    if(!result.success){
+      throw new Error("Pending vendor registration save nahi hui.");
+    }
   }
 
   async function createAppSubscription(paymentRef, vendorData) {
