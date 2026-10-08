@@ -2073,6 +2073,7 @@
               <div class="price">${priceText}</div>
               <div class="cardActions">
                 <button class="waBtn" onclick="vendorWhatsApp(${index})">☘</button>
+                <button class="callBtn" onclick="vendorCall(${index})">📞</button>
                 <button class="detailBtn" onclick="viewDetails(${index})">View Details</button>
                 <button class="favBtn" onclick="addFavorite(${index})">♡</button>
               </div>
@@ -2139,7 +2140,10 @@
         <p><b>Rating:</b> ⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)} reviews)</p>
         <p><b>Price:</b> ${priceText}</p>
         <p>${escapeHtml(v.desc)}</p>
-        <button onclick="vendorWhatsApp(${index})">Contact on WhatsApp</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button onclick="vendorCall(${index})">📞 Direct Call</button>
+          <button onclick="vendorWhatsApp(${index})">☘ Contact on WhatsApp</button>
+        </div>
       `;
 
       openModal("detailsModal");
@@ -2151,6 +2155,19 @@
       const phone = v.phone && v.phone.length >= 10 ? v.phone : WHATSAPP_NUMBER;
       const text = encodeURIComponent("Hello Samagra Decor, mujhe " + v.name + " vendor ki details chahiye.");
       window.open("https://wa.me/" + phone + "?text=" + text, "_blank", "noopener,noreferrer");
+    }
+
+    function vendorCall(index){
+      const v = currentVendorList[index];
+      if(!v) return;
+
+      const phone = String(v.phone || "").replace(/\D/g, "");
+      if(phone.length < 10){
+        alert("Is vendor ka direct call number available nahi hai.");
+        return;
+      }
+
+      window.location.href = "tel:+" + phone;
     }
 
     function addFavorite(index){
@@ -2670,6 +2687,10 @@
               <div class="sdListingActions">
                 <button type="button" onclick="openVendorFromMyAccount('${escapeHtml(String(v.id || ""))}')">👁️ View Listing</button>
                 <button type="button" onclick="editVendorFromMyAccount('${escapeHtml(String(v.id || ""))}')">✏️ Edit Listing</button>
+                <button type="button" onclick="deleteVendorFromMyAccount('${escapeHtml(String(v.id || ""))}')"
+                  style="background:#fff;border:1px solid #c62828;color:#c62828;">
+                  🗑️ Delete Listing
+                </button>
               </div>
             </div>`;
         }).join("");
@@ -2711,15 +2732,57 @@
       }
     }
 
-    function editVendorFromMyAccount(vendorId){
+    async function editVendorFromMyAccount(vendorId){
       closeModal("loginModal");
-      if(typeof openVendorEditModal === "function"){
-        openVendorEditModal(vendorId);
+
+      // My Account -> My Business Listings ka Edit button
+      // directly current vendor edit-request modal se connect hoga.
+      try{
+        if(typeof window.sdOpenEditVendorById === "function"){
+          await window.sdOpenEditVendorById(vendorId);
+          return;
+        }
+
+        // Backward compatibility: agar purana edit function available ho.
+        if(typeof openVendorEditModal === "function"){
+          openVendorEditModal(vendorId);
+          return;
+        }
+
+        alert("Edit system load nahi hua. Page ko Ctrl + Shift + R karke dobara try karein.");
+      }catch(error){
+        console.error("My Account edit error:", error);
+        alert("Edit Listing open nahi hui: " + (error?.message || error));
+      }
+    }
+
+
+    async function deleteVendorFromMyAccount(vendorId){
+      if(!currentUser){
+        requireLogin();
         return;
       }
-      // Existing site me vendor edit function ka naam different ho sakta hai.
-      // Listing page par le jaane ke bajay user ko clear message do.
-      alert("Edit Listing option available hai, lekin current page me edit modal function connect nahi mila.");
+
+      const ok = confirm(
+        "Kya aap is listing ko permanently delete karna chahte hain?\n\n" +
+        "Delete hone ke baad listing website se hat jayegi."
+      );
+      if(!ok) return;
+
+      try{
+        const result = await callVendorWrite("delete_vendor", { vendor_id: vendorId });
+
+        if(!result || result.success !== true){
+          throw new Error(result?.error || "Listing delete nahi hui.");
+        }
+
+        alert("Listing successfully delete ho gayi ✅");
+        await loadMyListingsIntoAccount();
+        await loadVendors();
+      }catch(error){
+        console.error("Delete listing error:", error);
+        alert("Delete Listing error: " + (error?.message || error));
+      }
     }
 
     async function showAccountScreen(){
@@ -4449,7 +4512,7 @@ document.addEventListener("click", function(e){
 .sdVendorBack{display:inline-flex;align-items:center;gap:7px;border:1px solid #d6a53a;background:#fff;color:#043b2f;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-bottom:15px}
 .sdVendorHero{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;background:#fff;border:1px solid #f0dfb8;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08)}
 .sdVendorHeroImg{min-height:330px;background:#eee}.sdVendorHeroImg img{width:100%;height:100%;min-height:330px;object-fit:cover;display:block}
-.sdVendorHeroBody{padding:25px}.sdVendorKicker{color:#a67400;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1px}.sdVendorTitle{font-family:Georgia,serif;color:#043b2f;font-size:clamp(30px,4vw,44px);line-height:1.05;margin:7px 0 10px}.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}.sdVendorDesc{color:#555;line-height:1.7;margin:12px 0}.sdVendorActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.sdVendorActions button{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.sdVendorContact{background:#0dbb59;color:#fff}.sdVendorEdit{background:#043b2f;color:#f7d77d}.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid #f0dfb8;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:1px solid #f0dfb8}.sdRelated{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sdRelated a{display:block;text-decoration:none;color:#043b2f;background:#fffaf0;border:1px solid #f0dfb8;border-radius:12px;padding:12px;font-weight:800}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}
+.sdVendorHeroBody{padding:25px}.sdVendorKicker{color:#a67400;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1px}.sdVendorTitle{font-family:Georgia,serif;color:#043b2f;font-size:clamp(30px,4vw,44px);line-height:1.05;margin:7px 0 10px}.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}.sdVendorDesc{color:#555;line-height:1.7;margin:12px 0}.sdVendorActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.sdVendorActions button{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.callBtn{background:#0b8f4d;color:#fff}.sdVendorContact{background:#0dbb59;color:#fff}.sdVendorEdit{background:#043b2f;color:#f7d77d}.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid #f0dfb8;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:1px solid #f0dfb8}.sdRelated{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sdRelated a{display:block;text-decoration:none;color:#043b2f;background:#fffaf0;border:1px solid #f0dfb8;border-radius:12px;padding:12px;font-weight:800}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}
 @media(max-width:800px){.sdVendorHero,.sdVendorGrid{grid-template-columns:1fr}.sdVendorHeroImg,.sdVendorHeroImg img{min-height:250px}.sdRelated{grid-template-columns:1fr}.sdGallery{grid-template-columns:repeat(2,1fr)}}
 </style>
 
@@ -4582,7 +4645,7 @@ document.addEventListener("click", function(e){
       '<h1 class="sdVendorTitle">'+esc(name)+'</h1>'+
       '<div class="sdVendorMeta"><span>📍 '+esc(city)+'</span><span>▦ '+esc(cat)+'</span><span>⭐ '+(reviews?rating.toFixed(1):'New Vendor')+(reviews?' ('+reviews+' reviews)':' · No reviews yet')+'</span><span>💰 '+esc(price)+'</span></div>'+ 
       '<p class="sdVendorDesc">'+esc(vendorDescription(v))+'</p>'+
-      '<div class="sdVendorActions"><button class="sdVendorContact" onclick="window.sdContactCurrent()">🔒 Contact Vendor</button>'+ (plan!=="free"?'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>':'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>')+'</div>'+ 
+      '<div class="sdVendorActions"><button class="sdVendorContact" onclick="window.sdCallCurrent()">📞 Direct Call</button><button class="sdVendorContact" onclick="window.sdContactCurrent()">☘ WhatsApp</button>'+ (plan!=="free"?'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>':'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>')+'</div>'+ 
       '<div class="sdPlanNote" style="margin-top:14px">'+esc(cfg.name)+' · '+cfg.categories+' categories / '+cfg.photos+' photos allowed. '+(cfg.seo?'Advanced profile SEO controls enabled for this plan.':'SEO title & description are generated automatically.')+'</div>'+ 
       '</div></article>'+ 
       '<div class="sdVendorGrid"><section class="sdVendorPanel"><h2>Business Photos</h2><div class="sdGallery">'+gallery+'</div></section>'+ 
@@ -4609,6 +4672,44 @@ document.addEventListener("click", function(e){
 
   window.sdBackToHome=backHome;
   window.sdContactCurrent=function(){if(sdCurrentVendor)contactVendor(sdCurrentVendor);};
+
+  window.sdCallCurrent=function(){
+    if(!sdCurrentVendor) return;
+    const phone = vendorPhone(sdCurrentVendor);
+    if(!phone || phone.length < 10){
+      alert("Is vendor ka direct call number available nahi hai.");
+      return;
+    }
+    window.location.href = "tel:+" + phone;
+  };
+
+  // My Account -> My Business Listings se direct edit modal open karne ke liye.
+  // Isse user ko pehle public vendor page par jaane ki zarurat nahi padegi.
+  window.sdOpenEditVendorById=async function(vendorId){
+    let user=null;
+    try{ user=firebase.auth().currentUser; }catch(e){}
+    if(!user){ requireLogin(); return; }
+
+    const v=await fetchVendorById(vendorId);
+    if(!v){
+      alert("Vendor listing nahi mili.");
+      return;
+    }
+
+    const ownerUid=v.firebase_uid||v.owner_user_id||v.user_id||"";
+    if(ownerUid && ownerUid!==user.uid){
+      alert("Sirf apni vendor profile edit kar sakte hain.");
+      return;
+    }
+
+    sdCurrentVendor=v;
+    if(typeof window.sdOpenEditCurrent === "function"){
+      await window.sdOpenEditCurrent();
+      return;
+    }
+
+    alert("Edit system load nahi hua. Page ko Ctrl + Shift + R karke dobara try karein.");
+  };
 
   window.sdOpenEditCurrent=async function(){
     if(!sdCurrentVendor)return;
