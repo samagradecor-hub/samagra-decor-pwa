@@ -1379,7 +1379,9 @@
       <h2 style="color:#061b3a;text-align:center;">Website Admin Panel</h2>
       <p style="text-align:center;">Pending vendors ko approve/reject karein.</p>
       <button class="monthlyBtn" onclick="loadAdminVendors()">Refresh Pending Vendors</button>
+      <button class="monthlyBtn" onclick="loadAdminEditRequests()" style="margin-top:8px;">🔄 Refresh Edit Requests</button>
       <div id="adminContent" style="margin-top:15px;">Loading...</div>
+      <div id="adminEditRequests" style="margin-top:20px;"></div>
     </div>
   </div>
 
@@ -2144,7 +2146,8 @@
       }
 
       openModal("adminModal");
-      loadAdminVendors();
+      await loadAdminVendors();
+      await loadAdminEditRequests();
     }
 
     async function loadAdminVendors(){
@@ -2207,6 +2210,53 @@
       }catch(error){
         console.error("Admin vendor load error:", error);
         box.innerHTML = "<b>Admin vendor load error:</b> " + escapeHtml(error?.message || String(error));
+      }
+    }
+
+    async function loadAdminEditRequests(){
+      const box = document.getElementById("adminEditRequests");
+      if(!box || !isWebsiteAdmin) return;
+      box.innerHTML = "<hr><h3 style='color:#043b2f;'>✏️ Vendor Edit Requests</h3><p>Loading...</p>";
+      try{
+        const result = await window.callVendorWrite("admin_list_edit_requests", {});
+        const requests = Array.isArray(result.requests) ? result.requests : [];
+        if(!requests.length){
+          box.innerHTML = "<hr><h3 style='color:#043b2f;'>✏️ Vendor Edit Requests</h3><p><b>Abhi koi pending edit request nahi hai ✅</b></p>";
+          return;
+        }
+        box.innerHTML = "<hr><h3 style='color:#043b2f;'>✏️ Vendor Edit Requests</h3>" + requests.map(function(r){
+          const v = r.vendor || {};
+          return `
+            <div style="border:1px solid #e2c15d;border-radius:14px;padding:14px;margin:12px 0;background:#fffaf0;">
+              <h3>${escapeHtml(r.business_name || v.business_name || "Vendor Edit")}</h3>
+              <p><b>Vendor:</b> ${escapeHtml(v.business_name || v.name || "")}</p>
+              <p><b>Owner:</b> ${escapeHtml(r.owner_name || "")}</p>
+              <p><b>City:</b> ${escapeHtml(r.city || "")}</p>
+              <p><b>Category:</b> ${escapeHtml(r.category || "")}</p>
+              <p><b>Price:</b> ${escapeHtml(r.price || "")}</p>
+              <p><b>Description:</b> ${escapeHtml(r.description || "")}</p>
+              ${r.seo_title ? `<p><b>SEO Title:</b> ${escapeHtml(r.seo_title)}</p>` : ""}
+              ${r.seo_description ? `<p><b>SEO Description:</b> ${escapeHtml(r.seo_description)}</p>` : ""}
+              <p><small>Submitted: ${escapeHtml(r.created_at || "")}</small></p>
+              <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorEditRequest('${r.id}','approved')">✅ Approve Changes</button>
+              <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorEditRequest('${r.id}','rejected')">❌ Reject Changes</button>
+            </div>`;
+        }).join("");
+      }catch(error){
+        console.error("Admin edit request load error:", error);
+        box.innerHTML = "<hr><h3>✏️ Vendor Edit Requests</h3><b>Error:</b> " + escapeHtml(error?.message || String(error));
+      }
+    }
+
+    async function updateVendorEditRequest(requestId, decision){
+      if(!isWebsiteAdmin){ alert("Admin access required."); return; }
+      try{
+        await window.callVendorWrite("admin_update_edit_request", { request_id: requestId, decision: decision });
+        alert(decision === "approved" ? "Vendor profile changes approve ho gaye ✅" : "Edit request reject ho gayi ❌");
+        await loadAdminEditRequests();
+        if(decision === "approved") await loadVendors();
+      }catch(error){
+        alert("Edit request update error: " + (error?.message || error));
       }
     }
 
@@ -2751,6 +2801,7 @@
         closeModal("loginModal");
         openModal("adminModal");
         await loadAdminVendors();
+        await loadAdminEditRequests();
       }
     });
 
