@@ -4373,9 +4373,13 @@ document.addEventListener("click", function(e){
     const user=firebase.auth().currentUser;if(!user){requireLogin();return;}
     const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,business_name:document.getElementById("sdEditName").value.trim(),owner_name:document.getElementById("sdEditOwner").value.trim(),city:document.getElementById("sdEditCity").value.trim(),category:document.getElementById("sdEditCategory").value.trim(),price:document.getElementById("sdEditPrice").value.trim(),description:document.getElementById("sdEditDesc").value.trim(),status:"pending"};
     const seoTitle=document.getElementById("sdEditSeoTitle");const seoDesc=document.getElementById("sdEditSeoDesc");if(seoTitle)payload.seo_title=seoTitle.value.trim();if(seoDesc)payload.seo_description=seoDesc.value.trim();
-    const {error}=await sdDb.from("vendor_profile_edit_requests").insert([payload]);
-    if(error){alert("Edit request save nahi hua. Supabase mein vendor_profile_edit_requests table/migration add karna hoga.\n\n"+error.message);return;}
-    document.getElementById("sdEditModal").remove();alert("Profile changes Admin Approval ke liye bhej diye gaye hain ✅");
+    try{
+      await window.callVendorWrite("create_vendor_edit_request", payload);
+      document.getElementById("sdEditModal").remove();
+      alert("Profile changes Admin Approval ke liye bhej diye gaye hain ✅");
+    }catch(error){
+      alert("Edit request save nahi hua.\n\n" + (error?.message || error));
+    }
   };
 
   /* Guest contact lock: capture before existing inline onclick. */
