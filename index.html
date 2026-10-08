@@ -2793,16 +2793,10 @@
 
       updateAuthButtons(user, currentUserRole);
 
-      const admin = await checkWebsiteAdmin(user);
-
-      // Sirf admin_users me registered email ko Admin Panel milega.
-      // Customer/Vendor login par Admin Panel hidden rahega.
-      if(admin){
-        closeModal("loginModal");
-        openModal("adminModal");
-        await loadAdminVendors();
-        await loadAdminEditRequests();
-      }
+      // Admin status sirf Admin Panel button/link ko control karega.
+      // Login ke baad Admin Panel automatically OPEN nahi hoga.
+      // Sirf admin_users me registered email ko Admin Panel button milega.
+      await checkWebsiteAdmin(user);
     });
 
     function showInfoPage(type){
