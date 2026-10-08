@@ -994,6 +994,83 @@
 .authError{font-size:13px;color:#9b1c1c;background:#fff1f1;border:1px solid #e7b0b0;border-radius:10px;padding:10px;margin:10px 0;display:none}
 @media(max-width:520px){.authRoleGrid{grid-template-columns:1fr}}
 
+
+    /* ===== Modern My Account / Profile UI ===== */
+    .sdProfileWrap{
+      max-width:760px;
+      margin:0 auto;
+      text-align:left;
+    }
+    .sdProfileHero{
+      background:linear-gradient(135deg,#062f25,#0b5a47);
+      border-radius:22px;
+      padding:22px;
+      color:#fff;
+      box-shadow:0 12px 30px rgba(0,0,0,.14);
+      margin-bottom:16px;
+    }
+    .sdProfileTop{
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .sdAvatar{
+      width:64px;height:64px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:#fff;color:#063c2f;font-size:30px;font-weight:800;
+      flex:none;
+    }
+    .sdProfileName{font-size:24px;font-weight:800;line-height:1.1}
+    .sdProfileEmail{font-size:13px;opacity:.86;margin-top:5px;word-break:break-word}
+    .sdRoleBadge{
+      display:inline-flex;align-items:center;gap:6px;
+      margin-top:10px;padding:6px 11px;border-radius:999px;
+      background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);
+      font-size:13px;font-weight:700;
+    }
+    .sdQuickGrid{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0;
+    }
+    .sdQuickBtn{
+      border:1px solid #e4c15b;background:#fff;color:#073b30;
+      border-radius:14px;padding:13px 10px;font-weight:800;cursor:pointer;
+    }
+    .sdQuickBtn.primary{background:#062f25;color:#fff;border-color:#062f25}
+    .sdSectionTitle{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;margin:18px 0 10px;color:#073b30;
+    }
+    .sdSectionTitle h3{margin:0;font-size:20px}
+    .sdListingCard{
+      border:1px solid #e8cf78;border-radius:18px;padding:14px;background:#fff;
+      margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,.07);
+    }
+    .sdListingHead{display:flex;gap:12px;align-items:center}
+    .sdListingImg{
+      width:72px;height:72px;border-radius:14px;object-fit:cover;
+      background:#edf3ef;flex:none;
+    }
+    .sdListingName{font-weight:900;font-size:18px;color:#073b30}
+    .sdListingMeta{font-size:13px;color:#666;margin-top:4px}
+    .sdStatus{
+      display:inline-block;margin-top:8px;padding:5px 9px;border-radius:999px;
+      font-size:12px;font-weight:800;text-transform:capitalize;
+      background:#eef5ef;color:#17623e;
+    }
+    .sdListingActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .sdListingActions button{
+      flex:1;min-width:130px;border-radius:11px;padding:10px;border:1px solid #d7bd58;
+      background:#fff;color:#073b30;font-weight:800;cursor:pointer;
+    }
+    .sdEmptyListing{
+      border:1px dashed #d7bd58;border-radius:16px;padding:20px;text-align:center;
+      color:#666;background:#fffdf5;
+    }
+    @media(max-width:600px){
+      .sdQuickGrid{grid-template-columns:1fr}
+      .sdProfileHero{padding:18px}
+    }
+
 </style>
 <!-- SAMAGRA DECOR ADMIN FIX: cross-scope callVendorWrite + secure admin vendor list -->
 </head>
@@ -2540,6 +2617,111 @@
       window.__sdSelectedSignupRole = function(){ return selectedRole; };
     }
 
+
+    async function loadMyListingsIntoAccount(){
+      const box = document.getElementById("myListingsBox");
+      if(!box || !currentUser) return;
+
+      box.innerHTML = '<div class="sdEmptyListing">⏳ Aapki listings load ho rahi hain...</div>';
+
+      try{
+        const result = await callVendorWrite("list_my_vendors", {});
+        const vendors = Array.isArray(result?.vendors) ? result.vendors : [];
+
+        if(!vendors.length){
+          box.innerHTML = `
+            <div class="sdEmptyListing">
+              <div style="font-size:30px;">🏪</div>
+              <b>Abhi aapki koi business listing nahi hai.</b>
+              <div style="margin-top:6px;">Apna business add karein, yahin se mil jayega.</div>
+              <button class="authMainBtn" style="margin-top:12px;" type="button"
+                onclick="openListingModal();closeModal('loginModal');">
+                ➕ Add Your Business
+              </button>
+            </div>`;
+          return;
+        }
+
+        box.innerHTML = vendors.map(function(v){
+          const image =
+            v.image_url_1 ||
+            v.image_url_2 ||
+            v.image_url_3 ||
+            v.image_url_4 ||
+            (Array.isArray(v.vendor_images) && v.vendor_images[0]?.image_url) ||
+            "https://placehold.co/300x200?text=Samagra+Decor";
+
+          const status = String(v.status || "pending");
+          const statusText = status === "approved" ? "Live / Approved" :
+                             status === "rejected" ? "Rejected" :
+                             "Pending Approval";
+
+          return `
+            <div class="sdListingCard">
+              <div class="sdListingHead">
+                <img class="sdListingImg" src="${escapeHtml(image)}" alt="Business">
+                <div style="min-width:0;">
+                  <div class="sdListingName">${escapeHtml(v.business_name || v.name || "My Business")}</div>
+                  <div class="sdListingMeta">📍 ${escapeHtml(v.city || "City not added")}</div>
+                  <div class="sdListingMeta">📂 ${escapeHtml(v.category || "Category not added")}</div>
+                  <span class="sdStatus">${escapeHtml(statusText)}</span>
+                </div>
+              </div>
+              <div class="sdListingActions">
+                <button type="button" onclick="openVendorFromMyAccount('${escapeHtml(String(v.id || ""))}')">👁️ View Listing</button>
+                <button type="button" onclick="editVendorFromMyAccount('${escapeHtml(String(v.id || ""))}')">✏️ Edit Listing</button>
+              </div>
+            </div>`;
+        }).join("");
+      }catch(error){
+        console.error("My listings load error:", error);
+        box.innerHTML = `
+          <div class="sdEmptyListing">
+            <b>Listing load nahi ho paayi.</b>
+            <div style="margin-top:6px;font-size:13px;">${escapeHtml(error?.message || "Please try again.")}</div>
+            <button class="authOutlineBtn" style="margin-top:10px;" onclick="loadMyListingsIntoAccount()">🔄 Retry</button>
+          </div>`;
+      }
+    }
+
+    async function openVendorFromMyAccount(vendorId){
+      try{
+        const result = await callVendorWrite("list_my_vendors", {});
+        const vendor = (result?.vendors || []).find(v => String(v.id) === String(vendorId));
+        if(!vendor){ alert("Listing nahi mili."); return; }
+
+        closeModal("loginModal");
+        const photos = [
+          vendor.image_url_1, vendor.image_url_2, vendor.image_url_3, vendor.image_url_4
+        ].filter(Boolean);
+
+        document.getElementById("detailsContent").innerHTML = `
+          <h2>${escapeHtml(vendor.business_name || vendor.name || "Business")}</h2>
+          ${photos.length ? `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0;">${photos.map(p=>`<img src="${escapeHtml(p)}" style="width:100%;height:150px;object-fit:cover;border-radius:10px;">`).join("")}</div>` : ""}
+          <p><b>Owner:</b> ${escapeHtml(vendor.owner_name || "")}</p>
+          <p><b>City:</b> ${escapeHtml(vendor.city || "")}</p>
+          <p><b>Category:</b> ${escapeHtml(vendor.category || "")}</p>
+          <p><b>Price:</b> ${escapeHtml(vendor.price || "")}</p>
+          <p><b>Status:</b> ${escapeHtml(vendor.status || "")}</p>
+          <p>${escapeHtml(vendor.description || "")}</p>
+        `;
+        openModal("detailsModal");
+      }catch(error){
+        alert("Listing open error: " + (error?.message || error));
+      }
+    }
+
+    function editVendorFromMyAccount(vendorId){
+      closeModal("loginModal");
+      if(typeof openVendorEditModal === "function"){
+        openVendorEditModal(vendorId);
+        return;
+      }
+      // Existing site me vendor edit function ka naam different ho sakta hai.
+      // Listing page par le jaane ke bajay user ko clear message do.
+      alert("Edit Listing option available hai, lekin current page me edit modal function connect nahi mila.");
+    }
+
     async function showAccountScreen(){
       if(!currentUser){
         showLoginScreen();
@@ -2548,25 +2730,52 @@
 
       const name = currentUser.displayName || "User";
       const email = currentUser.email || "";
-      const role = currentUserRole || await refreshCurrentUserRole();
+      let role = currentUserRole || await refreshCurrentUserRole();
+      const admin = !!isWebsiteAdmin;
+
+      if(admin) role = "admin";
+
+      const accountLabel = admin ? "Admin" : roleLabel(role);
+      const accountIcon = admin ? "🛡️" : roleIcon(role);
 
       document.getElementById("authContent").innerHTML = `
-        <div class="authIcon">${roleIcon(role)}</div>
-        <div class="authTitle">Welcome</div>
-        <div class="authSub">${escapeHtml(name)}</div>
-        <div class="authStatus">
-          <b>Account Type:</b> ${escapeHtml(roleLabel(role))}
+        <div class="sdProfileWrap">
+          <div class="sdProfileHero">
+            <div class="sdProfileTop">
+              <div class="sdAvatar">${accountIcon}</div>
+              <div style="min-width:0;">
+                <div class="sdProfileName">${escapeHtml(name)}</div>
+                <div class="sdProfileEmail">${escapeHtml(email)}</div>
+                <div class="sdRoleBadge">✓ Account Type: ${escapeHtml(accountLabel)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sdQuickGrid">
+            ${admin
+              ? `<button class="sdQuickBtn primary" type="button" onclick="openAdminPanel()">🛡️ Admin Panel</button>`
+              : role === "vendor"
+                ? `<button class="sdQuickBtn primary" type="button" onclick="openListingModal();closeModal('loginModal')">🏪 Manage Business</button>`
+                : `<button class="sdQuickBtn primary" type="button" onclick="closeModal('loginModal');scrollToRequirementSection()">📋 Post Requirement</button>`
+            }
+            <button class="sdQuickBtn" type="button" onclick="loadMyListingsIntoAccount()">🔄 Refresh Listings</button>
+          </div>
+
+          <div class="sdSectionTitle">
+            <h3>🏪 My Business Listings</h3>
+            <span style="font-size:12px;color:#777;">Aapki listings yahin milengi</span>
+          </div>
+
+          <div id="myListingsBox">
+            <div class="sdEmptyListing">⏳ Listings load ho rahi hain...</div>
+          </div>
+
+          <button class="authOutlineBtn" type="button" onclick="logoutUser()">Logout</button>
+          <button class="authOutlineBtn" type="button" onclick="closeModal('loginModal')">Close</button>
         </div>
-        <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
-
-        ${role === "vendor"
-          ? `<button class="authMainBtn" type="button" onclick="openListingModal(); closeModal('loginModal');">🏪 List / Manage Business</button>`
-          : `<button class="authMainBtn" type="button" onclick="closeModal('loginModal'); scrollToRequirementSection();">📋 Post Your Requirement</button>`
-        }
-
-        <button class="authOutlineBtn" type="button" onclick="logoutUser()">Logout</button>
-        <button class="authOutlineBtn" type="button" onclick="closeModal('loginModal')">Close</button>
       `;
+
+      await loadMyListingsIntoAccount();
     }
 
     function scrollToRequirementSection(){
