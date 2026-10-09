@@ -206,17 +206,21 @@
     .vendorTop{display:flex;justify-content:space-between;align-items:center;gap:10px}
     .viewAll{color:#043b2f;font-weight:bold;cursor:pointer}
     .vendors{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .vendorCard{display:grid;grid-template-columns: minmax(150px, 38%) minmax(0,1fr);background:white;border-radius:15px;overflow:hidden;border:1px solid #f0dfb8;box-shadow:0 8px 25px rgba(0,0,0,.08);transition:box-shadow .2s;min-width:0}
+    .vendorCard{display:grid;grid-template-columns:minmax(150px,38%) minmax(0,1fr);background:#fffaf0;border-radius:18px;overflow:hidden;border:2px solid #e3aa22;box-shadow:0 9px 25px rgba(65,43,7,.12);transition:box-shadow .2s;min-width:0}
     .vendorCard:hover{box-shadow:0 12px 35px rgba(0,0,0,.14)}
     .vendorImg{height:100%;min-height:220px;position:relative;background:#eee;overflow:hidden}
     .vendorImg img{width:100%;height:100%;min-height:220px;object-fit:cover;display:block}
-    @media(max-width:620px){.vendorCard{grid-template-columns:115px minmax(0,1fr)}.vendorImg,.vendorImg img{min-height:200px}.vendorBody{padding:10px}.cardActions{grid-template-columns:38px 38px minmax(85px,1fr) 34px 34px;gap:5px}.cardActions button{padding:6px;font-size:13px}}
+    @media(max-width:620px){.vendorCard{grid-template-columns:115px minmax(0,1fr)}.vendorImg,.vendorImg img{min-height:200px}.vendorBody{padding:10px}.vendorBody h3{font-size:16px}.cardActions{grid-template-columns:36px 36px minmax(70px,1fr) 32px;gap:5px}.cardActions button{padding:5px;font-size:13px}.favTitleBtn{width:30px;height:30px;flex-basis:30px}}
     .badge{position:absolute;top:10px;left:10px;background:#043b2f;color:#f9d77c;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold}
-    .vendorBody{padding:13px}
-    .vendorBody h3{color:#082f28;margin-bottom:7px;font-size:17px}
-    .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:#555;margin-bottom:8px}
-    .price{font-weight:bold;color:#043b2f;margin-bottom:12px}
-    .cardActions{display:grid;grid-template-columns:40px 40px minmax(90px,1fr) 36px 36px;gap:6px;align-items:stretch;margin-top:12px}.detailBtn{min-height:42px;background:#fff;border:1px solid #d6d6d6;color:#043b2f;white-space:nowrap}
+    .vendorTitleRow{display:flex;align-items:flex-start;gap:8px;justify-content:space-between}.vendorTitleRow h3{flex:1;min-width:0}.favTitleBtn{flex:0 0 34px;width:34px;height:34px;border:0;border-radius:10px;background:#ffe9ad;color:#a86400;font-size:23px;font-weight:900;cursor:pointer;line-height:1}.vendorBody{padding:14px;background:#f4e6c9;color:#302311;display:flex;flex-direction:column;min-width:0}
+    .vendorBody h3{color:#082f28;margin:0 0 5px;font-size:18px;font-weight:900;line-height:1.22}
+    .ownerLine{font-size:13px;font-weight:800;color:#49351b;margin-bottom:8px;line-height:1.35}
+    .ownerLine strong{color:#183f31;font-weight:900}
+    .meta{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:800;color:#382a17;margin-bottom:8px;line-height:1.45}
+    .meta span{font-weight:800}
+    .price{font-weight:900;color:#043b2f;background:#ffe38a;border:1px solid #f0c84f;border-radius:12px;padding:8px 10px;margin: auto 0 0;font-size:17px;line-height:1.2}
+    .price::before{content:"Starts from ";display:block;color:#69430b;font-size:12px;font-weight:900;margin-bottom:3px}
+    .cardActions{display:grid;grid-template-columns:42px 42px minmax(86px,1fr) 38px;gap:6px;align-items:stretch;margin-top:12px}.cardActions button{cursor:pointer;min-width:0}.shareBtn{background:#ffe9ad!important;color:#8a5200!important;border:1px solid #e8bc49!important;border-radius:10px!important;font-size:24px!important;font-weight:900!important;box-shadow:0 2px 5px rgba(80,52,0,.1)}.favBtn{background:#ffe9ad;color:#8a5200}.detailBtn{min-height:42px;background:#fff;border:1px solid #d6d6d6;color:#043b2f;white-space:nowrap}
     .waBtn,.callBtn,.detailBtn,.favBtn,.shareBtn{border:none;border-radius:8px;padding:10px;font-weight:bold;min-width:0}
     .waBtn{background:#0dbb59;color:white;font-size:18px}
     .callBtn{background:#087f48;color:#fff;font-size:18px}
@@ -1077,6 +1081,162 @@
 
 </style>
 <!-- SAMAGRA DECOR ADMIN FIX: cross-scope callVendorWrite + secure admin vendor list -->
+
+  <style id="sd-bold-vendor-card-information">
+    /* Only strengthen vendor-card information; keep layout and actions unchanged. */
+    .vendorCard .vendorBody h3 {
+      font-weight: 900 !important;
+      color: #062f27;
+      line-height: 1.25;
+    }
+    .vendorCard .vendorBody .meta {
+      color: #34443f;
+      font-weight: 750 !important;
+      line-height: 1.45;
+    }
+    .vendorCard .vendorBody .meta span {
+      font-weight: 750 !important;
+    }
+    .vendorCard .vendorBody .price {
+      font-weight: 900 !important;
+      color: #043b2f;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+    .vendorCard .vendorBody .detailBtn {
+      font-weight: 800 !important;
+    }
+    @media (max-width: 620px) {
+      .vendorCard .vendorBody h3 { font-size: 16px; }
+      .vendorCard .vendorBody .meta { font-size: 12px; }
+      .vendorCard .vendorBody .price { font-size: 15px; }
+    }
+  </style>
+
+  <style id="sd-premium-vendor-marketplace-ui">
+    /* Premium vendor cards: image left, bold information right, actions stay at bottom. */
+    #vendorList .vendorCard{
+      position:relative;
+      grid-template-columns:minmax(145px,38%) minmax(0,1fr);
+      border:2px solid #e7b52f;
+      border-radius:19px;
+      background:linear-gradient(145deg,#fff 0%,#fffdf7 100%);
+      box-shadow:0 8px 24px rgba(4,59,47,.10), inset 0 0 0 1px rgba(255,255,255,.85);
+      min-width:0;
+    }
+    #vendorList .vendorCard:hover{box-shadow:0 14px 32px rgba(4,59,47,.16);border-color:#d6a53a}
+    #vendorList .vendorImg{min-height:260px;height:100%;background:#f7ead0}
+    #vendorList .vendorImg img{min-height:260px;height:100%;object-fit:cover}
+    #vendorList .vendorBody{display:flex;flex-direction:column;min-width:0;padding:16px 15px 13px}
+    #vendorList .vendorBody h3{font-size:clamp(17px,1.3vw,22px);font-weight:950;line-height:1.18;letter-spacing:-.25px;color:#062f27;margin:2px 0 10px;overflow-wrap:anywhere}
+    #vendorList .vendorBody .meta{display:flex;flex-direction:column;gap:7px;font-size:14px;font-weight:800;line-height:1.35;color:#203b34;margin-bottom:12px}
+    #vendorList .vendorBody .meta span{font-weight:800}
+    #vendorList .vendorBody .price{margin-top:auto;margin-bottom:0;padding:9px 11px;border-radius:12px;background:linear-gradient(135deg,#fff0ad,#ffe07a);color:#043b2f;font-size:clamp(16px,1.35vw,21px);font-weight:950;line-height:1.2}
+    #vendorList .vendorBody .price::before{content:"Starts from ";display:block;color:#704500;font-size:12px;font-weight:900;margin-bottom:3px}
+    #vendorList .vendorCard{border:2px solid #e9b52d;box-shadow:0 8px 22px rgba(123,84,5,.12)}
+    #vendorList .cardActions{display:grid;grid-template-columns:42px 42px minmax(90px,1fr) 38px 38px;gap:6px;margin-top:12px;align-items:stretch}
+    #vendorList .cardActions button{box-sizing:border-box;min-width:0;min-height:44px;border-radius:10px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    #vendorList .waBtn{background:#0878e8;color:#fff;border:0;font-size:20px}
+    #vendorList .callBtn{background:#f21f36;color:#fff;border:0;font-size:20px}
+    #vendorList .detailBtn{border:1.5px solid #064638;background:#fff;color:#043b2f;font-size:13px;font-weight:950;white-space:normal;line-height:1.1;padding:5px}
+    #vendorList .favBtn,#vendorList .shareBtn{background:#fff0bf;color:#a76600;border:0;font-size:21px}
+    #vendorList .ownerLine{font-size:13px;font-weight:850;color:#5a4215;margin:-3px 0 9px;overflow-wrap:anywhere}
+    #vendorList .ownerLine strong{color:#043b2f;font-weight:950}
+    #vendorList .premiumPlanBadge{position:absolute;z-index:2;top:10px;right:10px;padding:7px 10px;border-radius:10px;background:#ffcf36;color:#241800;font-size:12px;font-weight:950;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+    #vendorList .paidPlanBadge{position:absolute;z-index:2;top:10px;right:10px;padding:7px 10px;border-radius:10px;background:#ef233c;color:#fff;font-size:12px;font-weight:950;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+    #vendorList .photoCountBadge{position:absolute;left:10px;bottom:10px;padding:6px 9px;border-radius:9px;background:rgba(0,0,0,.78);color:#fff;font-size:11px;font-weight:900}
+    #vendorList .badge{z-index:2;font-weight:900;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+    @media(max-width:950px){
+      #vendorList .vendorCard{grid-template-columns:minmax(125px,36%) minmax(0,1fr)}
+      #vendorList .vendorImg,#vendorList .vendorImg img{min-height:230px}
+      #vendorList .vendorBody{padding:12px}
+      #vendorList .cardActions{grid-template-columns:36px 36px minmax(75px,1fr) 32px 32px;gap:4px}
+    }
+    @media(max-width:620px){
+      #vendorList .vendorCard{grid-template-columns:115px minmax(0,1fr);border-radius:15px}
+      #vendorList .vendorImg,#vendorList .vendorImg img{min-height:210px}
+      #vendorList .vendorBody{padding:10px}
+      #vendorList .vendorBody h3{font-size:16px}
+      #vendorList .vendorBody .meta{font-size:12px;gap:6px}
+      #vendorList .vendorBody .price{font-size:15px;padding:8px}
+      #vendorList .cardActions{grid-template-columns:30px 30px minmax(62px,1fr) 26px 26px;gap:3px}
+      #vendorList .waBtn,#vendorList .callBtn,#vendorList .detailBtn,#vendorList .favBtn,#vendorList .shareBtn{min-height:36px;padding:4px 1px;font-size:11px}
+      #vendorList .favBtn,#vendorList .shareBtn{font-size:18px}
+      #vendorList .premiumPlanBadge,#vendorList .paidPlanBadge{font-size:10px;padding:5px 6px;right:6px;top:6px}
+      #vendorList .badge{left:6px;top:6px;font-size:10px;padding:5px 7px}
+    }
+    @media(max-width:380px){
+      #vendorList .vendorCard{grid-template-columns:100px minmax(0,1fr)}
+      #vendorList .cardActions{grid-template-columns:27px 27px minmax(55px,1fr) 24px 24px;gap:2px}
+    }
+  </style>
+<style>
+
+    /* Final premium card refinements */
+    #vendorList .vendorImg{
+      padding:7px;
+      box-sizing:border-box;
+      background:#e8d4ad;
+      border-right:3px solid #d8bd86;
+    }
+    #vendorList .vendorImg img{
+      border:3px solid #d5b77d;
+      border-radius:12px;
+      box-sizing:border-box;
+      object-fit:cover;
+    }
+    #vendorList .photoCountBadge{display:none!important}
+    #vendorList .cardActions{
+      grid-template-columns:44px 44px minmax(92px,1fr) 42px 46px;
+      gap:7px;
+      align-items:stretch;
+    }
+    #vendorList .cardActions .shareBtn{
+      display:inline-flex!important;
+      align-items:center;
+      justify-content:center;
+      min-width:46px;
+      width:46px;
+      height:44px;
+      padding:0!important;
+      font-size:29px!important;
+      line-height:1;
+      font-weight:900!important;
+      color:#704100!important;
+      background:linear-gradient(135deg,#ffe8a0,#ffd35c)!important;
+      border:2px solid #c99522!important;
+      border-radius:12px!important;
+      box-shadow:0 3px 0 #d6b15d,0 5px 10px rgba(75,49,0,.16);
+      transform:none;
+    }
+    #vendorList .cardActions .shareBtn:hover{
+      background:linear-gradient(135deg,#ffdc70,#ffc72c)!important;
+      box-shadow:0 4px 0 #c99522,0 7px 12px rgba(75,49,0,.2);
+    }
+    @media(max-width:950px){
+      #vendorList .cardActions{
+        grid-template-columns:38px 38px minmax(76px,1fr) 36px 40px;
+        gap:5px;
+      }
+      #vendorList .cardActions .shareBtn{min-width:40px;width:40px;height:42px;font-size:26px!important}
+    }
+    @media(max-width:620px){
+      #vendorList .cardActions{
+        grid-template-columns:34px 34px minmax(64px,1fr) 30px 34px;
+        gap:4px;
+      }
+      #vendorList .cardActions .shareBtn{min-width:34px;width:34px;height:38px;font-size:23px!important}
+    }
+    @media(max-width:420px){
+      #vendorList .cardActions{
+        grid-template-columns:32px 32px minmax(58px,1fr) 28px 32px;
+        gap:3px;
+      }
+      #vendorList .cardActions .shareBtn{min-width:32px;width:32px;height:36px;font-size:21px!important}
+    }
+
+</style>
+
 </head>
 
 <body>
@@ -1977,7 +2137,7 @@
         id: v.id || "",
         raw: v,
         name: safeText(v.name || v.business_name || v.businessName || v.vendor_name || v.vendorName, "Vendor Name"),
-        owner_name: safeText(v.owner_name || v.owner || v.ownerName || v.malik || "Owner", "Owner"),
+        owner_name: safeText(v.owner_name || v.owner || v.ownerName || v.full_name || v.contact_person || v.malik || "Owner details unavailable", "Owner details unavailable"),
         category: safeText(v.category || v.service_category || v.serviceCategory || "Event Service", "Event Service"),
         city: safeText(v.city || v.location || "India", "India"),
         rating: safeText(v.rating, "0"),
@@ -2087,26 +2247,35 @@
       const html = displayList.map(function(v,index){
         const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
 
+        const rawPlan = String((v.raw && (v.raw.plan || v.raw.listing_type || v.raw.subscription_plan || v.raw.subscriptionPlan || v.raw.plan_name || v.raw.subscription_type)) || "free").toLowerCase().replace(/[_-]+/g, " ");
+        const isPrime = rawPlan.includes("prime");
+        const isPaid = !isPrime && vendorCanShare(v);
+        const planBadge = isPrime
+          ? `<div class="premiumPlanBadge">👑 Prime Pro</div>`
+          : isPaid ? `<div class="paidPlanBadge">🔥 Paid Listing</div>` : "";
+        const photoCount = Array.isArray(v.photos) ? v.photos.length : 0;
+
         return `
           <div class="vendorCard" data-vendor-id="${escapeHtml(v.id || "")}">
             <div class="vendorImg">
               <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name)}" loading="lazy" decoding="async">
               <div class="badge">✅ Verified</div>
+              ${planBadge}
+              
             </div>
             <div class="vendorBody">
-              <h3>${escapeHtml(v.name)}</h3>
+              <div class="vendorTitleRow"><h3>${escapeHtml(v.name)}</h3><button class="favTitleBtn" type="button" title="Favorite" aria-label="Favorite" onclick="addFavorite(${index})">♡</button></div>
+              <div class="ownerLine"><strong>Owner:</strong> ${escapeHtml(v.owner_name || "Owner details unavailable")}</div>
               <div class="meta">
-                <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)})</span>
-                <span>📍 ${escapeHtml(v.city)}</span>
+                <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)})　📍 ${escapeHtml(v.city)}</span>
                 <span>▦ ${escapeHtml(v.category)}</span>
               </div>
-              <div class="price">${priceText}</div>
+              <div class="price">${priceText.replace(/^Starts from /, "")}</div>
               <div class="cardActions">
-                <button class="waBtn" type="button" title="WhatsApp" aria-label="WhatsApp" onclick="vendorWhatsApp(${index})">☘</button>
+                <button class="waBtn" type="button" title="WhatsApp par contact karein" aria-label="WhatsApp" onclick="vendorWhatsApp(${index})"><svg viewBox="0 0 24 24" width="23" height="23" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.04 2a9.8 9.8 0 0 0-8.42 14.82L2.3 22l5.32-1.39A9.96 9.96 0 0 0 12.04 22 10 10 0 1 0 12.04 2Zm0 18.15a8.1 8.1 0 0 1-4.13-1.13l-.3-.18-3.16.83.84-3.08-.2-.32a8.16 8.16 0 1 1 6.95 3.88Zm4.48-6.1c-.25-.13-1.48-.73-1.71-.81-.23-.08-.4-.13-.57.13-.17.25-.65.81-.8.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.39.11-.52.11-.11.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.45.06-.68.32-.23.25-.89.87-.89 2.12s.91 2.46 1.04 2.63c.13.17 1.79 2.73 4.33 3.83.6.26 1.07.41 1.44.52.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.2.21-.59.21-1.09.15-1.2-.06-.11-.23-.17-.48-.3Z"/></svg></button>
                 <button class="callBtn" type="button" title="Direct Call" aria-label="Direct Call" onclick="callVendor(${index})">📞</button>
                 <button class="detailBtn" type="button" onclick="viewDetails(${index})">View Details</button>
-                <button class="favBtn" type="button" title="Favorite" aria-label="Favorite" onclick="addFavorite(${index})">♡</button>
-                ${vendorCanShare(v) ? `<button class="shareBtn" type="button" title="Share Listing" aria-label="Share Listing" onclick="shareVendor(${index})">↗</button>` : ""}
+                ${vendorCanShare(v) ? `<button class="shareBtn" type="button" title="Share Listing" aria-label="Share Listing" onclick="shareVendor(${index})">⤴</button>` : ""}
               </div>
             </div>
           </div>`;
@@ -2180,8 +2349,11 @@
     function vendorWhatsApp(index){
       const v = currentVendorList[index];
       if (!requireLogin()) return;
-      const phone = v.phone && v.phone.length >= 10 ? v.phone : WHATSAPP_NUMBER;
-      const text = encodeURIComponent("Hello Samagra Decor, mujhe " + v.name + " vendor ki details chahiye.");
+      if(!v){ alert("Vendor details nahi mili."); return; }
+      const raw = v.raw || {};
+      const phone = String(raw.whatsapp || raw.whatsapp_number || raw.phone || raw.mobile || raw.mobile_number || v.phone || WHATSAPP_NUMBER).replace(/\D/g, "");
+      if(phone.length < 10){ alert("Is vendor ka WhatsApp number available nahi hai."); return; }
+      const text = encodeURIComponent("Hello " + v.name + ", mujhe Samagra Decor par aapki listing ki details chahiye.");
       window.open("https://wa.me/" + phone + "?text=" + text, "_blank", "noopener,noreferrer");
     }
 
