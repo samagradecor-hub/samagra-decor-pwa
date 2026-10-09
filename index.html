@@ -206,20 +206,20 @@
     .vendorTop{display:flex;justify-content:space-between;align-items:center;gap:10px}
     .viewAll{color:#043b2f;font-weight:bold;cursor:pointer}
     .vendors{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .vendorCard{display:grid;grid-template-columns:minmax(150px,38%) minmax(0,1fr);background:#fffaf0;border-radius:18px;overflow:hidden;border:2px solid #e3aa22;box-shadow:0 9px 25px rgba(65,43,7,.12);transition:box-shadow .2s;min-width:0}
+    .vendorCard{display:grid;grid-template-columns:minmax(120px,32%) minmax(0,1fr);background:#fffaf0;border-radius:18px;overflow:hidden;border:2px solid #e3aa22;box-shadow:0 9px 25px rgba(65,43,7,.12);transition:box-shadow .2s;min-width:0}
     .vendorCard:hover{box-shadow:0 12px 35px rgba(0,0,0,.14)}
     .vendorImg{height:100%;min-height:220px;position:relative;background:#eee;overflow:hidden}
     .vendorImg img{width:100%;height:100%;min-height:220px;object-fit:cover;display:block}
-    @media(max-width:620px){.vendorCard{grid-template-columns:115px minmax(0,1fr)}.vendorImg,.vendorImg img{min-height:200px}.vendorBody{padding:10px}.vendorBody h3{font-size:16px}.cardActions{grid-template-columns:36px 36px minmax(70px,1fr) 32px;gap:5px}.cardActions button{padding:5px;font-size:13px}.favTitleBtn{width:30px;height:30px;flex-basis:30px}}
+    @media(max-width:620px){.vendorCard{grid-template-columns:100px minmax(0,1fr)}.vendorImg,.vendorImg img{min-height:200px}.vendorBody{padding:10px}.vendorBody h3{font-size:16px}.cardActions{grid-template-columns:36px 36px minmax(70px,1fr) 32px;gap:5px}.cardActions button{padding:5px;font-size:13px}.favTitleBtn{width:30px;height:30px;flex-basis:30px}}
     .badge{position:absolute;top:10px;left:10px;background:#043b2f;color:#f9d77c;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:bold}
-    .vendorTitleRow{display:flex;align-items:flex-start;gap:8px;justify-content:space-between}.vendorTitleRow h3{flex:1;min-width:0}.favTitleBtn{flex:0 0 34px;width:34px;height:34px;border:0;border-radius:10px;background:#ffe9ad;color:#a86400;font-size:23px;font-weight:900;cursor:pointer;line-height:1}.vendorBody{padding:14px;background:#f4e6c9;color:#302311;display:flex;flex-direction:column;min-width:0}
+    .vendorTitleRow{display:flex;align-items:center;gap:8px;justify-content:flex-start}.vendorTitleRow h3{flex:0 1 auto;min-width:0}.favTitleBtn{order:-1;flex:0 0 30px;width:30px;height:30px;border:0;border-radius:10px;background:#ffe9ad;color:#a86400;font-size:23px;font-weight:900;cursor:pointer;line-height:1}.vendorBody{padding:14px;background:#f4e6c9;color:#302311;display:flex;flex-direction:column;min-width:0}
     .vendorBody h3{color:#082f28;margin:0 0 5px;font-size:18px;font-weight:900;line-height:1.22}
     .ownerLine{font-size:13px;font-weight:800;color:#49351b;margin-bottom:8px;line-height:1.35}
     .ownerLine strong{color:#183f31;font-weight:900}
     .meta{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;font-weight:800;color:#382a17;margin-bottom:8px;line-height:1.45}
     .meta span{font-weight:800}
     .price{font-weight:900;color:#043b2f;background:#ffe38a;border:1px solid #f0c84f;border-radius:12px;padding:8px 10px;margin: auto 0 0;font-size:17px;line-height:1.2}
-    .price::before{content:"Starts from ";display:block;color:#69430b;font-size:12px;font-weight:900;margin-bottom:3px}
+    .price::before{content:"Starting Price";display:inline;color:#69430b;font-size:13px;font-weight:900;margin:0}
     .cardActions{display:grid;grid-template-columns:42px 42px minmax(86px,1fr) 38px;gap:6px;align-items:stretch;margin-top:12px}.cardActions button{cursor:pointer;min-width:0}.shareBtn{background:#ffe9ad!important;color:#8a5200!important;border:1px solid #e8bc49!important;border-radius:10px!important;font-size:24px!important;font-weight:900!important;box-shadow:0 2px 5px rgba(80,52,0,.1)}.favBtn{background:#ffe9ad;color:#8a5200}.detailBtn{min-height:42px;background:#fff;border:1px solid #d6d6d6;color:#043b2f;white-space:nowrap}
     .waBtn,.callBtn,.detailBtn,.favBtn,.shareBtn{border:none;border-radius:8px;padding:10px;font-weight:bold;min-width:0}
     .waBtn{background:#0dbb59;color:white;font-size:18px}
@@ -1237,6 +1237,50 @@
 
 </style>
 
+<style>
+/* Requested final mobile vendor-card layout */
+#vendorList .vendorCard{grid-template-columns:minmax(125px,34%) minmax(0,1fr)}
+#vendorList .vendorImg{padding:5px;background:#e3cfaa;border-right:3px solid #cbb17c}
+#vendorList .vendorImg img{border:3px solid #c4a56a;border-radius:12px;box-sizing:border-box}
+#vendorList .vendorTitleRow{display:flex;align-items:center;justify-content:flex-start;gap:8px}
+#vendorList .vendorTitleRow .favTitleBtn{order:-1;flex:0 0 30px;width:30px;height:30px;margin:0}
+#vendorList .vendorTitleRow h3{flex:0 1 auto;min-width:0;margin:0}
+#vendorList .meta{margin-top:8px;margin-bottom:6px}
+#vendorList .reviewLine{margin-top:0;margin-bottom:4px;color:#382a17;font-weight:900}
+#vendorList .price{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0 0}
+#vendorList .price::before{content:"Starting Price"!important;display:inline;flex:1;font-size:13px;margin:0;color:#69430b}
+@media(max-width:620px){
+ #vendorList .vendorCard{grid-template-columns:112px minmax(0,1fr)}
+ #vendorList .vendorImg{padding:4px}
+ #vendorList .vendorBody{padding:10px}
+ #vendorList .vendorTitleRow{gap:6px}
+ #vendorList .vendorTitleRow .favTitleBtn{flex-basis:27px;width:27px;height:27px;font-size:20px}
+ #vendorList .vendorBody h3{font-size:16px}
+ #vendorList .ownerLine{margin-top:4px}
+ #vendorList .price{font-size:16px;padding:8px}
+ #vendorList .price::before{font-size:12px}
+}
+</style>
+
+
+
+<style>
+/* Final precise overrides requested */
+#vendorList .vendorCard{grid-template-columns:minmax(140px,36%) minmax(0,1fr)}
+#vendorList .price::before{content:"Starting Price"!important;display:inline!important;flex:1;font-size:13px;margin:0;color:#69430b}
+#vendorList .price{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#vendorList .vendorImg{min-width:0}
+#vendorList .badge{max-width:104px;padding:5px 7px;font-size:11px;line-height:1.15;white-space:normal}
+@media(max-width:620px){
+ #vendorList .vendorCard{grid-template-columns:112px minmax(0,1fr)}
+ #vendorList .badge{max-width:94px;padding:4px 6px;font-size:10px}
+ #vendorList .price::before{font-size:12px}
+}
+@media(max-width:380px){
+ #vendorList .vendorCard{grid-template-columns:104px minmax(0,1fr)}
+ #vendorList .badge{max-width:88px;font-size:9px}
+}
+</style>
 </head>
 
 <body>
@@ -2267,8 +2311,11 @@
               <div class="vendorTitleRow"><h3>${escapeHtml(v.name)}</h3><button class="favTitleBtn" type="button" title="Favorite" aria-label="Favorite" onclick="addFavorite(${index})">♡</button></div>
               <div class="ownerLine"><strong>Owner:</strong> ${escapeHtml(v.owner_name || "Owner details unavailable")}</div>
               <div class="meta">
-                <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)})　📍 ${escapeHtml(v.city)}</span>
+                <span>📍 ${escapeHtml(v.city)}</span>
                 <span>▦ ${escapeHtml(v.category)}</span>
+              </div>
+              <div class="meta reviewLine">
+                <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)} reviews)</span>
               </div>
               <div class="price">${priceText.replace(/^Starts from /, "")}</div>
               <div class="cardActions">
