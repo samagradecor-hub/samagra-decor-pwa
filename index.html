@@ -215,14 +215,14 @@
     .vendorBody h3{color:#082f28;margin-bottom:7px;font-size:17px}
     .meta{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:#555;margin-bottom:8px}
     .price{font-weight:bold;color:#043b2f;margin-bottom:12px}
-    /* Vendor card actions only: keep the existing card design, fix button sizing */
-    .cardActions{display:grid;grid-template-columns:44px 44px minmax(100px,1fr) 38px;gap:7px;align-items:stretch}
-    .cardActions button{box-sizing:border-box;min-width:0;min-height:44px;border-radius:8px;padding:8px;font-weight:bold;cursor:pointer}
-    .waBtn{background:#0dbb59;color:white;font-size:18px;border:0}
-    .callBtn{background:#0b8f4d;color:white;font-size:18px;border:0;display:flex;align-items:center;justify-content:center}
-    .detailBtn{background:white;border:1px solid #ccc;color:#043b2f;white-space:normal;line-height:1.15}
-    .favBtn,.shareBtn{background:#fff1cc;color:#a67400;border:0;font-size:17px;display:flex;align-items:center;justify-content:center}
-    @media(max-width:560px){.cardActions{grid-template-columns:38px 38px minmax(80px,1fr) 34px;gap:5px}.cardActions button{padding:6px;font-size:14px}.cardActions .waBtn,.cardActions .callBtn{font-size:16px}}
+    .cardActions{display:grid;grid-template-columns:44px 44px minmax(88px,1fr) 40px 40px;gap:7px;align-items:stretch}
+    .waBtn,.callBtn,.detailBtn,.favBtn,.shareBtn{border:none;border-radius:8px;padding:10px;font-weight:bold;min-width:0}
+    .waBtn{background:#0dbb59;color:white;font-size:18px}
+    .callBtn{background:#087f48;color:#fff;font-size:18px}
+    .shareBtn{background:#fff1cc;color:#a67400;font-size:17px}
+    @media(max-width:420px){.cardActions{grid-template-columns:40px 40px minmax(75px,1fr) 36px 36px;gap:5px}.waBtn,.callBtn,.detailBtn,.favBtn,.shareBtn{padding:8px 4px;font-size:14px}.detailBtn{font-size:12px}}
+    .detailBtn{background:white;border:1px solid #ccc;color:#043b2f}
+    .favBtn{background:#fff1cc;color:#a67400}
 
     .why{max-width:none;background:linear-gradient(135deg,#02251f,#07523f);color:white;margin-top:20px;padding:0}
     .whyInner{max-width:1220px;margin:auto;padding:22px 18px;display:grid;grid-template-columns:repeat(6,1fr);gap:14px}
@@ -997,6 +997,83 @@
 .authError{font-size:13px;color:#9b1c1c;background:#fff1f1;border:1px solid #e7b0b0;border-radius:10px;padding:10px;margin:10px 0;display:none}
 @media(max-width:520px){.authRoleGrid{grid-template-columns:1fr}}
 
+
+    /* ===== Modern My Account / Profile UI ===== */
+    .sdProfileWrap{
+      max-width:760px;
+      margin:0 auto;
+      text-align:left;
+    }
+    .sdProfileHero{
+      background:linear-gradient(135deg,#062f25,#0b5a47);
+      border-radius:22px;
+      padding:22px;
+      color:#fff;
+      box-shadow:0 12px 30px rgba(0,0,0,.14);
+      margin-bottom:16px;
+    }
+    .sdProfileTop{
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .sdAvatar{
+      width:64px;height:64px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:#fff;color:#063c2f;font-size:30px;font-weight:800;
+      flex:none;
+    }
+    .sdProfileName{font-size:24px;font-weight:800;line-height:1.1}
+    .sdProfileEmail{font-size:13px;opacity:.86;margin-top:5px;word-break:break-word}
+    .sdRoleBadge{
+      display:inline-flex;align-items:center;gap:6px;
+      margin-top:10px;padding:6px 11px;border-radius:999px;
+      background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);
+      font-size:13px;font-weight:700;
+    }
+    .sdQuickGrid{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0;
+    }
+    .sdQuickBtn{
+      border:1px solid #e4c15b;background:#fff;color:#073b30;
+      border-radius:14px;padding:13px 10px;font-weight:800;cursor:pointer;
+    }
+    .sdQuickBtn.primary{background:#062f25;color:#fff;border-color:#062f25}
+    .sdSectionTitle{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:10px;margin:18px 0 10px;color:#073b30;
+    }
+    .sdSectionTitle h3{margin:0;font-size:20px}
+    .sdListingCard{
+      border:1px solid #e8cf78;border-radius:18px;padding:14px;background:#fff;
+      margin-bottom:12px;box-shadow:0 6px 18px rgba(0,0,0,.07);
+    }
+    .sdListingHead{display:flex;gap:12px;align-items:center}
+    .sdListingImg{
+      width:72px;height:72px;border-radius:14px;object-fit:cover;
+      background:#edf3ef;flex:none;
+    }
+    .sdListingName{font-weight:900;font-size:18px;color:#073b30}
+    .sdListingMeta{font-size:13px;color:#666;margin-top:4px}
+    .sdStatus{
+      display:inline-block;margin-top:8px;padding:5px 9px;border-radius:999px;
+      font-size:12px;font-weight:800;text-transform:capitalize;
+      background:#eef5ef;color:#17623e;
+    }
+    .sdListingActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .sdListingActions button{
+      flex:1;min-width:130px;border-radius:11px;padding:10px;border:1px solid #d7bd58;
+      background:#fff;color:#073b30;font-weight:800;cursor:pointer;
+    }
+    .sdEmptyListing{
+      border:1px dashed #d7bd58;border-radius:16px;padding:20px;text-align:center;
+      color:#666;background:#fffdf5;
+    }
+    @media(max-width:600px){
+      .sdQuickGrid{grid-template-columns:1fr}
+      .sdProfileHero{padding:18px}
+    }
+
 </style>
 <!-- SAMAGRA DECOR ADMIN FIX: cross-scope callVendorWrite + secure admin vendor list -->
 </head>
@@ -1382,7 +1459,9 @@
       <h2 style="color:#061b3a;text-align:center;">Website Admin Panel</h2>
       <p style="text-align:center;">Pending vendors ko approve/reject karein.</p>
       <button class="monthlyBtn" onclick="loadAdminVendors()">Refresh Pending Vendors</button>
+      <button class="monthlyBtn" onclick="loadAdminEditRequests()" style="margin-top:8px;">🔄 Refresh Edit Requests</button>
       <div id="adminContent" style="margin-top:15px;">Loading...</div>
+      <div id="adminEditRequests" style="margin-top:20px;"></div>
     </div>
   </div>
 
@@ -1911,6 +1990,23 @@
       };
     }
 
+    function vendorPlanRank(v){
+      const plan = String(v.plan || v.listing_type || v.subscription_plan || "free").toLowerCase();
+      const expiry = v.subscription_end || v.plan_end || v.expires_at || v.subscription_expires_at;
+      if(expiry && new Date(expiry).getTime() < Date.now()) return 2;
+      if(plan.includes("prime")) return 0;
+      if(plan.includes("paid") || plan.includes("monthly") || plan.includes("yearly")) return 1;
+      return 2;
+    }
+
+    // Share button is available only for Paid and Prime Pro listings.
+    // Free listings keep the existing card layout without the share action.
+    function vendorCanShare(v){
+      const source = (v && v.raw) ? v.raw : (v || {});
+      const plan = String(source.plan || source.listing_type || source.subscription_plan || source.subscriptionPlan || "free").toLowerCase().trim();
+      return plan.includes("prime") || plan.includes("paid") || plan.includes("monthly") || plan.includes("yearly");
+    }
+
     async function loadVendors(){
       const box = document.getElementById("vendorList");
 
@@ -1963,6 +2059,13 @@
           const status = String(v.status || "").toLowerCase().trim();
           return status === "approved" || status === "active" || status === "live";
         })
+        .sort(function(a,b){
+          const rankDiff = vendorPlanRank(a) - vendorPlanRank(b);
+          if(rankDiff !== 0) return rankDiff;
+          const aDate = new Date(a.created_at || 0).getTime();
+          const bDate = new Date(b.created_at || 0).getTime();
+          return bDate - aDate;
+        })
         .map(normalizeVendor);
 
       currentVendorList = [...vendors];
@@ -1971,15 +2074,7 @@
 
     function renderVendors(list, featuredOnly){
       const box = document.getElementById("vendorList");
-      const planRank = { prime_pro: 0, paid: 1, free: 2 };
-      currentVendorList = [...list].sort(function(a,b){
-        const rankA = planRank[effectivePlan(a)] ?? 2;
-        const rankB = planRank[effectivePlan(b)] ?? 2;
-        if(rankA !== rankB) return rankA - rankB;
-        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
-      });
-      list = currentVendorList;
-
+      currentVendorList = list;
       if(list.length === 0){
         box.innerHTML = "<p style='grid-column:1/-1;text-align:center;font-weight:bold;'>Abhi koi approved vendor live nahi hai.</p>";
         return;
@@ -1990,7 +2085,7 @@
         const priceText = v.price > 0 ? "Starts from ₹" + v.price.toLocaleString("en-IN") : "Price on request";
 
         return `
-          <div class="vendorCard">
+          <div class="vendorCard" data-vendor-id="${escapeHtml(v.id || "")}">
             <div class="vendorImg">
               <img src="${escapeHtml(v.img)}" alt="${escapeHtml(v.name)}" loading="lazy" decoding="async">
               <div class="badge">✅ Verified</div>
@@ -2004,11 +2099,11 @@
               </div>
               <div class="price">${priceText}</div>
               <div class="cardActions">
-                <button class="waBtn" onclick="vendorWhatsApp(${index})" aria-label="WhatsApp" title="WhatsApp">☘</button>
-                <button class="callBtn" onclick="vendorCall(${index})" aria-label="Direct Call" title="Direct Call">📞</button>
-                <button class="detailBtn" onclick="viewDetails(${index})">View Details</button>
-                <button class="favBtn" onclick="addFavorite(${index})" aria-label="Favorite" title="Favorite">♡</button>
-                <button class="shareBtn" onclick="shareVendor(${index})" aria-label="Share listing" title="Share listing">↗</button>
+                <button class="waBtn" type="button" title="WhatsApp" aria-label="WhatsApp" onclick="vendorWhatsApp(${index})">☘</button>
+                <button class="callBtn" type="button" title="Direct Call" aria-label="Direct Call" onclick="callVendor(${index})">📞</button>
+                <button class="detailBtn" type="button" onclick="viewDetails(${index})">View Details</button>
+                <button class="favBtn" type="button" title="Favorite" aria-label="Favorite" onclick="addFavorite(${index})">♡</button>
+                ${vendorCanShare(v) ? `<button class="shareBtn" type="button" title="Share Listing" aria-label="Share Listing" onclick="shareVendor(${index})">↗</button>` : ""}
               </div>
             </div>
           </div>`;
@@ -2081,47 +2176,33 @@
 
     function vendorWhatsApp(index){
       const v = currentVendorList[index];
-      if (!v) return;
       if (!requireLogin()) return;
-      const phone = String(v.phone || v.mobile || v.mobile_number || WHATSAPP_NUMBER).replace(/\\D/g, "");
+      const phone = v.phone && v.phone.length >= 10 ? v.phone : WHATSAPP_NUMBER;
       const text = encodeURIComponent("Hello Samagra Decor, mujhe " + v.name + " vendor ki details chahiye.");
       window.open("https://wa.me/" + phone + "?text=" + text, "_blank", "noopener,noreferrer");
     }
 
-    function vendorCall(index){
+    function callVendor(index){
       const v = currentVendorList[index];
-      if(!v) return;
-      const phone = String(v.phone || v.mobile || v.mobile_number || "").replace(/\\D/g, "");
-      if(phone.length < 10){
-        alert("Is vendor ka direct call number available nahi hai.");
-        return;
-      }
-      window.location.href = "tel:+" + phone;
+      if(!v){ alert("Vendor details nahi mili."); return; }
+      const raw = v.raw || {};
+      const phone = String(raw.phone || raw.mobile || raw.mobile_number || raw.contact_number || "").replace(/\D/g, "");
+      if(!phone || phone.length < 10){ alert("Is vendor ka direct call number available nahi hai."); return; }
+      window.location.href = "tel:" + phone;
     }
 
     async function shareVendor(index){
       const v = currentVendorList[index];
-      if(!v) return;
-      const slug = v.slug || v.seo_slug || String(v.name || "vendor").toLowerCase()
-        .trim().replace(/[^a-z0-9\\s-]/g, "").replace(/\\s+/g, "-").replace(/-+/g, "-");
-      const url = window.location.origin + "/vendor/" + slug + "/";
-      const data = {
-        title: String(v.name || "Samagra Decor Vendor"),
-        text: "Samagra Decor par " + String(v.name || "vendor") + " ki listing dekhein.",
-        url
-      };
+      if(!v){ alert("Vendor details nahi mili."); return; }
+      const slug = String((v.raw && (v.raw.slug || v.raw.seo_slug)) || ((v.name || "vendor") + "-" + (v.city || "india")))
+        .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+      const url = location.origin + "/#vendor=" + encodeURIComponent(slug);
+      const shareData = { title: v.name + " | Samagra Decor", text: v.name + " – " + v.category + " in " + v.city, url: url };
       try{
-        if(navigator.share){
-          await navigator.share(data);
-        }else if(navigator.clipboard && navigator.clipboard.writeText){
-          await navigator.clipboard.writeText(url);
-          alert("Listing link copy ho gaya ✅");
-        }else{
-          window.prompt("Listing link copy karein:", url);
-        }
-      }catch(error){
-        if(error && error.name !== "AbortError") window.prompt("Listing link copy karein:", url);
-      }
+        if(navigator.share){ await navigator.share(shareData); }
+        else if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(url); alert("Listing link copy ho gaya. Ab share kar sakte hain."); }
+        else { window.prompt("Vendor listing link copy karein:", url); }
+      }catch(error){ if(error && error.name !== "AbortError") window.prompt("Vendor listing link copy karein:", url); }
     }
 
     function addFavorite(index){
@@ -2194,7 +2275,8 @@
       }
 
       openModal("adminModal");
-      loadAdminVendors();
+      await loadAdminVendors();
+      await loadAdminEditRequests();
     }
 
     async function loadAdminVendors(){
@@ -2257,6 +2339,53 @@
       }catch(error){
         console.error("Admin vendor load error:", error);
         box.innerHTML = "<b>Admin vendor load error:</b> " + escapeHtml(error?.message || String(error));
+      }
+    }
+
+    async function loadAdminEditRequests(){
+      const box = document.getElementById("adminEditRequests");
+      if(!box || !isWebsiteAdmin) return;
+      box.innerHTML = "<hr><h3 style='color:#043b2f;'>✏️ Vendor Edit Requests</h3><p>Loading...</p>";
+      try{
+        const result = await window.callVendorWrite("admin_list_edit_requests", {});
+        const requests = Array.isArray(result.requests) ? result.requests : [];
+        if(!requests.length){
+          box.innerHTML = "<hr><h3 style='color:#043b2f;'>✏️ Vendor Edit Requests</h3><p><b>Abhi koi pending edit request nahi hai ✅</b></p>";
+          return;
+        }
+        box.innerHTML = "<hr><h3 style='color:#043b2f;'>✏️ Vendor Edit Requests</h3>" + requests.map(function(r){
+          const v = r.vendor || {};
+          return `
+            <div style="border:1px solid #e2c15d;border-radius:14px;padding:14px;margin:12px 0;background:#fffaf0;">
+              <h3>${escapeHtml(r.business_name || v.business_name || "Vendor Edit")}</h3>
+              <p><b>Vendor:</b> ${escapeHtml(v.business_name || v.name || "")}</p>
+              <p><b>Owner:</b> ${escapeHtml(r.owner_name || "")}</p>
+              <p><b>City:</b> ${escapeHtml(r.city || "")}</p>
+              <p><b>Category:</b> ${escapeHtml(r.category || "")}</p>
+              <p><b>Price:</b> ${escapeHtml(r.price || "")}</p>
+              <p><b>Description:</b> ${escapeHtml(r.description || "")}</p>
+              ${r.seo_title ? `<p><b>SEO Title:</b> ${escapeHtml(r.seo_title)}</p>` : ""}
+              ${r.seo_description ? `<p><b>SEO Description:</b> ${escapeHtml(r.seo_description)}</p>` : ""}
+              <p><small>Submitted: ${escapeHtml(r.created_at || "")}</small></p>
+              <button style="background:#0dbb59;color:white;margin-top:8px;" onclick="updateVendorEditRequest('${r.id}','approved')">✅ Approve Changes</button>
+              <button style="background:#c62828;color:white;margin-top:8px;" onclick="updateVendorEditRequest('${r.id}','rejected')">❌ Reject Changes</button>
+            </div>`;
+        }).join("");
+      }catch(error){
+        console.error("Admin edit request load error:", error);
+        box.innerHTML = "<hr><h3>✏️ Vendor Edit Requests</h3><b>Error:</b> " + escapeHtml(error?.message || String(error));
+      }
+    }
+
+    async function updateVendorEditRequest(requestId, decision){
+      if(!isWebsiteAdmin){ alert("Admin access required."); return; }
+      try{
+        await window.callVendorWrite("admin_update_edit_request", { request_id: requestId, decision: decision });
+        alert(decision === "approved" ? "Vendor profile changes approve ho gaye ✅" : "Edit request reject ho gayi ❌");
+        await loadAdminEditRequests();
+        if(decision === "approved") await loadVendors();
+      }catch(error){
+        alert("Edit request update error: " + (error?.message || error));
       }
     }
 
@@ -2540,6 +2669,130 @@
       window.__sdSelectedSignupRole = function(){ return selectedRole; };
     }
 
+
+    async function loadMyListingsIntoAccount(){
+      const box = document.getElementById("myListingsBox");
+      if(!box || !currentUser) return;
+
+      box.innerHTML = '<div class="sdEmptyListing">⏳ Aapki listings load ho rahi hain...</div>';
+
+      try{
+        const result = await callVendorWrite("list_my_vendors", {});
+        const vendors = Array.isArray(result?.vendors) ? result.vendors : [];
+
+        if(!vendors.length){
+          box.innerHTML = `
+            <div class="sdEmptyListing">
+              <div style="font-size:30px;">🏪</div>
+              <b>Abhi aapki koi business listing nahi hai.</b>
+              <div style="margin-top:6px;">Apna business add karein, yahin se mil jayega.</div>
+              <button class="authMainBtn" style="margin-top:12px;" type="button"
+                onclick="openListingModal();closeModal('loginModal');">
+                ➕ Add Your Business
+              </button>
+            </div>`;
+          return;
+        }
+
+        box.innerHTML = vendors.map(function(v){
+          const image =
+            v.image_url_1 ||
+            v.image_url_2 ||
+            v.image_url_3 ||
+            v.image_url_4 ||
+            (Array.isArray(v.vendor_images) && v.vendor_images[0]?.image_url) ||
+            "https://placehold.co/300x200?text=Samagra+Decor";
+
+          const status = String(v.status || "pending");
+          const statusText = status === "approved" ? "Live / Approved" :
+                             status === "rejected" ? "Rejected" :
+                             "Pending Approval";
+
+          return `
+            <div class="sdListingCard">
+              <div class="sdListingHead">
+                <img class="sdListingImg" src="${escapeHtml(image)}" alt="Business">
+                <div style="min-width:0;">
+                  <div class="sdListingName">${escapeHtml(v.business_name || v.name || "My Business")}</div>
+                  <div class="sdListingMeta">📍 ${escapeHtml(v.city || "City not added")}</div>
+                  <div class="sdListingMeta">📂 ${escapeHtml(v.category || "Category not added")}</div>
+                  <span class="sdStatus">${escapeHtml(statusText)}</span>
+                </div>
+              </div>
+              <div class="sdListingActions">
+                <button type="button" onclick="openVendorFromMyAccount('${escapeHtml(String(v.id || ""))}')">👁️ View Listing</button>
+                <button type="button" onclick="editVendorFromMyAccount('${escapeHtml(String(v.id || ""))}')">✏️ Edit Listing</button>
+                <button type="button" style="border-color:#c62828;color:#c62828;" onclick="deleteMyListing('${escapeHtml(String(v.id || ""))}')">🗑️ Delete Listing</button>
+              </div>
+            </div>`;
+        }).join("");
+      }catch(error){
+        console.error("My listings load error:", error);
+        box.innerHTML = `
+          <div class="sdEmptyListing">
+            <b>Listing load nahi ho paayi.</b>
+            <div style="margin-top:6px;font-size:13px;">${escapeHtml(error?.message || "Please try again.")}</div>
+            <button class="authOutlineBtn" style="margin-top:10px;" onclick="loadMyListingsIntoAccount()">🔄 Retry</button>
+          </div>`;
+      }
+    }
+
+    async function openVendorFromMyAccount(vendorId){
+      try{
+        const result = await callVendorWrite("list_my_vendors", {});
+        const vendor = (result?.vendors || []).find(v => String(v.id) === String(vendorId));
+        if(!vendor){ alert("Listing nahi mili."); return; }
+
+        closeModal("loginModal");
+        const photos = [
+          vendor.image_url_1, vendor.image_url_2, vendor.image_url_3, vendor.image_url_4
+        ].filter(Boolean);
+
+        document.getElementById("detailsContent").innerHTML = `
+          <h2>${escapeHtml(vendor.business_name || vendor.name || "Business")}</h2>
+          ${photos.length ? `<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0;">${photos.map(p=>`<img src="${escapeHtml(p)}" style="width:100%;height:150px;object-fit:cover;border-radius:10px;">`).join("")}</div>` : ""}
+          <p><b>Owner:</b> ${escapeHtml(vendor.owner_name || "")}</p>
+          <p><b>City:</b> ${escapeHtml(vendor.city || "")}</p>
+          <p><b>Category:</b> ${escapeHtml(vendor.category || "")}</p>
+          <p><b>Price:</b> ${escapeHtml(vendor.price || "")}</p>
+          <p><b>Status:</b> ${escapeHtml(vendor.status || "")}</p>
+          <p>${escapeHtml(vendor.description || "")}</p>
+        `;
+        openModal("detailsModal");
+      }catch(error){
+        alert("Listing open error: " + (error?.message || error));
+      }
+    }
+
+    async function editVendorFromMyAccount(vendorId){
+      try{
+        const result = await callVendorWrite("list_my_vendors", {});
+        const vendor = (result?.vendors || []).find(v => String(v.id) === String(vendorId));
+        if(!vendor){ alert("Aapki listing nahi mili."); return; }
+        closeModal("loginModal");
+        if(typeof window.sdOpenEditCurrent === "function"){
+          window.sdSetCurrentVendorForEdit && window.sdSetCurrentVendorForEdit(vendor);
+          if(window.sdOpenEditCurrent) await window.sdOpenEditCurrent();
+          return;
+        }
+        alert("Edit form load nahi hua. Page refresh karke dobara try karein.");
+      }catch(error){ alert("Edit listing error: " + (error?.message || error)); }
+    }
+
+    async function deleteMyListing(vendorId){
+      if(!currentUser){ alert("Pehle login karein."); return; }
+      if(!vendorId) return;
+      if(!confirm("Kya aap apni ye listing permanently delete karna chahte hain? Ye action undo nahi hoga.")) return;
+      try{
+        await callVendorWrite("delete_my_vendor", { vendor_id: vendorId });
+        alert("Aapki listing delete ho gayi.");
+        await loadMyListingsIntoAccount();
+        await loadVendors();
+      }catch(error){
+        alert("Listing delete nahi hui: " + (error?.message || error) + "\n\nAgar action unavailable hai, vendor-write Edge Function mein delete_my_vendor action add karna hoga.");
+      }
+    }
+
     async function showAccountScreen(){
       if(!currentUser){
         showLoginScreen();
@@ -2548,25 +2801,52 @@
 
       const name = currentUser.displayName || "User";
       const email = currentUser.email || "";
-      const role = currentUserRole || await refreshCurrentUserRole();
+      let role = currentUserRole || await refreshCurrentUserRole();
+      const admin = !!isWebsiteAdmin;
+
+      if(admin) role = "admin";
+
+      const accountLabel = admin ? "Admin" : roleLabel(role);
+      const accountIcon = admin ? "🛡️" : roleIcon(role);
 
       document.getElementById("authContent").innerHTML = `
-        <div class="authIcon">${roleIcon(role)}</div>
-        <div class="authTitle">Welcome</div>
-        <div class="authSub">${escapeHtml(name)}</div>
-        <div class="authStatus">
-          <b>Account Type:</b> ${escapeHtml(roleLabel(role))}
+        <div class="sdProfileWrap">
+          <div class="sdProfileHero">
+            <div class="sdProfileTop">
+              <div class="sdAvatar">${accountIcon}</div>
+              <div style="min-width:0;">
+                <div class="sdProfileName">${escapeHtml(name)}</div>
+                <div class="sdProfileEmail">${escapeHtml(email)}</div>
+                <div class="sdRoleBadge">✓ Account Type: ${escapeHtml(accountLabel)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sdQuickGrid">
+            ${admin
+              ? `<button class="sdQuickBtn primary" type="button" onclick="openAdminPanel()">🛡️ Admin Panel</button>`
+              : role === "vendor"
+                ? `<button class="sdQuickBtn primary" type="button" onclick="openListingModal();closeModal('loginModal')">🏪 Manage Business</button>`
+                : `<button class="sdQuickBtn primary" type="button" onclick="closeModal('loginModal');scrollToRequirementSection()">📋 Post Requirement</button>`
+            }
+            <button class="sdQuickBtn" type="button" onclick="loadMyListingsIntoAccount()">🔄 Refresh Listings</button>
+          </div>
+
+          <div class="sdSectionTitle">
+            <h3>🏪 My Business Listings</h3>
+            <span style="font-size:12px;color:#777;">Aapki listings yahin milengi</span>
+          </div>
+
+          <div id="myListingsBox">
+            <div class="sdEmptyListing">⏳ Listings load ho rahi hain...</div>
+          </div>
+
+          <button class="authOutlineBtn" type="button" onclick="logoutUser()">Logout</button>
+          <button class="authOutlineBtn" type="button" onclick="closeModal('loginModal')">Close</button>
         </div>
-        <p style="color:#555;margin:10px 0 18px;">${escapeHtml(email)}</p>
-
-        ${role === "vendor"
-          ? `<button class="authMainBtn" type="button" onclick="openListingModal(); closeModal('loginModal');">🏪 List / Manage Business</button>`
-          : `<button class="authMainBtn" type="button" onclick="closeModal('loginModal'); scrollToRequirementSection();">📋 Post Your Requirement</button>`
-        }
-
-        <button class="authOutlineBtn" type="button" onclick="logoutUser()">Logout</button>
-        <button class="authOutlineBtn" type="button" onclick="closeModal('loginModal')">Close</button>
       `;
+
+      await loadMyListingsIntoAccount();
     }
 
     function scrollToRequirementSection(){
@@ -2793,15 +3073,10 @@
 
       updateAuthButtons(user, currentUserRole);
 
-      const admin = await checkWebsiteAdmin(user);
-
-      // Sirf admin_users me registered email ko Admin Panel milega.
-      // Customer/Vendor login par Admin Panel hidden rahega.
-      if(admin){
-        closeModal("loginModal");
-        openModal("adminModal");
-        await loadAdminVendors();
-      }
+      // Admin status sirf Admin Panel button/link ko control karega.
+      // Login ke baad Admin Panel automatically OPEN nahi hoga.
+      // Sirf admin_users me registered email ko Admin Panel button milega.
+      await checkWebsiteAdmin(user);
     });
 
     function showInfoPage(type){
@@ -4392,7 +4667,7 @@ document.addEventListener("click", function(e){
     const status=String(v.status||"").toLowerCase(); if(!["approved","active","live"].includes(status)){alert("Ye vendor profile abhi live nahi hai.");return;}
     sdCurrentVendor=v;
     const page=document.getElementById("sdVendorPage"); if(!page)return;
-    if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/vendor/"+vendorSlug(v)+"/");}
+    if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/#vendor="+encodeURIComponent(vendorSlug(v)));}
     page.innerHTML=profileHtml(v); page.classList.add("active");
     document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
     setVendorSeo(v); window.scrollTo(0,0);
@@ -4405,6 +4680,7 @@ document.addEventListener("click", function(e){
 
   window.sdBackToHome=backHome;
   window.sdContactCurrent=function(){if(sdCurrentVendor)contactVendor(sdCurrentVendor);};
+  window.sdSetCurrentVendorForEdit=function(v){sdCurrentVendor=v||null;};
 
   window.sdOpenEditCurrent=async function(){
     if(!sdCurrentVendor)return;
@@ -4469,9 +4745,11 @@ document.addEventListener("click", function(e){
 
   /* Pretty URL entry: hosting must rewrite /vendor/* to this index.html. */
   async function routeEntry(){
-    const m=location.pathname.match(/^\/vendor\/([^\/]+)\/?$/i);
-    if(!m)return;
-    const v=await fetchVendorBySlug(decodeURIComponent(m[1]));
+    const pathMatch=location.pathname.match(/^\/vendor\/([^\/]+)\/?$/i);
+    const hashMatch=location.hash.match(/^#vendor=(.+)$/i);
+    const slug=hashMatch ? decodeURIComponent(hashMatch[1]) : (pathMatch ? decodeURIComponent(pathMatch[1]) : "");
+    if(!slug)return;
+    const v=await fetchVendorBySlug(slug);
     if(v) openVendorProfile(v,false); else {document.getElementById("sdVendorPage").classList.add("active");document.getElementById("sdVendorPage").innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Ye vendor profile available nahi hai.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';}
   }
   window.addEventListener("popstate",function(){
