@@ -1264,21 +1264,39 @@
 
 
 
+
+
 <style>
-/* Final precise overrides requested */
-#vendorList .vendorCard{grid-template-columns:minmax(140px,36%) minmax(0,1fr)}
-#vendorList .price::before{content:"Starting Price"!important;display:inline!important;flex:1;font-size:13px;margin:0;color:#69430b}
-#vendorList .price{display:flex;align-items:center;justify-content:space-between;gap:8px}
-#vendorList .vendorImg{min-width:0}
-#vendorList .badge{max-width:104px;padding:5px 7px;font-size:11px;line-height:1.15;white-space:normal}
-@media(max-width:620px){
- #vendorList .vendorCard{grid-template-columns:112px minmax(0,1fr)}
- #vendorList .badge{max-width:94px;padding:4px 6px;font-size:10px}
- #vendorList .price::before{font-size:12px}
+/* FINAL IMAGE FIX: image fills the complete left panel, no inset frame */
+.vendorCard{
+  grid-template-columns:minmax(155px,38%) minmax(0,1fr)!important;
 }
-@media(max-width:380px){
- #vendorList .vendorCard{grid-template-columns:104px minmax(0,1fr)}
- #vendorList .badge{max-width:88px;font-size:9px}
+.vendorImg{
+  width:100%!important;height:100%!important;min-height:250px!important;
+  padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;overflow:hidden!important;background:#ead3a0!important;
+  align-self:stretch!important;
+}
+.vendorImg img{
+  display:block!important;width:100%!important;height:100%!important;min-height:250px!important;
+  object-fit:cover!important;object-position:center!important;
+  padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;
+}
+.vendorBody{min-width:0!important}
+.vendorCard .badge,.vendorCard .paidPlanBadge,.vendorCard .premiumPlanBadge{
+  max-width:108px!important;padding:5px 7px!important;font-size:11px!important;line-height:1.15!important;
+  white-space:normal!important;box-sizing:border-box!important;
+}
+@media(max-width:620px){
+  .vendorCard{grid-template-columns:138px minmax(0,1fr)!important}
+  .vendorImg,.vendorImg img{min-height:230px!important}
+  .vendorCard .badge,.vendorCard .paidPlanBadge,.vendorCard .premiumPlanBadge{
+    max-width:100px!important;padding:4px 6px!important;font-size:10px!important
+  }
+}
+@media(max-width:390px){
+  .vendorCard{grid-template-columns:124px minmax(0,1fr)!important}
 }
 </style>
 </head>
