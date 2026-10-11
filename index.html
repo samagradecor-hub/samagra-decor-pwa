@@ -2221,7 +2221,7 @@
     }
 
     // Used to identify Paid and Prime Pro plans for their badges.
-    // The Share action is now available on every vendor listing.
+    // Share is available only for Paid and Prime Pro listings.
     function vendorCanShare(v){
       const source = (v && v.raw) ? v.raw : (v || {});
       const rawPlan = source.plan || source.listing_type || source.subscription_plan || source.subscriptionPlan || source.plan_name || source.subscription_type || "free";
@@ -2334,11 +2334,11 @@
                 <span>⭐ ${escapeHtml(v.rating)} (${escapeHtml(v.reviews)} reviews)</span>
               </div>
               <div class="price">${priceText.replace(/^Starts from /, "")}</div>
-              <div class="cardActions">
+              <div class="cardActions ${vendorCanShare(v) ? "hasShare" : "noShare"}">
                 <button class="waBtn" type="button" title="WhatsApp par contact karein" aria-label="WhatsApp" onclick="vendorWhatsApp(${index})"><svg viewBox="0 0 24 24" width="23" height="23" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12.04 2a9.8 9.8 0 0 0-8.42 14.82L2.3 22l5.32-1.39A9.96 9.96 0 0 0 12.04 22 10 10 0 1 0 12.04 2Zm0 18.15a8.1 8.1 0 0 1-4.13-1.13l-.3-.18-3.16.83.84-3.08-.2-.32a8.16 8.16 0 1 1 6.95 3.88Zm4.48-6.1c-.25-.13-1.48-.73-1.71-.81-.23-.08-.4-.13-.57.13-.17.25-.65.81-.8.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.39.11-.52.11-.11.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.45.06-.68.32-.23.25-.89.87-.89 2.12s.91 2.46 1.04 2.63c.13.17 1.79 2.73 4.33 3.83.6.26 1.07.41 1.44.52.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.2.21-.59.21-1.09.15-1.2-.06-.11-.23-.17-.48-.3Z"/></svg></button>
                 <button class="callBtn" type="button" title="Direct Call" aria-label="Direct Call" onclick="callVendor(${index})">📞</button>
                 <button class="detailBtn" type="button" onclick="viewDetails(${index})">View Details</button>
-                <button class="shareBtn" type="button" title="Share Listing" aria-label="Share Listing" onclick="shareVendor(${index})">⤴</button>
+                ${vendorCanShare(v) ? `<button class="shareBtn" type="button" title="Share Listing" aria-label="Share Listing" onclick="shareVendor(${index})">⤴</button>` : ""}
               </div>
             </div>
           </div>`;
@@ -5160,13 +5160,24 @@ document.addEventListener("click", function(e){
 </script>
 
 
-<style id="sd-all-plan-vendor-actions-fix">
-/* Keep WhatsApp, Call, View Details and Share visible on every vendor card. */
-#vendorList .cardActions{grid-template-columns:44px 44px minmax(92px,1fr) 46px!important;gap:7px!important}
-#vendorList .cardActions .shareBtn{display:inline-flex!important}
-@media(max-width:950px){#vendorList .cardActions{grid-template-columns:38px 38px minmax(76px,1fr) 40px!important;gap:5px!important}}
-@media(max-width:620px){#vendorList .cardActions{grid-template-columns:34px 34px minmax(64px,1fr) 34px!important;gap:4px!important}}
-@media(max-width:420px){#vendorList .cardActions{grid-template-columns:32px 32px minmax(58px,1fr) 32px!important;gap:3px!important}}
+<style id="sd-plan-based-vendor-actions-fix">
+/* Free: WhatsApp, Call, View Details. Paid/Prime Pro: same actions plus Share. */
+#vendorList .cardActions.hasShare{grid-template-columns:44px 44px minmax(92px,1fr) 46px!important;gap:7px!important}
+#vendorList .cardActions.noShare{grid-template-columns:44px 44px minmax(92px,1fr)!important;gap:7px!important}
+#vendorList .cardActions.hasShare .shareBtn{display:inline-flex!important}
+#vendorList .cardActions.noShare .shareBtn{display:none!important}
+@media(max-width:950px){
+  #vendorList .cardActions.hasShare{grid-template-columns:38px 38px minmax(76px,1fr) 40px!important;gap:5px!important}
+  #vendorList .cardActions.noShare{grid-template-columns:38px 38px minmax(76px,1fr)!important;gap:5px!important}
+}
+@media(max-width:620px){
+  #vendorList .cardActions.hasShare{grid-template-columns:34px 34px minmax(64px,1fr) 34px!important;gap:4px!important}
+  #vendorList .cardActions.noShare{grid-template-columns:34px 34px minmax(64px,1fr)!important;gap:4px!important}
+}
+@media(max-width:420px){
+  #vendorList .cardActions.hasShare{grid-template-columns:32px 32px minmax(58px,1fr) 32px!important;gap:3px!important}
+  #vendorList .cardActions.noShare{grid-template-columns:32px 32px minmax(58px,1fr)!important;gap:3px!important}
+}
 </style>
 
 </body>
