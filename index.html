@@ -2436,7 +2436,7 @@
       if(!v){ alert("Vendor details nahi mili."); return; }
       const slug = String((v.raw && (v.raw.slug || v.raw.seo_slug)) || ((v.name || "vendor") + "-" + (v.city || "india")))
         .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-      const url = location.origin + "/vendor/" + encodeURIComponent(slug) + "/";
+      const url = location.origin + "/#vendor=" + encodeURIComponent(slug);
       const shareData = { title: v.name + " | Samagra Decor", text: v.name + " – " + v.category + " in " + v.city, url: url };
       try{
         if(navigator.share){ await navigator.share(shareData); }
