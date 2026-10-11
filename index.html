@@ -2434,15 +2434,19 @@
     async function shareVendor(index){
       const v = currentVendorList[index];
       if(!v){ alert("Vendor details nahi mili."); return; }
-      const slug = String((v.raw && (v.raw.slug || v.raw.seo_slug)) || ((v.name || "vendor") + "-" + (v.city || "india")))
+      const raw = v.raw || v;
+      const id = raw.id || v.id || raw.vendor_id || v.vendor_id || "";
+      const rawSlug = raw.slug || raw.seo_slug || raw.business_slug || "";
+      const slug = String(rawSlug || ((raw.business_name || v.name || "vendor") + "-" + (raw.city || v.city || "india")))
         .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-      const url = location.origin + "/#vendor=" + encodeURIComponent(slug);
-      const shareData = { title: v.name + " | Samagra Decor", text: v.name + " – " + v.category + " in " + v.city, url: url };
+      // Prefer the real database ID so the shared profile can be found reliably.
+      const url = location.origin + (id ? "/#vendor-id=" + encodeURIComponent(id) : "/#vendor=" + encodeURIComponent(slug));
+      const shareData = { title: (v.name || raw.business_name || "Vendor") + " | Samagra Decor", text: (v.name || raw.business_name || "Vendor") + " – " + (v.category || raw.category || "Event Service") + " in " + (v.city || raw.city || "India"), url: url };
       try{
         if(navigator.share){ await navigator.share(shareData); }
-        else if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(url); alert("Listing link copy ho gaya. Ab share kar sakte hain."); }
-        else { window.prompt("Vendor listing link copy karein:", url); }
-      }catch(error){ if(error && error.name !== "AbortError") window.prompt("Vendor listing link copy karein:", url); }
+        else if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(url); alert("Vendor profile link copy ho gaya. Ab share kar sakte hain."); }
+        else { window.prompt("Vendor profile link copy karein:", url); }
+      }catch(error){ if(error && error.name !== "AbortError") window.prompt("Vendor profile link copy karein:", url); }
     }
 
     function addFavorite(index){
@@ -4907,7 +4911,7 @@ document.addEventListener("click", function(e){
     const status=String(v.status||"").toLowerCase(); if(!["approved","active","live"].includes(status)){alert("Ye vendor profile abhi live nahi hai.");return;}
     sdCurrentVendor=v;
     const page=document.getElementById("sdVendorPage"); if(!page)return;
-    if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/vendor/"+encodeURIComponent(vendorSlug(v))+"/");}
+    if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/#vendor="+encodeURIComponent(vendorSlug(v)));}
     page.innerHTML=profileHtml(v); page.classList.add("active");
     document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
     setVendorSeo(v); window.scrollTo(0,0);
@@ -4986,16 +4990,29 @@ document.addEventListener("click", function(e){
   /* Pretty URL entry: hosting must rewrite /vendor/* to this index.html. */
   async function routeEntry(){
     const pathMatch=location.pathname.match(/^\/vendor\/([^\/]+)\/?$/i);
+    const idMatch=location.hash.match(/^#vendor-id=(.+)$/i);
     const hashMatch=location.hash.match(/^#vendor=(.+)$/i);
     const slug=hashMatch ? decodeURIComponent(hashMatch[1]) : (pathMatch ? decodeURIComponent(pathMatch[1]) : "");
-    if(!slug)return;
-    const v=await fetchVendorBySlug(slug);
-    if(v) openVendorProfile(v,false); else {document.getElementById("sdVendorPage").classList.add("active");document.getElementById("sdVendorPage").innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Ye vendor profile available nahi hai.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';}
+    const id=idMatch ? decodeURIComponent(idMatch[1]) : "";
+    if(!slug && !id)return;
+    let v = id ? await fetchVendorById(id) : await fetchVendorBySlug(slug);
+    if(v) openVendorProfile(v,false);
+    else {
+      const page=document.getElementById("sdVendorPage");
+      if(page){
+        page.classList.add("active");
+        page.innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Ye vendor profile available nahi hai. Kripya vendor ka share link dobara generate karein.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';
+        document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
+      }
+    }
   }
   window.addEventListener("popstate",function(){
-    if(history.state&&history.state.sdVendor){routeEntry();return;}
+    if(/^#vendor(?:-id)?=/i.test(location.hash)){routeEntry();return;}
     const page=document.getElementById("sdVendorPage");if(page)page.classList.remove("active");
     document.querySelectorAll("[data-sd-hidden]").forEach(function(el){el.style.display=el.dataset.sdHidden;delete el.dataset.sdHidden;});restoreHomeSeo();
+  });
+  window.addEventListener("hashchange",function(){
+    if(/^#vendor(?:-id)?=/i.test(location.hash)) routeEntry();
   });
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",routeEntry);else routeEntry();
 })();
