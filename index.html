@@ -4985,24 +4985,54 @@ document.addEventListener("click", function(e){
     let user=null;try{user=firebase.auth().currentUser;}catch(e){}
     if(!user){requireLogin();return;}
     const ownerUid=sdCurrentVendor.firebase_uid||sdCurrentVendor.owner_user_id||sdCurrentVendor.user_id||"";
-    if(ownerUid && ownerUid!==user.uid){alert("Sirf apni vendor profile edit kar sakte hain.");return;}
+    // Fail closed: a profile without a linked owner UID cannot be edited from the browser.
+    if(!ownerUid || ownerUid!==user.uid){alert("Is profile ka owner account verify nahi ho paaya. Security ke liye edit band hai. Admin se vendor profile ko aapke login se link karwayein.");return;}
     const p=effectivePlan(sdCurrentVendor), cfg=SD_PLANS[p]||SD_PLANS.free;
     const box=document.createElement("div");box.className="modal";box.style.display="flex";box.id="sdEditModal";
-    box.innerHTML='<div class="modalBox wideBox"><span class="close" onclick="document.getElementById(\'sdEditModal\').remove()">×</span><h2>✏️ Edit Vendor Profile</h2><p class="modalIntro">Changes direct live nahi hongi. Admin approval ke baad profile update hogi.</p><div class="sdEditForm"><input id="sdEditName" value="'+esc(vendorName(sdCurrentVendor))+'" placeholder="Business Name"><input id="sdEditOwner" value="'+esc(sdCurrentVendor.owner_name||"")+'" placeholder="Owner Name"><input id="sdEditCity" value="'+esc(vendorCity(sdCurrentVendor))+'" placeholder="City"><input id="sdEditCategory" value="'+esc(vendorCategory(sdCurrentVendor))+'" placeholder="Category"><input id="sdEditPrice" value="'+esc(sdCurrentVendor.price||sdCurrentVendor.starting_price||"")+'" placeholder="Starting Price"><textarea id="sdEditDesc" placeholder="Business Description">'+esc(vendorDescription(sdCurrentVendor))+'</textarea>'+ (cfg.seo?'<input id="sdEditSeoTitle" value="'+esc(sdCurrentVendor.seo_title||"")+'" placeholder="SEO Title"><textarea id="sdEditSeoDesc" placeholder="Meta Description">'+esc(sdCurrentVendor.seo_description||"")+'</textarea>':'<div class="sdPlanNote">Free plan: SEO Title aur Meta Description automatically generate honge. Paid/Prime mein manual SEO editing unlock hoti hai.</div>')+'<button style="background:#043b2f;color:#f7d77d;border:0;border-radius:10px;padding:13px;font-weight:900;cursor:pointer" onclick="window.sdSubmitEdit()">SUBMIT FOR ADMIN APPROVAL</button></div></div>';
+    box.innerHTML='<div class="modalBox wideBox"><span class="close" onclick="document.getElementById(\'sdEditModal\').remove()">×</span><h2>✏️ Edit Vendor Profile</h2><p class="modalIntro">Changes direct live nahi hongi. Admin approval ke baad profile update hogi.</p><div class="sdEditForm"><input id="sdEditName" value="'+esc(vendorName(sdCurrentVendor))+'" placeholder="Business Name"><input id="sdEditOwner" value="'+esc(sdCurrentVendor.owner_name||"")+'" placeholder="Owner Name"><input id="sdEditCity" value="'+esc(vendorCity(sdCurrentVendor))+'" placeholder="City"><input id="sdEditCategory" value="'+esc(vendorCategory(sdCurrentVendor))+'" placeholder="Category"><input id="sdEditPrice" value="'+esc(sdCurrentVendor.price||sdCurrentVendor.starting_price||"")+'" placeholder="Starting Price"><div class="sdPlanNote"><b>📸 Main Business Photo</b><br>Apni profile ki main photo badalne ke liye image select karein. JPG, PNG ya WEBP; maximum 8 MB. Photo save karne ke liye wahi secure vendor-write service use hogi.</div><input id="sdEditMainPhoto" type="file" accept="image/jpeg,image/png,image/webp" onchange="window.sdPreviewEditPhoto(this)"><img id="sdEditPhotoPreview" src="'+esc((vendorImages(sdCurrentVendor)[0]||""))+'" alt="Main photo preview" style="width:100%;max-width:240px;max-height:180px;object-fit:contain;border:1px solid #e7c45a;border-radius:12px;'+(vendorImages(sdCurrentVendor)[0]?'':'display:none;')+'"><textarea id="sdEditDesc" placeholder="Business Description">'+esc(vendorDescription(sdCurrentVendor))+'</textarea>'+ (cfg.seo?'<input id="sdEditSeoTitle" value="'+esc(sdCurrentVendor.seo_title||"")+'" placeholder="SEO Title"><textarea id="sdEditSeoDesc" placeholder="Meta Description">'+esc(sdCurrentVendor.seo_description||"")+'</textarea>':'<div class="sdPlanNote">Free plan: SEO Title aur Meta Description automatically generate honge. Paid/Prime mein manual SEO editing unlock hoti hai.</div>')+'<button style="background:#043b2f;color:#f7d77d;border:0;border-radius:10px;padding:13px;font-weight:900;cursor:pointer" onclick="window.sdSubmitEdit()">SUBMIT FOR ADMIN APPROVAL</button></div></div>';
     document.body.appendChild(box);
+  };
+
+  window.sdPreviewEditPhoto=function(input){
+    const file=input&&input.files&&input.files[0];
+    const preview=document.getElementById("sdEditPhotoPreview");
+    if(!file||!preview)return;
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+      alert("Sirf JPG, PNG ya WEBP image select karein.");input.value="";return;
+    }
+    if(file.size>8*1024*1024){alert("Image 8 MB se chhoti honi chahiye.");input.value="";return;}
+    preview.src=URL.createObjectURL(file);preview.style.display="block";
   };
 
   window.sdSubmitEdit=async function(){
     if(!sdCurrentVendor||!sdDb)return;
     const user=firebase.auth().currentUser;if(!user){requireLogin();return;}
+    const ownerUid=sdCurrentVendor.firebase_uid||sdCurrentVendor.owner_user_id||sdCurrentVendor.user_id||"";
+    if(!ownerUid||ownerUid!==user.uid){alert("Security check failed: aap sirf apni linked vendor profile edit kar sakte hain.");return;}
+    const photoInput=document.getElementById("sdEditMainPhoto");
+    const photoFile=photoInput&&photoInput.files&&photoInput.files[0];
+    if(photoFile&&(!["image/jpeg","image/png","image/webp"].includes(photoFile.type)||photoFile.size>8*1024*1024)){
+      alert("Photo JPG, PNG ya WEBP ho aur 8 MB se chhoti ho.");return;
+    }
     const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,business_name:document.getElementById("sdEditName").value.trim(),owner_name:document.getElementById("sdEditOwner").value.trim(),city:document.getElementById("sdEditCity").value.trim(),category:document.getElementById("sdEditCategory").value.trim(),price:document.getElementById("sdEditPrice").value.trim(),description:document.getElementById("sdEditDesc").value.trim(),status:"pending"};
     const seoTitle=document.getElementById("sdEditSeoTitle");const seoDesc=document.getElementById("sdEditSeoDesc");if(seoTitle)payload.seo_title=seoTitle.value.trim();if(seoDesc)payload.seo_description=seoDesc.value.trim();
     try{
+      // Use the existing authenticated Edge Function for photo writes; never write vendor rows directly from the browser.
+      if(photoFile){
+        const mediaResult=await window.callVendorWrite("update_vendor_media",{vendor_id:sdCurrentVendor.id,video_url:sdCurrentVendor.video_url||sdCurrentVendor.video||""},[photoFile]);
+        if(!mediaResult||!mediaResult.vendor)throw new Error("Photo upload response nahi mila.");
+        sdCurrentVendor=Object.assign({},sdCurrentVendor,mediaResult.vendor);
+      }
       await window.callVendorWrite("create_vendor_edit_request", payload);
-      document.getElementById("sdEditModal").remove();
-      alert("Profile changes Admin Approval ke liye bhej diye gaye hain ✅");
+      const modal=document.getElementById("sdEditModal");if(modal)modal.remove();
+      if(photoFile){
+        await openVendorProfile(sdCurrentVendor,false);
+        alert("Photo save ho gayi aur baaki profile changes Admin Approval ke liye bhej diye gaye hain. Agar photo update na dikhe, vendor-write function ki update_vendor_media policy check karni hogi.");
+      }else{
+        alert("Profile changes Admin Approval ke liye bhej diye gaye hain ✅");
+      }
     }catch(error){
-      alert("Edit request save nahi hua.\n\n" + (error?.message || error));
+      alert("Changes save nahi ho paaye.\n\n" + (error?.message || error));
     }
   };
 
