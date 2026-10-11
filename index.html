@@ -2434,17 +2434,16 @@
     async function shareVendor(index){
       const v = currentVendorList[index];
       if(!v){ alert("Vendor details nahi mili."); return; }
-      const raw = v.raw || v;
-      const id = raw.id || v.id || raw.vendor_id || v.vendor_id || "";
-      const rawSlug = raw.slug || raw.seo_slug || raw.business_slug || "";
-      const slug = String(rawSlug || ((raw.business_name || v.name || "vendor") + "-" + (raw.city || v.city || "india")))
+      const raw = v.raw || {};
+      const vendorId = raw.id || v.id || "";
+      const slug = String(raw.slug || raw.seo_slug || ((raw.business_name || raw.name || v.name || "vendor") + "-" + (raw.city || v.city || "india")))
         .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-      // Prefer the real database ID so the shared profile can be found reliably.
-      const url = location.origin + (id ? "/#vendor-id=" + encodeURIComponent(id) : "/#vendor=" + encodeURIComponent(slug));
-      const shareData = { title: (v.name || raw.business_name || "Vendor") + " | Samagra Decor", text: (v.name || raw.business_name || "Vendor") + " – " + (v.category || raw.category || "Event Service") + " in " + (v.city || raw.city || "India"), url: url };
+      /* Prefer the database ID: it is unique and avoids slug mismatch. */
+      const url = location.origin + (vendorId ? "/#vendor-id=" + encodeURIComponent(vendorId) : "/#vendor=" + encodeURIComponent(slug));
+      const shareData = { title: v.name + " | Samagra Decor", text: v.name + " – " + v.category + " in " + v.city, url: url };
       try{
         if(navigator.share){ await navigator.share(shareData); }
-        else if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(url); alert("Vendor profile link copy ho gaya. Ab share kar sakte hain."); }
+        else if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(url); alert("Vendor profile link copy ho gaya. Ab customer ko share karein."); }
         else { window.prompt("Vendor profile link copy karein:", url); }
       }catch(error){ if(error && error.name !== "AbortError") window.prompt("Vendor profile link copy karein:", url); }
     }
@@ -3636,12 +3635,22 @@
        We do not prevent leaving the website from the real
        home state; Back works normally after reaching the
        beginning of the site's internal navigation. */
+    const hasVendorDeepLink = /^#vendor(?:=|-id=)/i.test(location.hash);
     if(!history.state || !history.state.sdInternal){
-      history.replaceState(
-        {sdInternal:true, sdSection:"home"},
-        "",
-        location.pathname + location.search + "#home"
-      );
+      /* Do not overwrite a vendor profile link with #home on first load. */
+      if(hasVendorDeepLink){
+        history.replaceState(
+          {sdInternal:true, sdSection:"home", sdVendorDeepLink:true},
+          "",
+          location.pathname + location.search + location.hash
+        );
+      }else{
+        history.replaceState(
+          {sdInternal:true, sdSection:"home"},
+          "",
+          location.pathname + location.search + "#home"
+        );
+      }
     }
 
     function toggleMenu(){
@@ -4987,32 +4996,28 @@ document.addEventListener("click", function(e){
   }
   setInterval(preloadRows,5000); setTimeout(preloadRows,1200);
 
-  /* Pretty URL entry: hosting must rewrite /vendor/* to this index.html. */
+  /* Direct share-link entry. Supports unique database ID and legacy slug links. */
   async function routeEntry(){
-    const pathMatch=location.pathname.match(/^\/vendor\/([^\/]+)\/?$/i);
     const idMatch=location.hash.match(/^#vendor-id=(.+)$/i);
+    const pathMatch=location.pathname.match(/^\/vendor\/([^\/]+)\/?$/i);
     const hashMatch=location.hash.match(/^#vendor=(.+)$/i);
+    const vendorId=idMatch ? decodeURIComponent(idMatch[1]) : "";
     const slug=hashMatch ? decodeURIComponent(hashMatch[1]) : (pathMatch ? decodeURIComponent(pathMatch[1]) : "");
-    const id=idMatch ? decodeURIComponent(idMatch[1]) : "";
-    if(!slug && !id)return;
-    let v = id ? await fetchVendorById(id) : await fetchVendorBySlug(slug);
-    if(v) openVendorProfile(v,false);
+    if(!vendorId && !slug)return;
+    let v=null;
+    try{ v=vendorId ? await fetchVendorById(vendorId) : await fetchVendorBySlug(slug); }
+    catch(error){ console.error("Vendor deep-link load failed:",error); }
+    if(v){ await openVendorProfile(v,false); }
     else {
       const page=document.getElementById("sdVendorPage");
-      if(page){
-        page.classList.add("active");
-        page.innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Ye vendor profile available nahi hai. Kripya vendor ka share link dobara generate karein.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';
-        document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
-      }
+      if(page){page.classList.add("active");page.innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Vendor ID/slug database se match nahi hua. Vendor listing live hai ya nahi check karein.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';}
+      document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
     }
   }
   window.addEventListener("popstate",function(){
-    if(/^#vendor(?:-id)?=/i.test(location.hash)){routeEntry();return;}
+    if(history.state&&history.state.sdVendor){routeEntry();return;}
     const page=document.getElementById("sdVendorPage");if(page)page.classList.remove("active");
     document.querySelectorAll("[data-sd-hidden]").forEach(function(el){el.style.display=el.dataset.sdHidden;delete el.dataset.sdHidden;});restoreHomeSeo();
-  });
-  window.addEventListener("hashchange",function(){
-    if(/^#vendor(?:-id)?=/i.test(location.hash)) routeEntry();
   });
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",routeEntry);else routeEntry();
 })();
