@@ -1252,10 +1252,8 @@
 @media(max-width:620px){
  #vendorList .vendorCard{grid-template-columns:112px minmax(0,1fr)}
  #vendorList .vendorImg{padding:4px}
- #vendorList .vendorBody{padding:10px}
  #vendorList .vendorTitleRow{gap:6px}
  #vendorList .vendorTitleRow .favTitleBtn{flex-basis:27px;width:27px;height:27px;font-size:20px}
- #vendorList .vendorBody h3{font-size:16px}
  #vendorList .ownerLine{margin-top:4px}
  #vendorList .price{font-size:16px;padding:8px}
  #vendorList .price::before{font-size:12px}
@@ -4938,7 +4936,7 @@ document.addEventListener("click", function(e){
       '<h1 class="sdVendorTitle">'+esc(name)+'</h1>'+
       '<div class="sdVendorMeta"><span>📍 '+esc(city)+'</span><span>▦ '+esc(cat)+'</span><span>⭐ '+(reviews?rating.toFixed(1):'New Vendor')+(reviews?' ('+reviews+' reviews)':' · No reviews yet')+'</span><span>💰 '+esc(price)+'</span></div>'+ 
       '<p class="sdVendorDesc">'+esc(vendorDescription(v))+'</p>'+
-      '<div class="sdVendorActions"><button class="sdVendorContact" onclick="window.sdContactCurrent()">🔒 Contact Vendor</button>'+ (isOwnProfile?'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile</button>':'')+'</div>'+ 
+      '<div class="sdVendorActions"><button class="sdVendorContact" onclick="window.sdContactCurrent()">🔒 Contact Vendor</button>'+ (isOwnProfile?'<button class="sdVendorEdit" onclick="window.sdOpenEditCurrent()">✏️ Edit Profile & Details</button>':'')+'</div>'+ 
       '<div class="sdPlanNote" style="margin-top:14px">'+esc(cfg.name)+' · '+cfg.categories+' categories / '+cfg.photos+' photos allowed. '+(cfg.seo?'Advanced profile SEO controls enabled for this plan.':'SEO title & description are generated automatically.')+'</div>'+ 
       '</div></article>'+ 
       '<div class="sdVendorGrid"><section class="sdVendorPanel"><h2>Business Photos</h2><div class="sdGallery">'+gallery+'</div></section>'+ 
@@ -4997,14 +4995,32 @@ document.addEventListener("click", function(e){
     if(!user){requireLogin();return;}
     const ownerUid=sdCurrentVendor.firebase_uid||sdCurrentVendor.owner_user_id||sdCurrentVendor.user_id||"";
     if(!ownerUid||ownerUid!==user.uid){alert("Sirf apni vendor profile edit kar sakte hain.");return;}
-    const p=effectivePlan(sdCurrentVendor), cfg=SD_PLANS[p]||SD_PLANS.free;
-    const imgs=vendorImages(sdCurrentVendor);
+    // Avoid creating duplicate edit modals if the button is clicked more than once.
+    const existing=document.getElementById("sdEditModal");if(existing)existing.remove();
+    const v=sdCurrentVendor;
+    const imgs=vendorImages(v);
+    const val=function(){return "";};
+    const field=function(id,label,value,type){
+      return '<label class="sdEditField"><span>'+label+'</span><input id="'+id+'" type="'+(type||'text')+'" value="'+esc(value||'')+'" /></label>';
+    };
     const slots=[0,1,2,3].map(function(i){
       const url=imgs[i]||"";
-      return '<div class="sdPhotoEditSlot"><b>Business Photo '+(i+1)+'</b><img id="sdPhotoPreview'+i+'" src="'+esc(url)+'" alt="Photo '+(i+1)+' preview" style="'+(url?'':'display:none;')+'"><input type="file" id="sdPhotoFile'+i+'" accept="image/jpeg,image/png,image/webp" onchange="window.sdPreviewPhotoSlot(this,'+i+')"><div class="sdPhotoEditHint">JPG, PNG ya WEBP · adhiktam 8 MB</div></div>';
+      return '<div class="sdPhotoEditSlot"><b>Business Photo '+(i+1)+'</b><img id="sdPhotoPreview'+i+'" src="'+esc(url)+'" alt="Photo '+(i+1)+' preview" style="'+(url?'':'display:none;')+'"><input type="file" id="sdPhotoFile'+i+'" accept="image/jpeg,image/png,image/webp" onchange="window.sdPreviewPhotoSlot(this,'+i+')"><div class="sdPhotoEditHint">JPG, PNG ya WEBP · adhiktam 8 MB · file khaali chhodne par purani photo rahegi</div></div>';
     }).join("");
+    const style=document.getElementById("sdPhotoEditStyles");
+    if(style && !style.textContent.includes(".sdEditFields")) style.textContent += '.sdEditFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}.sdEditField{display:flex;flex-direction:column;gap:5px;font-weight:700;color:#073c30}.sdEditField span{font-size:14px}.sdEditField input,.sdEditField textarea{box-sizing:border-box;width:100%;padding:10px;border:1px solid #d8c99f;border-radius:8px;font:inherit;font-weight:400;background:#fff}.sdEditField textarea{min-height:95px;resize:vertical}.sdEditField.full{grid-column:1/-1}@media(max-width:600px){.sdEditFields{grid-template-columns:1fr}}';
     const box=document.createElement("div");box.className="modal";box.style.display="flex";box.id="sdEditModal";
-    box.innerHTML='<div class="modalBox wideBox"><span class="close" onclick="document.getElementById(\'sdEditModal\').remove()">×</span><h2>📸 Apni Business Photos Edit Karein</h2><p class="modalIntro">Sirf apni profile ki photos badal sakte hain. Nayi photos Admin Approval ke baad hi live hongi. Jis photo ko nahi badalna, uska file box khaali chhodein.</p><div class="sdPhotoEditGrid">'+slots+'</div><button style="margin-top:14px;background:#043b2f;color:#f7d77d;border:0;border-radius:10px;padding:13px;font-weight:900;cursor:pointer;width:100%" onclick="window.sdSubmitPhotoEdit()">SUBMIT PHOTOS FOR ADMIN APPROVAL</button></div>';
+    box.innerHTML='<div class="modalBox wideBox" style="max-height:88vh;overflow:auto"><span class="close" onclick="document.getElementById(\'sdEditModal\').remove()">×</span><h2>✏️ Apni Business Details Edit Karein</h2><p class="modalIntro">Apni listing ki jankari aur photos update karein. Sabhi badlav Admin Approval ke baad hi live hone chahiye. Sirf badli hui photos select karein.</p><div class="sdEditFields">'+
+      field('sdEditBusinessName','Business Name',v.business_name||v.name||v.vendor_name)+
+      field('sdEditOwnerName','Owner Name',v.owner_name||v.owner||v.contact_person||v.contact_name)+
+      field('sdEditPhone','Mobile Number',v.phone||v.mobile||v.mobile_number,'tel')+
+      field('sdEditWhatsapp','WhatsApp Number',v.whatsapp||v.whatsapp_number||v.phone||v.mobile,'tel')+
+      field('sdEditCity','City',v.city||v.location)+
+      field('sdEditCategory','Business Category / Services',v.category||v.service_category)+
+      field('sdEditPrice','Starting Price (₹)',v.price||v.starting_price,'number')+
+      '<label class="sdEditField full"><span>Business Description / About</span><textarea id="sdEditDescription">'+esc(v.description||v.business_description||v.seo_content||'')+'</textarea></label>'+
+      '<label class="sdEditField full"><span>SEO Title (optional)</span><input id="sdEditSeoTitle" value="'+esc(v.seo_title||'')+'"></label>'+
+      '<label class="sdEditField full"><span>SEO Description (optional)</span><textarea id="sdEditSeoDescription">'+esc(v.seo_description||'')+'</textarea></label></div><h3>Business Photos</h3><div class="sdPhotoEditGrid">'+slots+'</div><button style="margin-top:14px;background:#043b2f;color:#f7d77d;border:0;border-radius:10px;padding:13px;font-weight:900;cursor:pointer;width:100%" onclick="window.sdSubmitVendorEdit()">SUBMIT DETAILS FOR ADMIN APPROVAL</button></div>';
     document.body.appendChild(box);
   };
 
@@ -5014,7 +5030,6 @@ document.addEventListener("click", function(e){
     const ownerUid=sdCurrentVendor.firebase_uid||sdCurrentVendor.owner_user_id||sdCurrentVendor.user_id||"";
     if(!user||!ownerUid||ownerUid!==user.uid){alert("Sirf apni vendor profile ki photo edit kar sakte hain.");return;}
     window.sdOpenEditCurrent();
-    // Focus the requested photo slot after the modal is created.
     setTimeout(function(){const input=document.getElementById("sdPhotoFile"+slot);if(input)input.focus();},0);
   };
 
@@ -5026,33 +5041,45 @@ document.addEventListener("click", function(e){
       alert("Sirf JPG, PNG ya WEBP image select karein.");input.value="";return;
     }
     if(file.size>8*1024*1024){alert("Har image 8 MB se chhoti honi chahiye.");input.value="";return;}
-    preview.src=URL.createObjectURL(file);preview.style.display="block";
+    if(preview.dataset.objectUrl) URL.revokeObjectURL(preview.dataset.objectUrl);
+    preview.dataset.objectUrl=URL.createObjectURL(file);preview.src=preview.dataset.objectUrl;preview.style.display="block";
   };
 
-  window.sdSubmitPhotoEdit=async function(){
-    if(!sdCurrentVendor||!sdDb)return;
-    const user=firebase.auth().currentUser;if(!user){requireLogin();return;}
+  window.sdSubmitVendorEdit=async function(){
+    if(!sdCurrentVendor||!sdDb){alert("Database connection available nahi hai. Refresh karke dobara try karein.");return;}
+    let user=null;try{user=firebase.auth().currentUser;}catch(e){}
+    if(!user){requireLogin();return;}
     const ownerUid=sdCurrentVendor.firebase_uid||sdCurrentVendor.owner_user_id||sdCurrentVendor.user_id||"";
-    if(!ownerUid||ownerUid!==user.uid){alert("Security check failed: aap sirf apni linked vendor profile ki photos edit kar sakte hain.");return;}
-    const files=[], photoSlots=[];
+    if(!ownerUid||ownerUid!==user.uid){alert("Security check failed: aap sirf apni linked vendor profile edit kar sakte hain.");return;}
+    const get=function(id){const el=document.getElementById(id);return el?String(el.value||'').trim():'';};
+    const businessName=get('sdEditBusinessName'),ownerName=get('sdEditOwnerName');
+    if(!businessName){alert("Business Name bharna zaroori hai.");return;}
+    if(!ownerName){alert("Owner Name bharna zaroori hai.");return;}
+    const files=[],photoSlots=[];
     for(let i=0;i<4;i++){
-      const input=document.getElementById("sdPhotoFile"+i), file=input&&input.files&&input.files[0];
+      const input=document.getElementById("sdPhotoFile"+i),file=input&&input.files&&input.files[0];
       if(!file)continue;
       if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>8*1024*1024){alert("Har photo JPG, PNG ya WEBP ho aur 8 MB se chhoti ho.");return;}
       files.push(file);photoSlots.push(i+1);
     }
-    if(!files.length){alert("Pehle kam se kam ek photo select karein.");return;}
-    const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,edit_type:"vendor_photos",photo_slots:photoSlots,status:"pending",requires_admin_approval:true};
+    const payload={
+      vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,
+      business_name:businessName,owner_name:ownerName,
+      phone:get('sdEditPhone'),whatsapp:get('sdEditWhatsapp'),city:get('sdEditCity'),
+      category:get('sdEditCategory'),price:get('sdEditPrice'),description:get('sdEditDescription'),
+      seo_title:get('sdEditSeoTitle'),seo_description:get('sdEditSeoDescription'),
+      edit_type:"vendor_profile",photo_slots:photoSlots,status:"pending",requires_admin_approval:true
+    };
     try{
-      // Photos are sent only as a pending edit request. Do NOT call update_vendor_media here,
-      // because that action can update the live vendor media before admin approval.
       await window.callVendorWrite("create_vendor_edit_request",payload,files);
       const modal=document.getElementById("sdEditModal");if(modal)modal.remove();
-      alert("Photo edit request Admin Approval ke liye bhej di gayi hai. Approval se pehle live photos nahi badalengi.");
+      alert("Aapki business details aur selected photos Admin Approval ke liye bhej di gayi hain. Approval se pehle live profile nahi badalni chahiye.");
     }catch(error){
-      alert("Photo edit request save nahi hui.\n\n"+(error?.message||error));
+      alert("Edit request save nahi hui.\n\n"+(error?.message||error)+"\n\nAgar error field validation ka hai, to vendor-write Edge Function mein bhi ye fields support karni hongi.");
     }
   };
+  // Backward-compatible name for any existing button or script using the old handler.
+  window.sdSubmitPhotoEdit=window.sdSubmitVendorEdit;
 
   /* Guest contact lock: capture before existing inline onclick. */
   document.addEventListener("click",function(e){
