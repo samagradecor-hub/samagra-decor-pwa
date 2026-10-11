@@ -2436,7 +2436,7 @@
       if(!v){ alert("Vendor details nahi mili."); return; }
       const slug = String((v.raw && (v.raw.slug || v.raw.seo_slug)) || ((v.name || "vendor") + "-" + (v.city || "india")))
         .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-      const url = location.origin + "/#vendor=" + encodeURIComponent(slug);
+      const url = location.origin + "/vendor/" + encodeURIComponent(slug) + "/";
       const shareData = { title: v.name + " | Samagra Decor", text: v.name + " – " + v.category + " in " + v.city, url: url };
       try{
         if(navigator.share){ await navigator.share(shareData); }
@@ -4907,7 +4907,7 @@ document.addEventListener("click", function(e){
     const status=String(v.status||"").toLowerCase(); if(!["approved","active","live"].includes(status)){alert("Ye vendor profile abhi live nahi hai.");return;}
     sdCurrentVendor=v;
     const page=document.getElementById("sdVendorPage"); if(!page)return;
-    if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/#vendor="+encodeURIComponent(vendorSlug(v)));}
+    if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/vendor/"+encodeURIComponent(vendorSlug(v))+"/");}
     page.innerHTML=profileHtml(v); page.classList.add("active");
     document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
     setVendorSeo(v); window.scrollTo(0,0);
