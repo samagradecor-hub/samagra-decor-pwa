@@ -1252,8 +1252,10 @@
 @media(max-width:620px){
  #vendorList .vendorCard{grid-template-columns:112px minmax(0,1fr)}
  #vendorList .vendorImg{padding:4px}
+ #vendorList .vendorBody{padding:10px}
  #vendorList .vendorTitleRow{gap:6px}
  #vendorList .vendorTitleRow .favTitleBtn{flex-basis:27px;width:27px;height:27px;font-size:20px}
+ #vendorList .vendorBody h3{font-size:16px}
  #vendorList .ownerLine{margin-top:4px}
  #vendorList .price{font-size:16px;padding:8px}
  #vendorList .price::before{font-size:12px}
@@ -5040,7 +5042,7 @@ document.addEventListener("click", function(e){
       files.push(file);photoSlots.push(i+1);
     }
     if(!files.length){alert("Pehle kam se kam ek photo select karein.");return;}
-    const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,business_name:String(sdCurrentVendor.business_name||sdCurrentVendor.name||sdCurrentVendor.vendor_name||"").trim(),owner_name:String(sdCurrentVendor.owner_name||sdCurrentVendor.owner||sdCurrentVendor.contact_person||sdCurrentVendor.contact_name||sdCurrentVendor.business_name||sdCurrentVendor.name||sdCurrentVendor.vendor_name||"").trim(),edit_type:"vendor_photos",photo_slots:photoSlots,status:"pending",requires_admin_approval:true};
+    const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,edit_type:"vendor_photos",photo_slots:photoSlots,status:"pending",requires_admin_approval:true};
     try{
       // Photos are sent only as a pending edit request. Do NOT call update_vendor_media here,
       // because that action can update the live vendor media before admin approval.
