@@ -1297,6 +1297,68 @@
   .vendorCard{grid-template-columns:124px minmax(0,1fr)!important}
 }
 </style>
+
+<style id="sd-footer-whatsapp-helpline">
+  /* Icon-only WhatsApp helpline, fixed at lower right above the existing floating control. */
+  .sd-whatsapp-help-wrap{
+    position:fixed;
+    right:14px;
+    bottom:78px;
+    z-index:9999;
+    display:flex;
+    justify-content:center;
+    padding:0;
+    background:transparent;
+  }
+  .sd-whatsapp-help-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:56px;
+    height:56px;
+    padding:0;
+    border-radius:50%;
+    background:#d92332;
+    color:#fff!important;
+    text-decoration:none!important;
+    box-shadow:0 5px 16px rgba(0,0,0,.28);
+    border:2px solid #fff;
+    transition:transform .18s ease, background .18s ease;
+  }
+  .sd-whatsapp-help-btn:hover{background:#b91c2b;transform:translateY(-2px)}
+  .sd-whatsapp-help-icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#d92332;
+    line-height:1;
+    background:#fff;
+    border-radius:50%;
+    width:38px;
+    height:38px;
+    flex:0 0 38px;
+  }
+  .sd-whatsapp-help-icon svg{display:block;width:27px;height:27px}
+  @media(max-width:480px){
+    .sd-whatsapp-help-wrap{right:12px;bottom:72px}
+    .sd-whatsapp-help-btn{width:50px;height:50px}
+    .sd-whatsapp-help-icon{width:34px;height:34px;flex-basis:34px}
+    .sd-whatsapp-help-icon svg{width:24px;height:24px}
+  }
+</style>
+
+
+<style id="sd-whatsapp-channel-follow-style">
+  .sd-whatsapp-channel-follow{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:48px;padding:12px 24px;border-radius:12px;
+    background:#d92332;color:#fff!important;font-weight:800;
+    text-decoration:none!important;border:1px solid rgba(255,255,255,.2);
+    box-shadow:0 4px 12px rgba(0,0,0,.16);white-space:nowrap;
+  }
+  .sd-whatsapp-channel-follow:hover{background:#b91c2b}
+</style>
+
 </head>
 
 <body>
@@ -1577,7 +1639,7 @@
     </div>
     <form onsubmit="return false;" class="sd-newsletter-form">
       <input type="email" placeholder="Enter your email" aria-label="Email address">
-      <button type="button" onclick="subscribe()">Subscribe</button>
+      <a class="sd-whatsapp-channel-follow" href="https://whatsapp.com/channel/0029Vb8ifPSADTOKGbhCrW3y" target="_blank" rel="noopener noreferrer">Follow Karo</a>
     </form>
   </div>
 
@@ -1591,11 +1653,22 @@
       <a href="/sitemap.xml">Sitemap</a>
     </div>
   </div>
+
+  <div class="sd-whatsapp-help-wrap">
+    <a class="sd-whatsapp-help-btn"
+       href="https://wa.me/917999942060?text=Hello%20Samagra%20Decor%2C%20mujhe%20help%20chahiye"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="WhatsApp Samagra Decor Helpline"
+       title="WhatsApp Helpline">
+      <span class="sd-whatsapp-help-icon" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="25" height="25" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M16.04 3C8.86 3 3.02 8.82 3.02 15.98c0 2.28.6 4.5 1.75 6.46L3 29l6.75-1.76a13.1 13.1 0 0 0 6.28 1.6h.01c7.17 0 13.01-5.82 13.01-12.98A12.9 12.9 0 0 0 16.04 3Zm0 23.63h-.01a10.8 10.8 0 0 1-5.5-1.5l-.4-.23-4 .1 1.07-3.9-.26-.41a10.75 10.75 0 1 1 9.1 5.94Zm5.91-8.06c-.32-.16-1.9-.94-2.2-1.04-.3-.11-.51-.16-.73.16-.21.32-.83 1.04-1.02 1.25-.19.22-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.58-.95-.84-1.59-1.88-1.78-2.2-.19-.32-.02-.5.14-.66.14-.14.32-.38.48-.57.16-.19.21-.32.32-.54.1-.22.05-.4-.03-.57-.08-.16-.73-1.75-1-2.4-.26-.63-.53-.54-.73-.55h-.62c-.22 0-.57.08-.86.4-.3.32-1.13 1.1-1.13 2.68s1.16 3.1 1.32 3.31c.16.22 2.28 3.48 5.52 4.88.77.33 1.37.53 1.84.68.77.24 1.47.2 2.02.12.62-.09 1.9-.78 2.17-1.53.27-.76.27-1.4.19-1.53-.08-.13-.29-.21-.62-.37Z"/>
+        </svg>
+      </span>
+    </a>
+  </div>
 </footer>
-
-  <a class="floatWhatsApp" target="_blank" href="https://wa.me/917999942060?text=Hello%20Samagra%20Decor,%20mujhe%20event%20service%20ki%20details%20chahiye">☘</a>
-
-  <div class="installBar">
+<div class="installBar">
     <b>📱 App jaisa use karein</b>
     <button onclick="installApp()">Add</button>
   </div>
