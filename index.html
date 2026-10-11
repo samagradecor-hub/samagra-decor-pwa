@@ -5042,7 +5042,7 @@ document.addEventListener("click", function(e){
       files.push(file);photoSlots.push(i+1);
     }
     if(!files.length){alert("Pehle kam se kam ek photo select karein.");return;}
-    const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,business_name:vendorName(sdCurrentVendor),edit_type:"vendor_photos",photo_slots:photoSlots,status:"pending",requires_admin_approval:true};
+    const payload={vendor_id:sdCurrentVendor.id,owner_user_id:user.uid,business_name:String(sdCurrentVendor.business_name||sdCurrentVendor.name||sdCurrentVendor.vendor_name||"").trim(),owner_name:String(sdCurrentVendor.owner_name||sdCurrentVendor.owner||sdCurrentVendor.contact_person||sdCurrentVendor.contact_name||sdCurrentVendor.business_name||sdCurrentVendor.name||sdCurrentVendor.vendor_name||"").trim(),edit_type:"vendor_photos",photo_slots:photoSlots,status:"pending",requires_admin_approval:true};
     try{
       // Photos are sent only as a pending edit request. Do NOT call update_vendor_media here,
       // because that action can update the live vendor media before admin approval.
