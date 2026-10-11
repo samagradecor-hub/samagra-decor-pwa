@@ -2434,18 +2434,15 @@
     async function shareVendor(index){
       const v = currentVendorList[index];
       if(!v){ alert("Vendor details nahi mili."); return; }
-      const raw = v.raw || {};
-      const vendorId = raw.id || v.id || "";
-      const slug = String(raw.slug || raw.seo_slug || ((raw.business_name || raw.name || v.name || "vendor") + "-" + (raw.city || v.city || "india")))
+      const slug = String((v.raw && (v.raw.slug || v.raw.seo_slug)) || ((v.name || "vendor") + "-" + (v.city || "india")))
         .toLowerCase().trim().replace(/[^a-z0-9\s-]/g, "").replace(/\s+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
-      /* Prefer the database ID: it is unique and avoids slug mismatch. */
-      const url = location.origin + (vendorId ? "/#vendor-id=" + encodeURIComponent(vendorId) : "/#vendor=" + encodeURIComponent(slug));
+      const url = location.origin + "/#vendor=" + encodeURIComponent(slug);
       const shareData = { title: v.name + " | Samagra Decor", text: v.name + " – " + v.category + " in " + v.city, url: url };
       try{
         if(navigator.share){ await navigator.share(shareData); }
-        else if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(url); alert("Vendor profile link copy ho gaya. Ab customer ko share karein."); }
-        else { window.prompt("Vendor profile link copy karein:", url); }
-      }catch(error){ if(error && error.name !== "AbortError") window.prompt("Vendor profile link copy karein:", url); }
+        else if(navigator.clipboard && navigator.clipboard.writeText){ await navigator.clipboard.writeText(url); alert("Listing link copy ho gaya. Ab share kar sakte hain."); }
+        else { window.prompt("Vendor listing link copy karein:", url); }
+      }catch(error){ if(error && error.name !== "AbortError") window.prompt("Vendor listing link copy karein:", url); }
     }
 
     function addFavorite(index){
@@ -3635,22 +3632,12 @@
        We do not prevent leaving the website from the real
        home state; Back works normally after reaching the
        beginning of the site's internal navigation. */
-    const hasVendorDeepLink = /^#vendor(?:=|-id=)/i.test(location.hash);
     if(!history.state || !history.state.sdInternal){
-      /* Do not overwrite a vendor profile link with #home on first load. */
-      if(hasVendorDeepLink){
-        history.replaceState(
-          {sdInternal:true, sdSection:"home", sdVendorDeepLink:true},
-          "",
-          location.pathname + location.search + location.hash
-        );
-      }else{
-        history.replaceState(
-          {sdInternal:true, sdSection:"home"},
-          "",
-          location.pathname + location.search + "#home"
-        );
-      }
+      history.replaceState(
+        {sdInternal:true, sdSection:"home"},
+        "",
+        location.pathname + location.search + "#home"
+      );
     }
 
     function toggleMenu(){
@@ -4773,76 +4760,8 @@ document.addEventListener("click", function(e){
 .sdVendorBack{display:inline-flex;align-items:center;gap:7px;border:1px solid #d6a53a;background:#fff;color:#043b2f;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-bottom:15px}
 .sdVendorHero{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;background:#fff;border:1px solid #f0dfb8;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.08)}
 .sdVendorHeroImg{min-height:330px;background:#eee}.sdVendorHeroImg img{width:100%;height:100%;min-height:330px;object-fit:cover;display:block}
-.sdVendorHeroBody{padding:25px}.sdVendorKicker{color:#a67400;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1px}.sdVendorTitle{font-family:Georgia,serif;color:#043b2f;font-size:clamp(30px,4vw,44px);line-height:1.05;margin:7px 0 10px}.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}.sdVendorDesc{color:#555;line-height:1.7;margin:12px 0}.sdVendorActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.sdVendorActions button{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.sdVendorContact{background:#0dbb59;color:#fff}.sdVendorEdit{background:#043b2f;color:#f7d77d}.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid #f0dfb8;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:2px solid #f0dfb8;cursor:pointer;transition:border-color .15s,transform .15s}.sdGallery img:hover{border-color:#d6a53a;transform:translateY(-2px)}.sdGallery img.sdPhotoSelected{border-color:#043b2f;box-shadow:0 0 0 2px #e7c45a}.sdRelated{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sdRelated a{display:block;text-decoration:none;color:#043b2f;background:#fffaf0;border:1px solid #f0dfb8;border-radius:12px;padding:12px;font-weight:800}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}
+.sdVendorHeroBody{padding:25px}.sdVendorKicker{color:#a67400;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1px}.sdVendorTitle{font-family:Georgia,serif;color:#043b2f;font-size:clamp(30px,4vw,44px);line-height:1.05;margin:7px 0 10px}.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}.sdVendorDesc{color:#555;line-height:1.7;margin:12px 0}.sdVendorActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.sdVendorActions button{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.sdVendorContact{background:#0dbb59;color:#fff}.sdVendorEdit{background:#043b2f;color:#f7d77d}.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid #f0dfb8;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:1px solid #f0dfb8}.sdRelated{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sdRelated a{display:block;text-decoration:none;color:#043b2f;background:#fffaf0;border:1px solid #f0dfb8;border-radius:12px;padding:12px;font-weight:800}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}
 @media(max-width:800px){.sdVendorHero,.sdVendorGrid{grid-template-columns:1fr}.sdVendorHeroImg,.sdVendorHeroImg img{min-height:250px}.sdRelated{grid-template-columns:1fr}.sdGallery{grid-template-columns:repeat(2,1fr)}}
-/* Custom colors ONLY for All Decoration Service - Katni vendor profile */
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHero,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel,
-#sdVendorPage.active.sdKatniCreamRed .sdPlanNote {
-  background-color:#ead8b5 !important;
-  border:2px solid #b5121b !important;
-  box-shadow:0 8px 24px rgba(110,20,20,.10) !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody { border-left:0 !important; }
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel h2,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel p,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorTitle,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorDesc,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorKicker { color:#342516 !important; }
-#sdVendorPage.active.sdKatniCreamRed .sdVendorMeta span {
-  background:#dfc89c !important; border:1px solid #b5121b !important; color:#342516 !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdGallery img { border:2px solid #b5121b !important; }
-#sdVendorPage.active.sdKatniCreamRed .sdGallery img.sdPhotoSelected {
-  border-color:#b5121b !important; box-shadow:0 0 0 2px #8e0d14 !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdVendorBack { background:#ead8b5 !important; border:2px solid #b5121b !important; color:#342516 !important; }
-
-/* Strong scoped override: only All Decoration Service - Katni profile */
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHero,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel,
-#sdVendorPage.active.sdKatniCreamRed .sdPlanNote {
-  background: #ead8b5 !important;
-  background-color: #ead8b5 !important;
-  border: 2px solid #b5121b !important;
-  color: #342516 !important;
-  box-shadow: 0 8px 24px rgba(110,20,20,.10) !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody {
-  border-left: 0 !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel p,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel p *,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorDesc,
-#sdVendorPage.active.sdKatniCreamRed .sdPlanNote,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorMeta span {
-  color: #342516 !important;
-  font-weight: 700 !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel h2,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorTitle,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorKicker,
-#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel p b {
-  color: #342516 !important;
-  font-weight: 800 !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdVendorMeta span {
-  background: #dfc89c !important;
-  border: 1px solid #b5121b !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdGallery img {
-  border: 2px solid #b5121b !important;
-}
-#sdVendorPage.active.sdKatniCreamRed .sdGallery img.sdPhotoSelected {
-  border-color: #b5121b !important;
-  box-shadow: 0 0 0 2px #8e0d14 !important;
-}
-
 </style>
 
 <div id="sdVendorPage" class="sdVendorPage" aria-live="polite"></div>
@@ -4965,7 +4884,7 @@ document.addEventListener("click", function(e){
     const rating=Number(v.rating||0), reviews=Number(v.review_count||v.reviews||0);
     const price=Number(v.price||v.starting_price||0)>0 ? "Starts from ₹"+Number(v.price||v.starting_price).toLocaleString("en-IN") : "Price on request";
     const main=imgs[0]||"https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80";
-    const gallery=(imgs.length?imgs:[main]).slice(0,cfg.photos).map(function(x,i){return '<img src="'+esc(x)+'" alt="'+esc(name+' '+cat+' '+city+' photo '+(i+1))+'" loading="lazy" onclick="window.sdSelectVendorPhoto(this)" title="Click to view large photo"'+(i===0?' class="sdPhotoSelected"':'')+'>';}).join("");
+    const gallery=(imgs.length?imgs:[main]).slice(0,cfg.photos).map(function(x){return '<img src="'+esc(x)+'" alt="'+esc(name+' '+cat+' '+city)+'" loading="lazy">';}).join("");
     const owner=v.owner_name||v.owner||"";
     return '<button class="sdVendorBack" onclick="window.sdBackToHome()">← Back to Vendors</button>'+
       '<article class="sdVendorHero">'+
@@ -4982,34 +4901,15 @@ document.addEventListener("click", function(e){
       '<section class="sdVendorPanel" style="margin-top:18px"><h2>About '+esc(name)+'</h2><p style="color:#555;line-height:1.7">'+esc(v.seo_content||vendorDescription(v))+'</p></section>';
   }
 
-  // Clicking any gallery photo updates the large hero image at the top.
-  window.sdSelectVendorPhoto=function(thumb){
-    if(!thumb) return;
-    const page=document.getElementById("sdVendorPage");
-    if(!page) return;
-    const hero=page.querySelector(".sdVendorHeroImg img");
-    if(!hero) return;
-    hero.src=thumb.currentSrc||thumb.src;
-    hero.alt=thumb.alt||"Vendor business photo";
-    page.querySelectorAll(".sdGallery img").forEach(function(img){img.classList.toggle("sdPhotoSelected",img===thumb);});
-  };
-
   let sdCurrentVendor=null;
   async function openVendorProfile(vOrId,push){
     const v=typeof vOrId==='object'?vOrId:await fetchVendorById(vOrId); if(!v){alert("Vendor profile nahi mili.");return;}
     const status=String(v.status||"").toLowerCase(); if(!["approved","active","live"].includes(status)){alert("Ye vendor profile abhi live nahi hai.");return;}
     sdCurrentVendor=v;
     const page=document.getElementById("sdVendorPage"); if(!page)return;
+    page.dataset.sdVendorSlug=vendorSlug(v);
     if(push!==false){history.pushState({sdVendor:true,slug:vendorSlug(v)},"", "/#vendor="+encodeURIComponent(vendorSlug(v)));}
-    page.innerHTML=profileHtml(v);
-    // Apply this theme only to the requested Katni vendor profile.
-    const requestedVendorSlug=String(vendorSlug(v)||"").toLowerCase();
-    const requestedVendorName=String(v.business_name||v.name||v.vendor_name||"").trim().toLowerCase();
-    const requestedVendorCity=String(v.city||v.location||"").trim().toLowerCase();
-    const isTargetKatniVendor = requestedVendorSlug === "all-decoration-service-katni" ||
-      (requestedVendorName === "all decoration service" && requestedVendorCity === "katni");
-    page.classList.toggle("sdKatniCreamRed", isTargetKatniVendor);
-    page.classList.add("active");
+    page.innerHTML=profileHtml(v); page.classList.add("active");
     document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
     setVendorSeo(v); window.scrollTo(0,0);
   }
@@ -5084,23 +4984,14 @@ document.addEventListener("click", function(e){
   }
   setInterval(preloadRows,5000); setTimeout(preloadRows,1200);
 
-  /* Direct share-link entry. Supports unique database ID and legacy slug links. */
+  /* Pretty URL entry: hosting must rewrite /vendor/* to this index.html. */
   async function routeEntry(){
-    const idMatch=location.hash.match(/^#vendor-id=(.+)$/i);
     const pathMatch=location.pathname.match(/^\/vendor\/([^\/]+)\/?$/i);
     const hashMatch=location.hash.match(/^#vendor=(.+)$/i);
-    const vendorId=idMatch ? decodeURIComponent(idMatch[1]) : "";
     const slug=hashMatch ? decodeURIComponent(hashMatch[1]) : (pathMatch ? decodeURIComponent(pathMatch[1]) : "");
-    if(!vendorId && !slug)return;
-    let v=null;
-    try{ v=vendorId ? await fetchVendorById(vendorId) : await fetchVendorBySlug(slug); }
-    catch(error){ console.error("Vendor deep-link load failed:",error); }
-    if(v){ await openVendorProfile(v,false); }
-    else {
-      const page=document.getElementById("sdVendorPage");
-      if(page){page.classList.add("active");page.innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Vendor ID/slug database se match nahi hua. Vendor listing live hai ya nahi check karein.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';}
-      document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
-    }
+    if(!slug)return;
+    const v=await fetchVendorBySlug(slug);
+    if(v) openVendorProfile(v,false); else {document.getElementById("sdVendorPage").classList.add("active");document.getElementById("sdVendorPage").innerHTML='<h1 style="color:#043b2f">Vendor profile not found</h1><p style="color:#666">Ye vendor profile available nahi hai.</p><button class="sdVendorBack" onclick="window.sdBackToHome()">← Home</button>';}
   }
   window.addEventListener("popstate",function(){
     if(history.state&&history.state.sdVendor){routeEntry();return;}
@@ -5110,6 +5001,40 @@ document.addEventListener("click", function(e){
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",routeEntry);else routeEntry();
 })();
 </script>
+
+
+<style id="sd-katni-darkcream-red-fix">
+/* Scoped only to All Decoration Service – Katni vendor profile */
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorHero,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorPanel {
+  background: #ead8b5 !important;
+  background-color: #ead8b5 !important;
+  border: 2px solid #d71920 !important;
+  box-shadow: 0 5px 18px rgba(120, 0, 0, .10) !important;
+}
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorHeroBody,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorPanel,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorPanel p,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorPanel h2,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorTitle,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorKicker,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorDesc,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdPlanNote {
+  font-weight: 700 !important;
+}
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdPlanNote {
+  background: #ead8b5 !important;
+  border: 2px solid #d71920 !important;
+  color: #3e2a16 !important;
+}
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorDesc,
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdVendorPanel p {
+  color: #30251b !important;
+}
+#sdVendorPage.active[data-sd-vendor-slug="all-decoration-service-katni"] .sdGallery img {
+  border: 2px solid #d71920 !important;
+}
+</style>
 
 </body>
 </html>
