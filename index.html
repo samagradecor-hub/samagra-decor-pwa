@@ -4776,34 +4776,30 @@ document.addEventListener("click", function(e){
 .sdVendorHeroBody{padding:25px}.sdVendorKicker{color:#a67400;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:1px}.sdVendorTitle{font-family:Georgia,serif;color:#043b2f;font-size:clamp(30px,4vw,44px);line-height:1.05;margin:7px 0 10px}.sdVendorMeta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.sdVendorMeta span{background:#fff1cc;border:1px solid #e7c45a;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800;color:#5a4300}.sdVendorDesc{color:#555;line-height:1.7;margin:12px 0}.sdVendorActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.sdVendorActions button{border:0;border-radius:10px;padding:12px 16px;font-weight:900;cursor:pointer}.sdVendorContact{background:#0dbb59;color:#fff}.sdVendorEdit{background:#043b2f;color:#f7d77d}.sdVendorGrid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-top:18px}.sdVendorPanel{background:#fff;border:1px solid #f0dfb8;border-radius:16px;padding:20px;box-shadow:0 6px 22px rgba(0,0,0,.05)}.sdVendorPanel h2{color:#043b2f;font-family:Georgia,serif;margin-bottom:12px}.sdGallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.sdGallery img{width:100%;height:150px;object-fit:cover;border-radius:11px;border:2px solid #f0dfb8;cursor:pointer;transition:border-color .15s,transform .15s}.sdGallery img:hover{border-color:#d6a53a;transform:translateY(-2px)}.sdGallery img.sdPhotoSelected{border-color:#043b2f;box-shadow:0 0 0 2px #e7c45a}.sdRelated{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.sdRelated a{display:block;text-decoration:none;color:#043b2f;background:#fffaf0;border:1px solid #f0dfb8;border-radius:12px;padding:12px;font-weight:800}.sdEditForm{display:grid;gap:10px}.sdEditForm input,.sdEditForm textarea,.sdEditForm select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}.sdEditForm textarea{min-height:110px}.sdPlanNote{padding:12px;border-radius:12px;background:#fff7df;border:1px solid #e7c45a;color:#5a4300;font-size:13px;line-height:1.5}
 @media(max-width:800px){.sdVendorHero,.sdVendorGrid{grid-template-columns:1fr}.sdVendorHeroImg,.sdVendorHeroImg img{min-height:250px}.sdRelated{grid-template-columns:1fr}.sdGallery{grid-template-columns:repeat(2,1fr)}}
 /* Custom colors ONLY for All Decoration Service - Katni vendor profile */
-#sdVendorPage.sdKatniCreamRed .sdVendorHero,
-#sdVendorPage.sdKatniCreamRed .sdVendorPanel {
-  background:#ead8b5 !important;
+#sdVendorPage.active.sdKatniCreamRed .sdVendorHero,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel,
+#sdVendorPage.active.sdKatniCreamRed .sdPlanNote {
+  background-color:#ead8b5 !important;
   border:2px solid #b5121b !important;
-  box-shadow:0 8px 24px rgba(110,20,20,.10);
+  box-shadow:0 8px 24px rgba(110,20,20,.10) !important;
 }
-#sdVendorPage.sdKatniCreamRed .sdVendorHeroBody,
-#sdVendorPage.sdKatniCreamRed .sdVendorPanel,
-#sdVendorPage.sdKatniCreamRed .sdVendorPanel h2,
-#sdVendorPage.sdKatniCreamRed .sdVendorPanel p,
-#sdVendorPage.sdKatniCreamRed .sdVendorTitle,
-#sdVendorPage.sdKatniCreamRed .sdVendorDesc { color:#342516 !important; }
-#sdVendorPage.sdKatniCreamRed .sdPlanNote {
-  background:#dfc89c !important;
-  border:1px solid #b5121b !important;
-  color:#342516 !important;
+#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody { border-left:0 !important; }
+#sdVendorPage.active.sdKatniCreamRed .sdVendorHeroBody,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel h2,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorPanel p,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorTitle,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorDesc,
+#sdVendorPage.active.sdKatniCreamRed .sdVendorKicker { color:#342516 !important; }
+#sdVendorPage.active.sdKatniCreamRed .sdVendorMeta span {
+  background:#dfc89c !important; border:1px solid #b5121b !important; color:#342516 !important;
 }
-#sdVendorPage.sdKatniCreamRed .sdVendorMeta span {
-  background:#dfc89c !important;
-  border:1px solid #b5121b !important;
-  color:#342516 !important;
+#sdVendorPage.active.sdKatniCreamRed .sdGallery img { border:2px solid #b5121b !important; }
+#sdVendorPage.active.sdKatniCreamRed .sdGallery img.sdPhotoSelected {
+  border-color:#b5121b !important; box-shadow:0 0 0 2px #8e0d14 !important;
 }
-#sdVendorPage.sdKatniCreamRed .sdGallery img { border-color:#b5121b !important; }
-#sdVendorPage.sdKatniCreamRed .sdGallery img.sdPhotoSelected {
-  border-color:#b5121b !important;
-  box-shadow:0 0 0 2px #8e0d14 !important;
-}
-
+#sdVendorPage.active.sdKatniCreamRed .sdVendorBack { background:#ead8b5 !important; border:2px solid #b5121b !important; color:#342516 !important; }
 </style>
 
 <div id="sdVendorPage" class="sdVendorPage" aria-live="polite"></div>
@@ -4965,7 +4961,11 @@ document.addEventListener("click", function(e){
     page.innerHTML=profileHtml(v);
     // Apply this theme only to the requested Katni vendor profile.
     const requestedVendorSlug=String(vendorSlug(v)||"").toLowerCase();
-    page.classList.toggle("sdKatniCreamRed", requestedVendorSlug==="all-decoration-service-katni");
+    const requestedVendorName=String(v.business_name||v.name||v.vendor_name||"").trim().toLowerCase();
+    const requestedVendorCity=String(v.city||v.location||"").trim().toLowerCase();
+    const isTargetKatniVendor = requestedVendorSlug === "all-decoration-service-katni" ||
+      (requestedVendorName === "all decoration service" && requestedVendorCity === "katni");
+    page.classList.toggle("sdKatniCreamRed", isTargetKatniVendor);
     page.classList.add("active");
     document.querySelectorAll("body > *:not(#sdVendorPage)").forEach(function(el){el.dataset.sdHidden=el.style.display;el.style.display="none";});
     setVendorSeo(v); window.scrollTo(0,0);
