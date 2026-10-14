@@ -2494,6 +2494,10 @@
     }
 
     function callVendor(index){
+      // Vendor ko call karne se pehle har baar Firebase login verify karein.
+      // Login nahi hai to call link bilkul open nahi hoga.
+      if (!requireLogin()) return;
+
       const v = currentVendorList[index];
       if(!v){ alert("Vendor details nahi mili."); return; }
       const raw = v.raw || {};
